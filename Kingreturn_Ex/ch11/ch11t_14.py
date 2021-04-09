@@ -1,0 +1,10 @@
+# 匿名函數使用與filter() 使用傳統定義方式將串列元素內容是偶數的元素篩選出來
+def oddfn(x):
+    return x if (x % 2 == 0) else None
+
+
+mylist = [5, 10, 15, 20, 25, 30]
+filter_object = filter(oddfn, mylist)  # 傳回filter object
+
+# 輸出偶數串列
+print("偶數串列:", [item for item in filter_object])
