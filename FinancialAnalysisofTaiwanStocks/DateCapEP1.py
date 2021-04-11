@@ -45,7 +45,7 @@ def parse_n_days(start_date,n):
         time.sleep(3) # 避免被停止抓取 每3秒抓一次 
     return df_dict
 
-result_dict = parse_n_days(datetime.datetime.now(),2)
+result_dict = parse_n_days(datetime.datetime.now(),10)
 os.chdir(os.path.dirname(os.path.abspath(__file__))) # 將目前資料夾當作工作目錄
 # 將資料輸出成csv檔
 for key in result_dict.keys():
