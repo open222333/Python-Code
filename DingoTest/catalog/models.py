@@ -55,6 +55,13 @@ class Book(models.Model):
     # 回傳一個可以被用來存取該模型細節紀錄的 URL (要讓其有效運作，我們必須定義一個 URL 的映射，我們將其命名為 book-detail
     # ，另外還得定義一個關聯示圖(view)與模板(template) )。
 
+    def display_genre(self):
+        """Create a string for the Genre. This is required to display genre in
+         Admin."""
+        return ', '.join(genre.name for genre in self.genre.all()[:3])
+
+    display_genre.short_description = 'Genre'
+
     def get_absolute_url(self):
         """Returns the url to access a detail record for this book."""
         return reverse('book-detail', args=[str(self.id)])
@@ -119,6 +126,9 @@ class Author(models.Model):
     class Meta:
         ordering = ['last_name', 'first_name']
     # 反轉 author-detail 的URL映射，來獲得顯示單個作者的URL。
+    # 無法直接在 list_display 中指定「書籍類別」(genre field)字段，因為它是一個 ManyToManyField
+    # (多對多字段)，因為如果這樣做會造成很大的資料庫讀寫「成本」，所以 Django 會預防這樣的狀況發生，因此，取而代之，我們將定義一個
+    # display_genre 函式以「字串」形式得到書籍類別。
 
     def get_absolute_url(self):
         """Returns the url to access a particular author instance."""
