@@ -1,0 +1,9 @@
+{% extends 'base_generic.html' %}
+{% block title %}<title>Test  Page</title>{% endblock %}
+{% block content %}
+    <h1>Test</h1>
+        <div>
+            {% load static %}
+            <img src="{% static "images/local_library_model_uml.png" %}" alt="My image" style="width:819px;height:523px;" />
+        </div>
+{% endblock  %}
