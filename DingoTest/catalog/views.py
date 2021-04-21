@@ -35,25 +35,46 @@ def index(request):
     # 帶有數據佔位符的HTML模板以及上下文 context 變量包含將插入到這些佔位符中的數據的Python字典）為參數。
     return render(request, 'index.html', context=context)
 
+
+def book_detail_view(request, primary_key):
+    try:
+        book = Book.objects.get(pk=primary_key)
+    except Book.DoesNotExist as Http404:
+        raise Http404('Book does not exist')
+
+    # from django.shortcuts import get_object_or_404
+    # book = get_object_or_404(Book, pk=primary_key)
+
+    return render(request, 'book_detail.html', context={'book': book})
+
+
+def testpage(request):
+    return render(request, 'testpage.html')
+
 # 通用view將查詢數據庫，以獲取指定模型（Book）的所有記錄
 
 
 class BookListView(generic.ListView):
     model = Book
+    paginate_by = 10
     # 添加屬性
-    context_object_name = 'my_book_list'
-    # your own name for the list as a template variable
-    queryset = Book.objects.filter(title__icontains='war')[:5]
-    # Get 5 books containing the title war
-    template_name = 'books/my_arbitrary_template_name_list.html'
-    # Specify your own template name/location
+    context_object_name = 'books'
+    # # your own name for the list as a template variable
+    book_list = Book.objects.all()
+    # # Get 5 books containing the title war
+    template_name = 'book_list.html'
+    # # Specify your own template name/location
 
-    # 覆寫某些類別方法
-    def get_queryset(self):
-        # 列出其他用戶閱讀的前5本書，而不是列出所有書本。
-        return Book.objects.filter(title_icontains='war')[:5]
+    # # 覆寫某些類別方法
+    # def get_queryset(self):
+    #     # 列出其他用戶閱讀的前5本書，而不是列出所有書本。
+    #     return Book.objects.filter()
 
     def get_context_data(self, **kwargs):
         context = super(BookListView, self).get_context_data(**kwargs)
         context['some_data'] = 'This is jut some data'
         return context
+
+
+class BookDetailView(generic.DetailView):
+    model = Book
