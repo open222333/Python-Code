@@ -49,7 +49,9 @@ def book_detail_view(request, primary_key):
 
 
 def testpage(request):
-    return render(request, 'testpage.html')
+    book_test = Book.objects.all()
+    context = {'book_test': book_test}
+    return render(request, 'testpage.html', context=context)
 
 # 通用view將查詢數據庫，以獲取指定模型（Book）的所有記錄
 
@@ -72,7 +74,6 @@ class BookListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(BookListView, self).get_context_data(**kwargs)
-        context['some_data'] = 'This is jut some data'
         return context
 
 
