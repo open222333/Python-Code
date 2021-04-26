@@ -1,7 +1,8 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <h1>Book List</h1>
+    <h1>Book List : {{ book_list }}</h1>
+    <p>{{  book_list }}</p>
     {% if book_list %}
     <ul>
         {% for book in book_list %}

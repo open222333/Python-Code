@@ -66,11 +66,15 @@ class BookListView(generic.ListView):
     # # Get 5 books containing the title war
     template_name = 'book_list.html'
     # # Specify your own template name/location
-
     # # 覆寫某些類別方法
     # def get_queryset(self):
     #     # 列出其他用戶閱讀的前5本書，而不是列出所有書本。
     #     return Book.objects.filter()
+
+    def get_book_list(request):
+        book_test = Book.objects.all()
+        context = {'book_list': book_test}
+        return render(request, 'book_list.html', context=context)
 
     def get_context_data(self, **kwargs):
         context = super(BookListView, self).get_context_data(**kwargs)

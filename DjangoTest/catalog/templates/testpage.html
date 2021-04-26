@@ -2,9 +2,20 @@
 {% block title %}<title>Test  Page</title>{% endblock %}
 {% block content %}
     <h1>Test</h1>
-    <h2>{{ book_list }}</h2>
+    <p>Book List : {{ book_test }} </p>
         <div>
             {% load static %}
             <img src="{% static "images/local_library_model_uml.png" %}" alt="My image" style="width:819px;height:523px;" />
         </div>
+    {% if book_test %}
+    <ul>
+        {% for book in book_test %}
+            <li>
+                <a href='{{ book.get_absolute_url }}'>{{ book.title }}</a> ({{ book.author }})
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>There are no books in the library.</p>
+    {% endif %}
 {% endblock  %}
