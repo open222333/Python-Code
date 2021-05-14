@@ -1,15 +1,23 @@
+# https://leetcode.com/problems/longest-substring-without-repeating-characters/discuss/347818/Python3%3A-sliding-window-O(N)-with-explanation
+
+# Given a string s, find the length of the longest substring without repeating
+# characters.
+
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        seen = {}
-        left_node = 0
-        output = 0
-        for right_node in range(len(s)):
-            if s[right_node] not in seen:
-                output = max(output, right_node-left_node+1)
+        seen = {}  # 儲存{字母：索引值} seen[charactor] = index
+        left_pointer = 0  # 左邊指針從0開始
+        output = 0  # 窗口大小
+        for right_pointer in range(len(s)):
+            if s[right_pointer] not in seen:
+                #  如果右指針的字元不在字典內，取output跟目前窗口大小(r-l+1)的最大值
+                output = max(output, right_pointer - left_pointer + 1)
             else:
-                if seen[s[right_node]] < left_node:
-                    output = max(output, right_node-left_node+1)
+                if seen[s[right_pointer]] < left_pointer:
+                    output = max(output, right_pointer - left_pointer + 1)
                 else:
-                    left_node = seen[s[right_node]] + 1
-            seen[s[right_node]] = right_node
+                    # 若有相同字元且右指針字元的索引值大於左指針
+                    # 則左指針移動到目前右指針的右邊一位
+                    left_pointer = seen[s[right_pointer]] + 1
+            seen[s[right_pointer]] = right_pointer
         return output
