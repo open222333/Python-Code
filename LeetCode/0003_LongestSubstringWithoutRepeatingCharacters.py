@@ -35,8 +35,10 @@ class Solution2:
         for i in range(len(s)):
             # 字元已在字典內 且 字元的索引值大於等於start
             if s[i] in usedChar and start <= usedChar[s[i]]:
+                # 移動start指針
                 start = usedChar[s[i]] + 1
             else:
+                # 窗口大小
                 maxLength = max(maxLength, i - start + 1)
             # 字元加入字典
             usedChar[s[i]] = i
