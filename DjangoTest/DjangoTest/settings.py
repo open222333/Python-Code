@@ -29,6 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'open222333.ddns.net',
+    '3c9e24f97fae.ngrok.io',
 ]
 
 
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalog.apps.CatalogConfig',
+    'linebot_test.apps.LinebotTestConfig'
 ]
 
 MIDDLEWARE = [
@@ -132,3 +134,8 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Line Bot 密鑰憑證
+LINE_CANNEL_ACCESS_TOKEN = '9sNHzK9fe++M2HpTjrVMIh60iBvdkEcC+JyJy/hKbrLzOgv7Xu3qXyINBwb9tOEUzCu0NPTSoawQ73opF3fCCcTXO4MqfbJvX7qeJ725UkshR9PIhXv/b7m4SKACnUytHB18BBgF4JHQY9RY4oNrBgdB04t89/1O/w1cDnyilFU='
+
+LINE_CHANNEL_SECRET = '2f3748a8f2a08838c3869627c7822d9b'
