@@ -22,6 +22,22 @@ class Solution:
                 else:
                     # 則左指針移動到目前右指針的右邊一位
                     left_pointer = seen[s[right_pointer]] + 1
-            # 儲存{字母：索引值} seen[charactor] = index
+            # 儲存{字母：索引值} seen[charactor] = index ,字元加入字典
             seen[s[right_pointer]] = right_pointer
         return output
+
+
+class Solution2:
+    # @return an integer
+    def lengthOfLongestSubstring(self, s):
+        start = maxLength = 0
+        usedChar = {}  # 儲存{字母：索引值} seen[charactor] = index
+        for i in range(len(s)):
+            # 字元已在字典內 且 字元的索引值大於等於start
+            if s[i] in usedChar and start <= usedChar[s[i]]:
+                start = usedChar[s[i]] + 1
+            else:
+                maxLength = max(maxLength, i - start + 1)
+            # 字元加入字典
+            usedChar[s[i]] = i
+        return maxLength
