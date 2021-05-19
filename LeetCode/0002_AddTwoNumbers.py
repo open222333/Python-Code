@@ -19,6 +19,9 @@ class ListNode(object):
         self.next = next
 
 
+# Approach 1: Elementary Math
+
+
 class Solution(object):
     def addTwoNumbers(self, l1, l2):
         """
