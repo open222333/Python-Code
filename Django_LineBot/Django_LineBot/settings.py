@@ -25,7 +25,9 @@ SECRET_KEY = '^^xn+ae$-^bd#59ucr&#!o7150nl10&wz^@76!i)(ja#8%&oqk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '54c2b8a5454d.ngrok.io'
+]
 
 
 # Application definition
@@ -37,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'LineBot_TimAAAAAA.apps.LinebotTimaaaaaaConfig',
+    'linebottim.apps.LinebottimConfig',
 ]
 
 MIDDLEWARE = [
@@ -118,3 +123,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# LINE BOT
+LINE_CHANNEL_ACCESS_TOKEN = '9sNHzK9fe++M2HpTjrVMIh60iBvdkEcC+JyJy/hKbrLzOgv7Xu3qXyINBwb9tOEUzCu0NPTSoawQ73opF3fCCcTXO4MqfbJvX7qeJ725UkshR9PIhXv/b7m4SKACnUytHB18BBgF4JHQY9RY4oNrBgdB04t89/1O/w1cDnyilFU='
+LINE_CHANNEL_SECERT = '2f3748a8f2a08838c3869627c7822d9b'
