@@ -1,14 +1,14 @@
 from django.http import HttpResponse, HttpResponseBadRequest, \
     HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextSendMessage
+from linebot import LineBotApi, WebhookParser
 
-# line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
-# parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
-line_bot_api = '9sNHzK9fe++M2HpTjrVMIh60iBvdkEcC+JyJy/hKbrLzOgv7Xu3qXyINBwb9tOEUzCu0NPTSoawQ73opF3fCCcTXO4MqfbJvX7qeJ725UkshR9\
-    PIhXv/b7m4SKACnUytHB18BBgF4JHQY9RY4oNrBgdB04t89/1O/w1cDnyilFU='
-parser = '2f3748a8f2a08838c3869627c7822d9b'
+# 套用settings.py 的屬性
+line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
+parser = WebhookParser(settings.LINE_CHANNEL_SECERT)
 
 
 @csrf_exempt
@@ -24,12 +24,20 @@ def callback(request):
         except LineBotApiError:
             return HttpResponseBadRequest()
 
+        message_keyword = ['誰最狠']
+
         for event in events:
             if isinstance(event, MessageEvent):  # 如果有訊息事件
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text=event.message.text)
-                )
+                if event.message.text in message_keyword:
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text='家維')
+                    )
+                else:
+                    line_bot_api.reply_message(
+                        event.reply_token,
+                        TextSendMessage(text=event.message.text)
+                    )
         return HttpResponse()
     else:
         return HttpResponseBadRequest()
