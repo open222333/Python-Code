@@ -29,10 +29,7 @@ def callback(request):
         for event in events:
             if isinstance(event, MessageEvent):  # 如果有訊息事件
                 if event.message.text in message_keyword:
-                    line_bot_api.reply_message(
-                        event.reply_token,
-                        TextSendMessage(text='家維')
-                    )
+                    ans_tim(event)
                 else:
                     line_bot_api.reply_message(
                         event.reply_token,
@@ -41,3 +38,10 @@ def callback(request):
         return HttpResponse()
     else:
         return HttpResponseBadRequest()
+
+
+def ans_tim(event_item):
+    line_bot_api.reply_message(
+        event_item.reply_token,
+        TextSendMessage(text='家維')
+    )

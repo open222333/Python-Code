@@ -10,6 +10,12 @@ You can return the answer in any order.
 一個整數數組，找出兩個數字，加起來等於目標數字，回傳數字在數組的位置
 '''
 from typing import List
+# Approach 1: Brute Force
+"""
+Loop through each element x and find if there is another value that equals to target−x.
+"""
+# Approach 2: Two-pass Hash Table
+# Approach 3: One-pass Hash Table
 
 
 class Solution:
