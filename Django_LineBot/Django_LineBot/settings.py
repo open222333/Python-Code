@@ -27,7 +27,7 @@ SECRET_KEY = '^^xn+ae$-^bd#59ucr&#!o7150nl10&wz^@76!i)(ja#8%&oqk'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '54c2b8a5454d.ngrok.io'
+    '0adee5a7e592.ngrok.io'
 ]
 
 
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'linebottim.apps.LinebottimConfig',
+    'linebotnotify.apps.LinebotnotifyConfig'
 ]
 
 MIDDLEWARE = [

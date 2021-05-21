@@ -22,4 +22,5 @@ from django.urls.conf import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('linebottim/', include('linebottim.urls')),
+    path('linebotnotify/', include('linebotnotify.urls'))
 ]
