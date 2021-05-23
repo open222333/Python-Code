@@ -9,16 +9,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 ClientID = "jz2l4k1HcnjOszeNNk4w4Z"
 ClientSecret = "OypnXJMWd6lUEtBmSkBifiBmg4Klqzc3NeMPixq3lbm"
-RedirectUrl = "https://0adee5a7e592.ngrok.io/linebotnotify/getAuthorize"
+RedirectUrl = "https://af0a1002f339.ngrok.io/linebotnotify/getAuthorize"
 
 
 @csrf_exempt
-def getLink(request):
+def getLink():
     # 建立跳轉鏈結
     Url = "https://notify-bot.line.me/oauth/authorize?"
     returnUrl = Url + 'response_type=code&client_id=jz2l4k1HcnjOszeNNk4w4Z&redirect_uri=' + \
         RedirectUrl + '&scope=notify&state=NO_STATE'
-    return returnUrl
+    return HttpResponse(returnUrl)
 
 
 def getAuthorize(request):
