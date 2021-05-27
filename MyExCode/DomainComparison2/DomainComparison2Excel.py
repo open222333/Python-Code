@@ -11,14 +11,14 @@ def Createtable():
 
 
 def AddRecord(SourceFile, dbFileName):
-    
+
     for sheets in SourceFile.sheetnames:
         # 讀取每個資料表
         sheet = SourceFile[sheets]
         # 紀錄至資料庫
         for row in range(2, sheet.max_row + 1):
             conn = sqlite3.connect(dbFileName)
-            if sheet['A' + str(row)].value != None:
+            if sheet['A' + str(row)].value is not None:
                 DomainName = sheet['A' + str(row)].value
                 NextDate = sheet['B' + str(row)].value
                 Price = sheet['C' + str(row)].value
@@ -49,7 +49,7 @@ dbFileName = 'domainName.db'
 SourceFile = openpyxl.load_workbook('Source.xlsx')  # 開啟excel檔案
 DomainComparisonFile = 'A.txt'
 # 第一次執行 建立資料庫、各式文檔
-if os.path.exists(dbFileName) == False:
+if os.path.exists(dbFileName) is False:
     Createtable()
     AddRecord(SourceFile, dbFileName)
     newfile = open('A.txt', 'w')
@@ -64,7 +64,7 @@ else:
         for result in results:
             fileObj.write("%s\t%s\t%s\t%s\t分頁名稱：\t%s\n" % (
                 result[0], result[1], result[2], result[3], result[4]))
-    
+
 while True:
     flag = input("輸入E關閉程式:")
     if flag.upper() == 'E':
