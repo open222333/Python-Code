@@ -14,7 +14,7 @@ line_bot_api = LineBotApi(config.get('line-bot', 'channel_access_token'))
 handler = WebhookHandler(config.get('line-bot', 'channel_secret'))
 
 
-@app.route("/callback", method=['POST'])
+@app.route("/callback", methods=['POST'])
 # 接收LINE的資訊
 def callback():
     signature = request.headers['X-Line-Signature']
