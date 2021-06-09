@@ -24,7 +24,7 @@ def callback(request):
         except LineBotApiError:
             return HttpResponseBadRequest()
 
-        message_keyword = ['誰最狠']
+        message_keyword = ['測試']
 
         for event in events:
             if isinstance(event, MessageEvent):  # 如果有訊息事件
@@ -43,5 +43,5 @@ def callback(request):
 def ans_tim(event_item):
     line_bot_api.reply_message(
         event_item.reply_token,
-        TextSendMessage(text='家維')
+        TextSendMessage(text='測試回覆')
     )
