@@ -14,11 +14,11 @@ class Solution:
             pass
         else:
             ans = digitsList[0]
-            for i in range(1,len(digitsList)):
+            for i in range(1, len(digitsList)):
                 ans = self.combinationList(ans, digitsList[i])
         return ans
 
-    def combinationList(self,listA:list,listB:list):
+    def combinationList(self, listA: list, listB: list):
         result = []
         for i in listA:
             for j in listB:
