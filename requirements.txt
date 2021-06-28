@@ -10,3 +10,4 @@ qrcode==6.1
 six==1.16.0
 sqlparse==0.4.1
 toml==0.10.2
+uWSGI @ file:///Users/runner/miniforge3/conda-bld/uwsgi_1611006603902/work
