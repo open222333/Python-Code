@@ -24,7 +24,7 @@ class Solution:
             for j in range(notZeroCount, length):
                 nums[j] = 0
         return nums
-        
 
-nums = [0,1,0,3,12]
+
+nums = [0, 1, 0, 3, 12]
 print(Solution().moveZeroes2(nums))
