@@ -8,12 +8,6 @@ import os
 config = configparser.ConfigParser()
 config.read(os.path.dirname(__file__) + '/config.ini')
 
-datalist = config.get('data', 'NAME').split(',')
-nameDict = {}
-for item in datalist:
-    itemlist = item.split(':')
-    nameDict[itemlist[0]] = itemlist[1]
-
 
 def submitFrom(name, shift):
     options = webdriver.ChromeOptions()
@@ -29,6 +23,13 @@ def submitFrom(name, shift):
     driver.find_element_by_xpath(shift).click()
     driver.find_element_by_xpath(config.get('data', 'SUBMIT_X_PATH')).click()
     driver.close()
+
+
+datalist = config.get('data', 'NAME').split(',')
+nameDict = {}
+for item in datalist:
+    itemlist = item.split(':')
+    nameDict[itemlist[0]] = itemlist[1]
 
 
 def shitf_m_on():
