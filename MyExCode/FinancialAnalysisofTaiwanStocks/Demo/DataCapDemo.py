@@ -1,4 +1,4 @@
-# 在台灣證卷交易所爬蟲取的資料 
+# 在台灣證卷交易所爬蟲取的資料
 import requests
 import pandas as pd
 import io

@@ -1,7 +1,9 @@
 import pyautogui
 
+
 def keep_press():
     pyautogui.press('caps_lock')
+
 
 flag = input("Q")
 
