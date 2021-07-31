@@ -1,4 +1,5 @@
 from selenium import webdriver
+from datetime import datetime
 import configparser
 import schedule
 import time
@@ -6,7 +7,7 @@ import os
 
 
 config = configparser.ConfigParser()
-config.read(os.path.dirname(__file__) + '/config.ini')
+config.read(os.path.dirname(__file__) + '/config.ini', encoding='utf-8')
 
 
 def submitFrom(name, shift):
@@ -57,77 +58,76 @@ for item in datalist:
     temp[1] = temp[1].replace(')', '')
     nameDict[itemlist[0]] = temp
 
-print(nameDict)
-
 for name in nameDict.keys():
     shift = nameDict[name][0]
     week_rest = nameDict[name][1]
     if shift == '早班':
         if '1' not in week_rest:
-            schedule.every().monday.at('7:40').do(shitf_m_on)
+            schedule.every().monday.at('07:40').do(shitf_m_on)
             schedule.every().monday.at('17:00').do(shitf_m_off)
         elif '2' not in week_rest:
-            schedule.every().tuesday.at('7:40').do(shitf_m_on)
+            schedule.every().tuesday.at('07:40').do(shitf_m_on)
             schedule.every().tuesday.at('17:00').do(shitf_m_off)
         elif '3' not in week_rest:
-            schedule.every().wednesday.at('7:40').do(shitf_m_on)
+            schedule.every().wednesday.at('07:40').do(shitf_m_on)
             schedule.every().wednesday.at('17:00').do(shitf_m_off)
         elif '4' not in week_rest:
-            schedule.every().thursday.at('7:40').do(shitf_m_on)
+            schedule.every().thursday.at('07:40').do(shitf_m_on)
             schedule.every().thursday.at('17:00').do(shitf_m_off)
         elif '5' not in week_rest:
-            schedule.every().friday.at('7:40').do(shitf_m_on)
+            schedule.every().friday.at('07:40').do(shitf_m_on)
             schedule.every().friday.at('17:00').do(shitf_m_off)
         elif '6' not in week_rest:
-            schedule.every().saturday.at('7:40').do(shitf_m_on)
+            schedule.every().saturday.at('07:40').do(shitf_m_on)
             schedule.every().saturday.at('17:00').do(shitf_m_off)
         elif '7' not in week_rest:
-            schedule.every().sunday.at('7:40').do(shitf_m_on)
+            schedule.every().sunday.at('07:40').do(shitf_m_on)
             schedule.every().sunday.at('17:00').do(shitf_m_off)
     elif shift == '中班':
         if '1' not in week_rest:
             schedule.every().monday.at('15:40').do(shitf_n_on)
-            schedule.every().monday.at('1:00').do(shitf_n_off)
+            schedule.every().monday.at('01:00').do(shitf_n_off)
         elif '2' not in week_rest:
             schedule.every().tuesday.at('15:40').do(shitf_n_on)
-            schedule.every().tuesday.at('1:00').do(shitf_n_off)
+            schedule.every().tuesday.at('01:00').do(shitf_n_off)
         elif '3' not in week_rest:
             schedule.every().wednesday.at('15:40').do(shitf_n_on)
-            schedule.every().wednesday.at('1:00').do(shitf_n_off)
+            schedule.every().wednesday.at('01:00').do(shitf_n_off)
         elif '4' not in week_rest:
             schedule.every().thursday.at('15:40').do(shitf_n_on)
-            schedule.every().thursday.at('1:00').do(shitf_n_off)
+            schedule.every().thursday.at('01:00').do(shitf_n_off)
         elif '5' not in week_rest:
             schedule.every().friday.at('15:40').do(shitf_n_on)
-            schedule.every().friday.at('1:00').do(shitf_n_off)
+            schedule.every().friday.at('01:00').do(shitf_n_off)
         elif '6' not in week_rest:
             schedule.every().saturday.at('15:40').do(shitf_n_on)
-            schedule.every().saturday.at('1:00').do(shitf_n_off)
+            schedule.every().saturday.at('01:00').do(shitf_n_off)
         elif '7' not in week_rest:
             schedule.every().sunday.at('15:40').do(shitf_n_on)
-            schedule.every().sunday.at('1:00').do(shitf_n_off)
+            schedule.every().sunday.at('01:00').do(shitf_n_off)
     elif shift == '晚班':
         if '1' not in week_rest:
-            schedule.every().monday.at('0:40').do(shitf_g_on)
-            schedule.every().monday.at('9:00').do(shitf_g_off)
+            schedule.every().monday.at('00:40').do(shitf_g_on)
+            schedule.every().monday.at('09:00').do(shitf_g_off)
         elif '2' not in week_rest:
-            schedule.every().tuesday.at('0:40').do(shitf_g_on)
-            schedule.every().tuesday.at('9:00').do(shitf_g_off)
+            schedule.every().tuesday.at('00:40').do(shitf_g_on)
+            schedule.every().tuesday.at('09:00').do(shitf_g_off)
         elif '3' not in week_rest:
-            schedule.every().wednesday.at('0:40').do(shitf_g_on)
-            schedule.every().wednesday.at('9:00').do(shitf_g_off)
+            schedule.every().wednesday.at('00:40').do(shitf_g_on)
+            schedule.every().wednesday.at('09:00').do(shitf_g_off)
         elif '4' not in week_rest:
-            schedule.every().thursday.at('0:40').do(shitf_g_on)
-            schedule.every().thursday.at('9:00').do(shitf_g_off)
+            schedule.every().thursday.at('00:40').do(shitf_g_on)
+            schedule.every().thursday.at('09:00').do(shitf_g_off)
         elif '5' not in week_rest:
-            schedule.every().friday.at('0:40').do(shitf_g_on)
-            schedule.every().friday.at('9:00').do(shitf_g_off)
+            schedule.every().friday.at('00:40').do(shitf_g_on)
+            schedule.every().friday.at('09:00').do(shitf_g_off)
         elif '6' not in week_rest:
-            schedule.every().saturday.at('0:40').do(shitf_g_on)
-            schedule.every().saturday.at('9:00').do(shitf_g_off)
+            schedule.every().saturday.at('00:40').do(shitf_g_on)
+            schedule.every().saturday.at('09:00').do(shitf_g_off)
         elif '7' not in week_rest:
-            schedule.every().sunday.at('0:40').do(shitf_g_on)
-            schedule.every().sunday.at('9:00').do(shitf_g_off)
+            schedule.every().sunday.at('00:40').do(shitf_g_on)
+            schedule.every().sunday.at('09:00').do(shitf_g_off)
+    print(f'{name}:{shift}打卡,{datetime.now()}')
 
 
 if __name__ == "__main__":
