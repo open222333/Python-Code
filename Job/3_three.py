@@ -1,15 +1,15 @@
 import threading
-import time
 lock = threading.Lock()
 
 
 def job1():
     for i in range(10):
         print('job1', i)
+    lock.release()
 
 
 def job2():
-    time.sleep(1)
+    lock.acquire()
     for i in range(10):
         print('job2', i)
 
