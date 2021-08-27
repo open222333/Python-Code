@@ -25,4 +25,12 @@ now_utctime = datetime.utcnow()
 # print(datetime.utcfromtimestamp(time.mktime(now_time.timetuple())))
 # print(int(datetime.timestamp(now_time)))
 # print((datetime.timestamp(datetime.now())))
-print(now_time)
+# print(now_time)
+
+
+# date_format = '%Y-%m-%d %H:%M:%S'
+# now_time = datetime.now().__format__(date_format)
+# time.sleep(10)
+# end_time = datetime.now().__format__(date_format)
+# print(datetime.strptime(end_time, date_format) -
+#       datetime.strptime(now_time, date_format))
