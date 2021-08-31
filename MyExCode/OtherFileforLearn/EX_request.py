@@ -15,15 +15,15 @@ import requests
 # print(get_status_code(url))
 
 
-url = 'http://dekm6v70x775h.cloudfront.net/JKSR-235/240/JKSR-235.m3u8'
-r = requests.get(url, headers={"Content-Type": "application/json"})
-reditList = r.history
-print(f'獲取追蹤歷史：{r}')
+# url = 'http://dekm6v70x775h.cloudfront.net/JKSR-235/240/JKSR-235.m3u8'
+# r = requests.get(url, headers={"Content-Type": "application/json"})
+# reditList = r.history
+# print(f'獲取追蹤歷史：{r}')
 # print(f'headers：{reditList[0].headers}')
 # print(f'url：{reditList[len(reditList)-1].headers["location"]}')
 
 # 20210831 
-url = 'https://pjbar09.xyz'
+url = 'http://quotes.toscrape.com/js/'
 r = requests.get('http://localhost:8050/render.html',
                  params={'url': url, 'wait': 2})
 
