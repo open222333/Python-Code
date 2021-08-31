@@ -1,4 +1,4 @@
-# Scrapy settings for scrapy_ex project
+# Scrapy settings for ptt project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,18 +7,16 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'scrapy_ex'
+BOT_NAME = 'ptt'
+
+SPIDER_MODULES = ['ptt.spiders']
+NEWSPIDER_MODULE = 'ptt.spiders'
 
 # 配置Splash服務的地址
-SPLASH_URL = 'http://localhost:8050'
-
-SPIDER_MODULES = ['scrapy_ex.spiders']
-NEWSPIDER_MODULE = 'scrapy_ex.spiders'
-
+# SPLASH_URL = 'http://localhost:8050'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'scrapy_ex (+http://www.yourdomain.com)'
-USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'
+#USER_AGENT = 'ptt (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 # 不遵守 robot協議
@@ -49,21 +47,15 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-SPIDER_MIDDLEWARES = {
-    # 'scrapy_ex.middlewares.ScrapyExSpiderMiddleware': 543,
-    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
-}
+# SPIDER_MIDDLEWARES = {
+#    'ptt.middlewares.PttSpiderMiddleware': 543,
+# }
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-DOWNLOADER_MIDDLEWARES = {
-    # 'scrapy_ex.middlewares.ScrapyExDownloaderMiddleware': 543,
-    'scrapy_splash.SplashCookiesMiddleware': 723,
-    'scrapy_splash.SplashMiddleware': 725,
-    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
-}
-
-DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+# DOWNLOADER_MIDDLEWARES = {
+#    'ptt.middlewares.PttDownloaderMiddleware': 543,
+# }
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -73,9 +65,12 @@ DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    'scrapy_ex.pipelines.ScrapyExPipeline': 300,
-# }
+# 啟用pipeline
+# 後面的數字300表示Pipeline的執行順序，小的會先執行
+ITEM_PIPELINES = {
+    'ptt.pipelines.PttPipeline': 300,
+    'myFirstScrapyProject.pipelines.DeleteNullTitlePipeline': 200,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -97,4 +92,3 @@ DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'

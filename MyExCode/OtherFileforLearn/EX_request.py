@@ -21,3 +21,13 @@ reditList = r.history
 print(f'獲取追蹤歷史：{r}')
 # print(f'headers：{reditList[0].headers}')
 # print(f'url：{reditList[len(reditList)-1].headers["location"]}')
+
+# 20210831 
+url = 'https://pjbar09.xyz'
+r = requests.get('http://localhost:8050/render.html',
+                 params={'url': url, 'wait': 2})
+
+with open('test.html', 'w') as f:
+    f.write(r.text)
+    f.close()
+# print(r.text)
