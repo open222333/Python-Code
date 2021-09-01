@@ -58,6 +58,7 @@ SPIDER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     # 'scrapy_ex.middlewares.ScrapyExDownloaderMiddleware': 543,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 400,
     'scrapy_splash.SplashCookiesMiddleware': 723,
     'scrapy_splash.SplashMiddleware': 725,
     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
@@ -98,3 +99,8 @@ DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+
+# IP rotation in Scrapy
+ROTATING_PROXY_LIST = [
+    "http://139.162.125.79:8888",
+]

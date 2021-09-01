@@ -20,5 +20,5 @@ class QuoteSpider(scrapy.Spider):
             print(q.text)
         fileName = 'quote.html'
         with open(fileName, 'wb') as f:
-            f.write(quotes)
+            f.write(response.body)
             f.close()
