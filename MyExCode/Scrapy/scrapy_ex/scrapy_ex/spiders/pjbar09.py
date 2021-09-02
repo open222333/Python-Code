@@ -11,12 +11,7 @@ from selenium import webdriver
 import os
 
 # https://splash.readthedocs.io/en/stable/scripting-tutorial.html
-# script = '''function main(splash, args)
-#   splash:go("https://pjbar09.xyz/")
-#   splash:wait(5)
-#   local title = splash:evaljs("document.title")
-#   return {title=title}
-# end'''
+script = ''
 
 
 class pjbar09Spider(scrapy.Spider):
@@ -37,17 +32,16 @@ class pjbar09Spider(scrapy.Spider):
     #     self.browser = webdriver.Chrome(
     #         options=self.options, executable_path=self.dirpath)
 
-    # def start_requests(self):
-    #     for url in self.start_urls:
-    #         return Request(url=url, callback=self.parse, headers={"User-Agent": "My UserAgent"}, meta={"proxy": "http://192.168.1.1:8050"})
-
     def start_requests(self):
         for url in self.start_urls:
             # 'proxy': 'http://139.162.125.79:8888',
-            yield SplashRequest(url=url, callback=self.parse, args={'wait': 5, 'splash_headers': self.header})
+            yield SplashRequest(url=url, callback=self.parse, args={'wait': 30, 'splash_headers': self.header})
 
-    # def start_requests2(self):
-    #     yield SplashRequest(url=url, callback=self.parse, args={'wait': 3})
+    # # def start_requests2(self):
+    # #     yield SplashRequest(url=url, callback=self.parse, args={'wait': 3})
+    # def parse_second(self, response):
+    #     for url in self.start_urls:
+    #         yield SplashRequest(url=self.url, callback=self.parse, args={'wait': 5, 'splash_headers': self.header})
 
     def parse(self, response):
 
@@ -74,9 +68,11 @@ class pjbar09Spider(scrapy.Spider):
         #     print(test)
 
         sel = Selector(response)
-        results = sel.css('ul.ul_link').getall()
-        for result in results:
-            print(result)
+        results = sel.css('script::text').getall()
+        with open('test.js', 'w') as f:
+            for result in results:
+                f.write(result)
+            f.close()
 
         # Selector 選擇器
         # sel = Selector(response)
@@ -90,5 +86,3 @@ class pjbar09Spider(scrapy.Spider):
             # for i in results:
             #     f.write(i)
             f.close()
-
-        
