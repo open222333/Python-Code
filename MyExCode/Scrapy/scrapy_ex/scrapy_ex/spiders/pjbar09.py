@@ -19,15 +19,12 @@ import os
 # end'''
 
 
-class TestspiderSpider(scrapy.Spider):
-    name = 'testSpider'
-    # allowed_domains = ['pjbar09.xyz','cn.jujiarobot.com']
+class pjbar09Spider(scrapy.Spider):
+    name = 'pjbar09'
+    # allowed_domains = ['pjbar09.xyz']
     start_urls = [
         'https://pjbar09.xyz/',
-        # 'https://cn.jujiarobot.com',
-        # 'https://g.jujiarobot.com',
     ]
-    # start_urls = ['https://pz01.bar/']
     header = {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'
     }
@@ -53,21 +50,11 @@ class TestspiderSpider(scrapy.Spider):
     #     yield SplashRequest(url=url, callback=self.parse, args={'wait': 3})
 
     def parse(self, response):
+
         # # 先由self.browser進行請求
         # self.browser.get(response.url)
         # # 用scrapy選擇器獲取selenium的頁面源代碼
         # sel = Selector(text=self.browser.page_source)
-
-        # soup = BeautifulSoup(response.text, 'lxml')
-        # print(response.body)
-        # tests = soup.select('ul.ul_link li.yellow')
-        # for test in tests:
-        #     print(test)
-
-        sel = Selector(response)
-        results = sel.css('ul.ul_link').getall()
-        for result in results:
-            print(result)
 
         # test = sel.xpath(
         #     '/html/body/span[1]/section[9]/ul/li[1]/a').extract_first()
@@ -77,6 +64,19 @@ class TestspiderSpider(scrapy.Spider):
         #     for i in test2:
         #         f.write(f"{i}\n")
         #     f.close()
+        # 以上 scrapy + selenium
+
+        # soup = BeautifulSoup(response.text, 'lxml')
+        # print(response.body)
+        # tests = soup.select('ul.ul_link li.yellow')
+        # tests = soup.find_all('li', {'class':'yellow'})
+        # for test in tests:
+        #     print(test)
+
+        sel = Selector(response)
+        results = sel.css('ul.ul_link').getall()
+        for result in results:
+            print(result)
 
         # Selector 選擇器
         # sel = Selector(response)
@@ -84,13 +84,11 @@ class TestspiderSpider(scrapy.Spider):
         # for result in results:
         #     print(result)
 
-        filename = "testSpider.html"
+        filename = "pjbar09_response.html"
         with open(filename, 'wb') as f:
             f.write(response.body)
             # for i in results:
             #     f.write(i)
             f.close()
 
-        # tests = soup.find_all('li', {'class':'yellow'})
-        # for test in tests:
-        #     print(test)
+        

@@ -16,7 +16,7 @@ class Pz01Spider(scrapy.Spider):
             yield SplashRequest(url=url, callback=self.parse, args={'wait': 2, 'proxy': 'http://139.162.125.79:8888', 'splash_headers': self.header})
 
     def parse(self, response):
-        with open('pz01_crawler.html', 'wb') as f:
+        with open('pz01_response.html', 'wb') as f:
             f.write(response.body)
             f.close
 
