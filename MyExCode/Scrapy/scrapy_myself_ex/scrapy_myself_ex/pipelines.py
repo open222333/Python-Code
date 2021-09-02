@@ -3,15 +3,24 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
+
+# useful for handling different item types with a single interface
+from scrapy.exceptions import DropItem
+from itemadapter import ItemAdapter
+
+
+class ScrapyMyselfExPipeline:
+    def process_item(self, item, spider):
+        return item
+
 # Item pipelines 的典型應用：
 # 清洗資料
 # 驗證資料
 # 過濾重複資料
 # 資料存入資料庫
 
+
 # useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
-from scrapy.exceptions import DropItem
 
 
 class PttPipeline:

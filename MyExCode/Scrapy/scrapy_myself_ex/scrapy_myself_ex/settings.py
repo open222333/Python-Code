@@ -1,4 +1,4 @@
-# Scrapy settings for quotes_ex project
+# Scrapy settings for scrapy_myself_ex project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,17 +7,18 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'quotes_ex'
+BOT_NAME = 'scrapy_myself_ex'
 
-SPIDER_MODULES = ['quotes_ex.spiders']
-NEWSPIDER_MODULE = 'quotes_ex.spiders'
+SPIDER_MODULES = ['scrapy_myself_ex.spiders']
+NEWSPIDER_MODULE = 'scrapy_myself_ex.spiders'
 
-SPLASH_URL = 'http://127.0.0.1:8050'
+# 配置Splash服務的地址
+SPLASH_URL = 'http://localhost:8050'
 
-DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'quotes_ex (+http://www.yourdomain.com)'
+#USER_AGENT = 'scrapy_myself_ex (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'
 
 # Obey robots.txt rules
 # 不遵守 robot協議
@@ -48,15 +49,22 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+# SPIDER_MIDDLEWARES = {
+#    'scrapy_myself_ex.middlewares.ScrapyMyselfExSpiderMiddleware': 543,
+# }
+# Splash 要使用
 SPIDER_MIDDLEWARES = {
-    # 'quotes_ex.middlewares.QuotesExSpiderMiddleware': 543,
     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
 }
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
+# DOWNLOADER_MIDDLEWARES = {
+#    'scrapy_myself_ex.middlewares.ScrapyMyselfExDownloaderMiddleware': 543,
+# }
+
+# Splash 要使用
 DOWNLOADER_MIDDLEWARES = {
-    # 'quotes_ex.middlewares.QuotesExDownloaderMiddleware': 543,
     'scrapy_splash.SplashCookiesMiddleware': 723,
     'scrapy_splash.SplashMiddleware': 725,
     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
@@ -71,7 +79,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # ITEM_PIPELINES = {
-#    'quotes_ex.pipelines.QuotesExPipeline': 300,
+#    'scrapy_myself_ex.pipelines.ScrapyMyselfExPipeline': 300,
 # }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -94,4 +102,14 @@ DOWNLOADER_MIDDLEWARES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# Splash 要使用
 HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+
+# Splash 要使用
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+
+# IP rotation in Scrapy
+ROTATING_PROXY_LIST = [
+    "http://139.162.125.79:8888",
+]

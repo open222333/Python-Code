@@ -11,9 +11,9 @@ class Pz01Spider(scrapy.Spider):
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'
     }
 
-    def start_requests(self):
-        for url in self.start_urls:
-            yield SplashRequest(url=url, callback=self.parse, args={'wait': 2, 'proxy': 'http://139.162.125.79:8888', 'splash_headers': self.header})
+    # def start_requests(self):
+    #     for url in self.start_urls:
+    #         yield SplashRequest(url=url, callback=self.parse, args={'wait': 2, 'proxy': 'http://139.162.125.79:8888', 'splash_headers': self.header})
 
     def parse(self, response):
         with open('pz01_response.html', 'wb') as f:

@@ -1,12 +1,12 @@
 import scrapy
 from scrapy.exceptions import CloseSpider
-from ptt.items import PttItem
+from scrapy_myself_ex.items import PttItem
 # https://ithelp.ithome.com.tw/articles/10205893
 
 
 class PttSpider(scrapy.Spider):
     count_page = 1
-    name = 'Ptt'
+    name = 'ptt'
     allowed_domains = ['www.ptt.cc']
     start_urls = ['http://www.ptt.cc/bbs/movie/index.html']
 

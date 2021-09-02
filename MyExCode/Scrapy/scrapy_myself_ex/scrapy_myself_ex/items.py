@@ -6,6 +6,14 @@
 import scrapy
 
 
+class ScrapyMyselfExItem(scrapy.Item):
+    # define the fields for your item here like:
+    # name = scrapy.Field()
+    pass
+
+# 給 pttSpider 用
+
+
 class PttItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
