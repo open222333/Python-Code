@@ -22,7 +22,7 @@ import requests
 # print(f'headers：{reditList[0].headers}')
 # print(f'url：{reditList[len(reditList)-1].headers["location"]}')
 
-# 20210831 
+# 20210831
 url = 'http://quotes.toscrape.com/js/'
 r = requests.get('http://localhost:8050/render.html',
                  params={'url': url, 'wait': 2})
@@ -31,3 +31,10 @@ with open('test.html', 'w') as f:
     f.write(r.text)
     f.close()
 # print(r.text)
+
+
+# AutoKeyInForms
+
+url = 'https://docs.google.com/forms/d/e/1FAIpQLSc7fZg0bAjD5fQOsdxtIHlV3m-OPECu3VHahfJYJH2_-KGCmQ/viewform'
+text = requests.get(url)
+print(text.headers)

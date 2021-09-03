@@ -1,4 +1,6 @@
 class SettlementScheme():
+    '''順序賠付'''
+
     def __init__(self, money: list, bet: list) -> None:
         self.betMakerMoneyList = money
         self.betAmountList = bet
