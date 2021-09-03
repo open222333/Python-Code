@@ -7,10 +7,15 @@ client = MongoClient('127.0.0.1:31117')
 # db, collection
 datas = client['avnight']['avdata_actor']
 
+# 找重複
+# db.avdata_long_video.aggregate()
+#       .group({ _id: "$avkey", count: { $sum: 1 } })
+#       .match({count:{ $gt : 1 }})  
+
 # flask mongoengine 用法
 # Model._get_collection().aggregate([
-#     { '$group' : 
-#         { '_id' : { 'carrier' : '$carrierA', 'category' : '$category' }, 
+#     { '$group' :
+#         { '_id' : { 'carrier' : '$carrierA', 'category' : '$category' },
 #           'count' : { '$sum' : 1 }
 #         }
 #     }
@@ -88,11 +93,11 @@ datas = client['avnight']['avdata_actor']
 pipeline = [
     {
         "$addFields": {
-                "created_updated_days_divide": {"$divide": [{"$subtract": [{"$dateFromString": {"dateString": "$avdata_updated_at"}}, {"$dateFromString": {"dateString": "$avdata_created_at"}}]}, 60 * 60 * 24 * 1000]},
-                "now_updated_days_divide": {"$divide": [{"$subtract": [ datetime.now(), {"$dateFromString": {"dateString": "$avdata_updated_at"}}]}, 60 * 60 * 24 * 1000]}}
+            "created_updated_days_divide": {"$divide": [{"$subtract": [{"$dateFromString": {"dateString": "$avdata_updated_at"}}, {"$dateFromString": {"dateString": "$avdata_created_at"}}]}, 60 * 60 * 24 * 1000]},
+            "now_updated_days_divide": {"$divide": [{"$subtract": [datetime.now(), {"$dateFromString": {"dateString": "$avdata_updated_at"}}]}, 60 * 60 * 24 * 1000]}}
     },
     {
-        "$match": {"$or":[{"created_updated_days_divide": {"$lte": 30}}, {"now_updated_days_divide": {"$lte": 30}}]}
+        "$match": {"$or": [{"created_updated_days_divide": {"$lte": 30}}, {"now_updated_days_divide": {"$lte": 30}}]}
     }
     # {
     #     "$limit": 1
