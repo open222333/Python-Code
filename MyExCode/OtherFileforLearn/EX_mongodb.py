@@ -5,12 +5,12 @@ from datetime import datetime
 # 連線到mongodb
 client = MongoClient('127.0.0.1:31117')
 # db, collection
-datas = client['avnight']['avdata_actor']
+datas = client['database']['collection']
 
 # 找重複
-# db.avdata_long_video.aggregate()
-#       .group({ _id: "$avkey", count: { $sum: 1 } })
-#       .match({count:{ $gt : 1 }})  
+# db.collection.aggregate()
+#       .group({ _id: "$key", count: { $sum: 1 } })
+#       .match({count:{ $gt : 1 }})
 
 # flask mongoengine 用法
 # Model._get_collection().aggregate([
@@ -23,21 +23,13 @@ datas = client['avnight']['avdata_actor']
 
 # find 用法
 # print(datas.count()) # 有幾筆資料
-# cursor_datas = datas.find().sort("av_id", 1).limit(1000).skip(110000)
+# cursor_datas = datas.find().sort("id", 1).limit(1000).skip(110000)
 # cursor_datas = datas.find()[100:189]
 # need_datas = [data for data in cursor_datas]
 
 # aggregate 用法
 # https://docs.mongodb.com/manual/reference/operator/aggregation/
 # pipeline 查詢語法
-# db.avdata_video.aggregate([
-#     {
-#         $addFields:{days:{$divide:[{$subtract: ["$avdata_updated_at","$avdata_created_at"]}, 60 * 60 * 24 * 1000]}}
-#     },
-#     {
-#         $match:{$or:[{days:{$lte:30}}, {avdata_created_at:{$gte:ISODate("2021-07-25T00:00:00.000+08:00")}}]}
-#     }
-# ]).count();
 
 # dateFromString 用法
 # { $dateFromString: {
@@ -90,19 +82,7 @@ datas = client['avnight']['avdata_actor']
 # ])
 
 
-pipeline = [
-    {
-        "$addFields": {
-            "created_updated_days_divide": {"$divide": [{"$subtract": [{"$dateFromString": {"dateString": "$avdata_updated_at"}}, {"$dateFromString": {"dateString": "$avdata_created_at"}}]}, 60 * 60 * 24 * 1000]},
-            "now_updated_days_divide": {"$divide": [{"$subtract": [datetime.now(), {"$dateFromString": {"dateString": "$avdata_updated_at"}}]}, 60 * 60 * 24 * 1000]}}
-    },
-    {
-        "$match": {"$or": [{"created_updated_days_divide": {"$lte": 30}}, {"now_updated_days_divide": {"$lte": 30}}]}
-    }
-    # {
-    #     "$limit": 1
-    # }
-]
+
 # cursor_datas = datas.aggregate(pipeline)
 # print(len([i for i in cursor_datas]))
 # print([i for i in cursor_datas])
@@ -113,9 +93,3 @@ pipeline = [
 #         if item not in ans:
 #             ans.append(item)
 # print(ans)
-
-# 欄位空直檢查
-# maybe_null_col_list = ['birth', 'height', 'cup', 'bust', 'waist', 'hip']
-# for col_name in maybe_null_col_list:
-#     if col_name not in test_data:
-#         test_data[col_name] = None
