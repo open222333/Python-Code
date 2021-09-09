@@ -20,4 +20,14 @@ if __name__ == '__main__':
             print(line, end='')
             print('-' * 20)
 
-# 
+# 搜尋特定項目時 常用yield產生器函式
+q = deque(maxlen=3)  # deque(maxlen=N) 產生固定佇列 新的項目加入 佇列已滿 舊的會移除
+q.append(1)
+q.append(2)
+q.append(3)
+print(q)
+q.append(4)
+print(q)
+
+q.appendleft(4)
+q.popleft()
