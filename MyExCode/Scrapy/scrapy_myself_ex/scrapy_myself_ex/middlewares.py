@@ -8,6 +8,12 @@ from scrapy import signals
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
 
+# 以下為scrapy_selenium_middleware.py middleware 所需套件
+# https://blog.csdn.net/killeri/article/details/80525825
+# https://blog.csdn.net/WanYu_Lss/article/details/82807099
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+
 
 class ScrapyMyselfExSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
