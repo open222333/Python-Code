@@ -68,3 +68,17 @@ def download_image(url: str):
     # file_name = url.split("/")[-1]
     with open(file_name, "wb") as f:
         shutil.copyfileobj(r.raw, f)
+
+
+def create_file(fileName='file', fileFormat='txt', content='', openMode='w'):
+    import os
+    num = 1
+    file = f'{fileName}_{num}.{fileFormat}'
+    while True:
+        if os.path.exists(file):
+            num += 1
+        else:
+            break
+    with open(file, openMode) as f:
+        f.write(content)
+        # f.close() # with open 會close()
