@@ -1,5 +1,4 @@
 -- https://github.com/scrapy-plugins/scrapy-splash/issues/106
-
 function process_one(splash)
     local get_dimensions = splash:jsfunc([[
     function () {
