@@ -7,6 +7,7 @@
 # useful for handling different item types with a single interface
 from scrapy.exceptions import DropItem
 from itemadapter import ItemAdapter
+from pymongo import MongoClient
 
 
 class ScrapyMyselfExPipeline:
@@ -43,12 +44,26 @@ class DeleteNullTitlePipeline(object):
 
 class MongoDBPipeline:
     '''存入mongoDB'''
+    # https://ithelp.ithome.com.tw/articles/10207157
+    # open_spider : 開始爬之前先連接MongoDB並設定參數。
+    # process_item : 呼叫insert_article。
+    # insert_article : 新增資料到MongoDB內。
+    # close_spider : 爬取完全部後被呼叫，關閉連接。
 
     def open_spider(self, spider):
-        from pymongo import MongoClient
         db_uri = spider.settings.get(
             'MONGODB_URI', 'mongodb://localhost:27017')
         db_name = spider.settings.get('MONGODB_DB_NAME', 'ptt_scrapy')
         self.db_client = MongoClient('mongodb://localhost:27017')
         self.db = self.db_client[db_name]
-    pass
+
+    def process_item(self, item, spider):
+        self.insert_article(item)
+        return item
+
+    def insert_article(self, item):
+        item = dict(item)
+        self.db.article.insert_one(item)
+
+    def close_spider(self, spider):
+        self.db_clients.close()

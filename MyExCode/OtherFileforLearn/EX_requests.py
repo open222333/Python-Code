@@ -29,7 +29,6 @@ r = requests.get('http://localhost:8050/render.html',
 
 with open('test.html', 'w') as f:
     f.write(r.text)
-    f.close()
 # print(r.text)
 
 
