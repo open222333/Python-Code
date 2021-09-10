@@ -9,7 +9,9 @@ def get_content(pattern, file):
 
 
 pattern = r'<iframe src=+[^\s]*[^ "]'
+iframe_pattern = r"html5player.setVideoURL+[^\s]*[^');]"
 urls_pattern = r'[a-zA-Z]+://+[^\s]*'
-print(get_content(pattern, 'test_video_1.html'))
-# for i in get_content(pattern, 'test_video_1.html'):
-#     print(re.findall(urls_pattern, i))
+urls2_pattern = r"/+[^\s]*[^');\n]"
+print(get_content(iframe_pattern, 'test_1.html'))
+for i in get_content(iframe_pattern, 'test_1.html'):
+    print(re.findall(urls2_pattern, i))
