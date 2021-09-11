@@ -22,7 +22,7 @@ class QuoteSpider(scrapy.Spider):
     def start_requests(self):
         for url in self.start_urls:
             # args = {'wait': 5, 'proxy': 'http://139.162.125.79:8888', 'splash_headers': self.header})
-            yield SplashRequest(url, self.parse, args={'wait': 5, 'lua_source': self.script})
+            yield SplashRequest(url, cookies={'t': '1'}, callback=self.parse, args={'wait': 5, 'lua_source': self.script})
 
     def parse(self, response):
         soup = BeautifulSoup(response.text, 'lxml')
