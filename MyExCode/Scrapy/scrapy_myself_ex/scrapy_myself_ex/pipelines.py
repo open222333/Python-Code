@@ -42,6 +42,28 @@ class DeleteNullTitlePipeline(object):
             raise DropItem(f'found null title {item}')
 
 
+class MongoPipeline(object):
+    def __init__(self, databaseIp='127.0.0.1', databasePort=27017, user="simple", password="test", mongodbName='tutorial'):
+        client = MongoClient(databaseIp, databasePort)
+        self.db = client[mongodbName]
+        self.db.authenticate(user, password)
+
+    def process_item(self, item, spider):
+        postItem = dict(item)  # 將item轉化為字典
+        self.db.scrapy.insert(postItem)  # 插入紀錄
+        return item  # 在終端輸出紀錄 可不寫
+
+    # def __init__(self) -> None:
+    #     host = settings.MONGODB_HOST
+    #     client = MongoClient(host)
+    #     self.data = client['test']['original']
+
+    # def process_item(self, item, spider):
+    #     postItem = dict(item)
+    #     self.data.scrapy.insert(postItem)
+    #     return item
+
+
 class MongoDBPipeline:
     '''存入mongoDB'''
     # https://ithelp.ithome.com.tw/articles/10207157
