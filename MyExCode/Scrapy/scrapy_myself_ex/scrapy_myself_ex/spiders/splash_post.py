@@ -30,4 +30,5 @@ class SplashPostSpider(scrapy.Spider):
                             args={'lua_source': self.lua_script, 'http_method': 'POST', 'body': post_data})
 
     def parse(self, response):
-        print(response.body)
+        with open('test.txt', 'a') as f:
+            f.write(bytes(response.body).decode('utf-8'))

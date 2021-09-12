@@ -78,10 +78,11 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-    # 'scrapy_myself_ex.pipelines.ScrapyMyselfExPipeline': 300,
-    'scrapy_myself_ex.pipelines.MongoDBPipeline': 400,
-}
+# ITEM_PIPELINES = {
+#     # 'scrapy_myself_ex.pipelines.ScrapyMyselfExPipeline': 300,
+#     '''存入資料庫'''
+#     # 'scrapy_myself_ex.pipelines.MongoDBPipeline': 400,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

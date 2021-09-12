@@ -82,3 +82,15 @@ def create_file(fileName='file', fileFormat='txt', content='', openMode='w'):
     with open(file, openMode) as f:
         f.write(content)
         # f.close() # with open 會close()
+
+
+def unquote_encode(url, unicode='utf-8'):
+    from urllib.parse import unquote
+
+    url = unquote(url).encode(unicode)
+    return url
+    # 演示：
+    # >>> from urllib.parse import unquote
+    # >>> 'example.com?title=%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D0%B2%D0%B0%D1%8F+%D0%B7%D0%B0%D1%89%D0%B8%D1%82%D0%B0'
+    # >>> unquote(url)
+    # 'example.com?title=правовая+защита'

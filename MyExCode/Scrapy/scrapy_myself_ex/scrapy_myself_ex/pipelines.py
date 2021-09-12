@@ -53,15 +53,15 @@ class MongoPipeline(object):
         self.db.scrapy.insert(postItem)  # 插入紀錄
         return item  # 在終端輸出紀錄 可不寫
 
-    # def __init__(self) -> None:
-    #     host = settings.MONGODB_HOST
-    #     client = MongoClient(host)
-    #     self.data = client['test']['original']
+    def __init__(self) -> None:
+        host = settings.MONGODB_HOST
+        client = MongoClient(host)
+        self.data = client['test']['original']
 
-    # def process_item(self, item, spider):
-    #     postItem = dict(item)
-    #     self.data.scrapy.insert(postItem)
-    #     return item
+    def process_item(self, item, spider):
+        postItem = dict(item)
+        self.data.scrapy.insert(postItem)
+        return item
 
 
 class MongoDBPipeline:
@@ -73,11 +73,15 @@ class MongoDBPipeline:
     # close_spider : 爬取完全部後被呼叫，關閉連接。
 
     def open_spider(self, spider):
-        db_uri = spider.settings.get(
-            'MONGODB_URI', 'mongodb://localhost:27017')
-        db_name = spider.settings.get('MONGODB_DB_NAME', 'ptt_scrapy')
-        self.db_client = MongoClient('mongodb://localhost:27017')
-        self.db = self.db_client[db_name]
+        # db_uri = spider.settings.get(
+        #     'MONGODB_URI', 'mongodb://localhost:27017')
+        # db_name = spider.settings.get('MONGODB_DB_NAME', 'ptt_scrapy')
+        # self.db_client = MongoClient('mongodb://localhost:27017')
+        # self.db = self.db_client[db_name]
+
+        # host = settings.MONGODB_HOST
+        self.client = MongoClient('127.0.0.1:31117')
+        self.db = self.client['test']
 
     def process_item(self, item, spider):
         self.insert_article(item)

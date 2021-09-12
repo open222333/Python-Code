@@ -28,6 +28,7 @@ pipeline = [
 print(datas.count())  # 有幾筆資料
 cursor_datas = datas.find().sort("id", 1).limit(1000).skip(110000)
 cursor_datas = datas.find()[100:189]
+cursor_datas = datas.find_one({'_id': data['data']['_id']})
 need_datas = [data for data in cursor_datas]
 
 cursor_datas = datas.aggregate(pipeline)
