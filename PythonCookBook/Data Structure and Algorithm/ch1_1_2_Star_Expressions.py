@@ -1,3 +1,12 @@
+'''
+1.2 拆解一個任意長度的可迭代物件之元素
+問題：
+解開一個可迭代物件(iterable)取出Ｎ個元素，但這個可疊愛物件的長度可能比Ｎ個元素還多，導致「要拆解的值太多(too many values to unpack)」的例外
+解法：
+星號運算式(star expressions)
+討論：
+延伸式的可迭代物件(extended iterable unpacking)動作專門用來拆解任意長度或長度未知的可迭代物件(iterables)
+'''
 # 拆解一個任意長度的可迭代物件之元素
 # 星號運算式(star expressions)
 def drop_frist_last(grades):

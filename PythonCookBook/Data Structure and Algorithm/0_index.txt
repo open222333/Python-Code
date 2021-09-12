@@ -1,0 +1,38 @@
+資料結構與演算法
+
+問題：
+解法：
+討論：
+
+1.1 將一個序列拆分給個別變數
+問題：
+有一個Ｎ個元素的元組(tuple)或序列(sequen),拆分給Ｎ個變數
+解法：
+賦值(assignment operation) 拆分給變數
+討論：
+拆分(unpacking)可用在任何可迭代物件(iterable)：元組 串列 字串 檔案 迭代器(iterators) 產生器(generators)
+用了就丟的變數名稱(throwaway variable name)：_，須確保所挑的名稱沒用在其他地方
+
+1.2 拆解一個任意長度的可迭代物件之元素
+問題：
+解開一個可迭代物件(iterable)取出Ｎ個元素，但這個可疊愛物件的長度可能比Ｎ個元素還多，導致「要拆解的值太多(too many values to unpack)」的例外
+解法：
+星號運算式(star expressions)
+討論：
+延伸式的可迭代物件(extended iterable unpacking)動作專門用來拆解任意長度或長度未知的可迭代物件(iterables)
+
+1.3 留下最後Ｎ個項目
+問題：
+在迭代(iteration)或某種處理動作的過程中留下最近項目的少量歷程紀錄(limited history)
+解法：
+collections.deque適合用來製作這種少量的歷程紀錄。
+討論：
+搜尋特定項目(items)時，通常使用yield的產生器函示(generator function)
+
+1.4 找出最大或最小的Ｎ個項目
+問題：
+找出一個群集(collection)中最大或最小的Ｎ個項目做成一個串列(list)
+解法：
+heapq模組 nlargest() nsmallest()
+討論：
+heapq運作方式：先將資料轉為一個串列，項目以堆積(heap)的形式安置的。

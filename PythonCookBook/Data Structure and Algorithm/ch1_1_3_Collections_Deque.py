@@ -1,5 +1,16 @@
+'''
+1.3 留下最後Ｎ個項目
+問題：
+在迭代(iteration)或某種處理動作的過程中留下最近項目的少量歷程紀錄(limited history)
+解法：
+collections.deque適合用來製作這種少量的歷程紀錄。
+討論：
+搜尋特定項目(items)時，通常使用yield的產生器函示(generator function)
+'''
+
 # 留下最後N個項目
 # 在迭代(iteration) 或某種處理動作的過程中留下最近幾個項目的少量歷程紀錄(limited history)
+
 from collections import deque
 
 
