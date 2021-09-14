@@ -2,6 +2,20 @@ import schedule
 import time
 
 
+class Test():
+    def tesst(self):
+        return self.test('sss')
+
+    def test(self, s, s2):
+        print(s, s2)
+
+    def run(self):
+        for i in range(5):
+            if i < 5:
+                schedule.every().sunday.at('18:45').do(self.test, str(i), 't2')
+                schedule.every().saturday.at('22:29').do(self.tesst)
+
+
 def job():
     print("I'm working...")
 

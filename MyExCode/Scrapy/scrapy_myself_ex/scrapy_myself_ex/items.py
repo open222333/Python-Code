@@ -22,3 +22,9 @@ class PttItem(scrapy.Item):
     push = scrapy.Field()
     href = scrapy.Field()
     date = scrapy.Field()
+
+
+class LeetcodeItem(scrapy.Item):
+    # define the fields for your item here like:
+    # name = scrapy.Field()
+    title = scrapy.Field()

@@ -1,0 +1,87 @@
+version: '3'
+services:
+    scrapy:
+        container_name: scrapy
+        image: scrapinghub/splash
+        ports:
+            - 8050:8050
+        volumes:
+            - ../spiders:/usr/src/app
+        # 為了不讓他中止
+        command: ping 127.0.0.1
+    mongo:
+        container_name: mongo
+        hostname: mongo-container
+        image: mongo:4
+        ports:
+            - 31117:27017
+        volumes:
+            - ./docker/data/mongo:/data/db
+    redis:
+        container_name: redis
+        hostname: redis-container
+        image: redis:3
+        ports:
+            - 31119:6379
+    mysql:
+        container_name: mysql
+        hostname: mysql-container
+        image: mysql:5.7
+        ports:
+            - 31116:3306
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+        volumes:
+            - ./docker/data/mysql:/var/lib/mysql
+            - ./docker/log/mysql:/var/log/mysql
+            - ./docker/conf/mysql:/etc/mysql/conf.d
+    phpmyadmin:
+        container_name: phpmyadmin
+        hostname: phpmyadmin-container
+        image: phpmyadmin/phpmyadmin
+        volumes:
+            - ./docker/conf/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+            - ./docker/data/phpmyadmin/:/srv/phpmyadmin/
+        ports:
+            - 31111:80
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+            PMA_USER: root
+            PMA_PASSWORD: root
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+            UPLOAD_LIMIT: '100M'
+        depends_on:
+            - mysql
+    api:
+        container_name: api
+        build: ./
+        hostname: api-container
+        env_file: ./test.env
+        volumes:
+            - ./:/usr/src/app
+            - ./google_api_auth.json:/usr/src/app/google_api_auth.json
+        ports:
+            - 31112:81
+            - 31118:5678
+        command: ping 127.0.0.1
+        depends_on:
+            - redis
+            - mysql
+            - mongo
+    admin:
+        container_name: admin
+        build: ./
+        hostname: admin-container
+        env_file: ./test.env
+        volumes:
+            - ./:/usr/src/app
+        ports:
+            - 35000:5000
+        command: ping 127.0.0.1
+        depends_on:
+            - redis
+            - mysql
+            - mongo
