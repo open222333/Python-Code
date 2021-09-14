@@ -8,6 +8,9 @@
 from scrapy.exceptions import DropItem
 from itemadapter import ItemAdapter
 from pymongo import MongoClient
+import os
+import sys
+from datetime import datetime
 
 
 class ScrapyMyselfExPipeline:
@@ -54,6 +57,7 @@ class MongoPipeline(object):
         return item  # 在終端輸出紀錄 可不寫
 
     def __init__(self) -> None:
+        from scrapy_myself_ex import settings
         host = settings.MONGODB_HOST
         client = MongoClient(host)
         self.data = client['test']['original']
@@ -93,3 +97,79 @@ class MongoDBPipeline:
 
     def close_spider(self, spider):
         self.db_clients.close()
+
+
+class TempleOnePipeline:
+    '''mongodb 範本 insert_article 兩種'''
+
+    def __init__(self) -> None:
+        pass
+
+    def open_spider(self, spider):
+        # host = settings.MONGODB_HOST
+        self.client = MongoClient('127.0.0.1:31117')
+        self.db = self.client['test']
+
+    def process_item(self, item, spider):
+        self.insert_article(item)
+
+    def insert_article(self, item):
+        dir_name = __file__
+        for i in range(5):
+            dir_name = os.path.dirname(dir_name)
+
+        sys.path.append(os.path.join(dir_name))
+        from flask.models import Models
+        item = dict(item)
+        data = Models.objects(post_id=item['post_id']).first()
+        if data is None:
+            Models(
+                post_id=item['post_id'],
+                page_url=item['page_url'],
+                img_url=item['img_url'],
+                first_video_urls=item['first_video_urls'],
+                title=item['title'],
+                tags=item['tags'],
+                second_video_url=item['second_video_url']
+            ).save()
+
+    # def insert_article(self, item):
+    #     item = dict(item)
+    #     cursor_data = self.db.testTTT.find_one({'post_id': item['post_id']})
+    #     if cursor_data is None:
+    #         item['created_at'] = datetime.now()
+    #         item['updated_at'] = datetime.now()
+    #         self.db.testTTT.insert_one(item)
+    #     elif cursor_data != item:
+    #         self.db.testTTT.update_one(item)
+
+    def close_spider(self, spider):
+        self.client.close()
+
+
+class TempleTwoPipeline:
+    '''mongodb 範本 insert_article 兩種'''
+
+    def __init__(self) -> None:
+        pass
+
+    def open_spider(self, spider):
+        from scrapy_myself_ex.settings import MONGODB_HOST
+        self.client = MongoClient(MONGODB_HOST)
+        self.db = self.client['test']
+
+    def process_item(self, item, spider):
+        self.insert_article(item)
+
+    def insert_article(self, item):
+        item = dict(item)
+        cursor_data = self.db.testTTT.find_one({'post_id': item['post_id']})
+        if cursor_data is None:
+            item['created_at'] = datetime.now()
+            item['updated_at'] = datetime.now()
+            self.db.testTTT.insert_one(item)
+        elif cursor_data != item:
+            self.db.testTTT.update_one(item)
+
+    def close_spider(self, spider):
+        self.client.close()
