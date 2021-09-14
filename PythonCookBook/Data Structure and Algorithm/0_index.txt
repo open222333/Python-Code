@@ -36,3 +36,15 @@ collections.deque適合用來製作這種少量的歷程紀錄。
 heapq模組 nlargest() nsmallest()
 討論：
 heapq運作方式：先將資料轉為一個串列，項目以堆積(heap)的形式安置的。
+若找單一最大最小 使用max() min()
+若Ｎ的大小接近該群集 使用sorted(items)[:N] sorted(item)[-N:]
+
+1.5 實作一個優先序佇列
+問題：
+實作一個佇列(queue)，依據給定的優先序(priority)排序項目，每次取出(pop)都回傳最高優先序的項目
+解法：
+用heapq模組實作簡單的優先序佇列
+討論：
+heapq.heappush() 插入項目
+heapq.heappop() 回傳那個最小的項目
+佇列由(-priority, index, item)這種形式的元組(tuples)

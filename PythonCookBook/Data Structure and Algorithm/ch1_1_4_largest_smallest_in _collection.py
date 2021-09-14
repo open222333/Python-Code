@@ -6,6 +6,8 @@
 heapq模組 nlargest() nsmallest()
 討論：
 heapq運作方式：先將資料轉為一個串列，項目以堆積(heap)的形式安置的。
+若找單一最大最小 使用max() min()
+若Ｎ的大小接近該群集 使用sorted(items)[:N] sorted(item)[-N:]
 '''
 import heapq
 
