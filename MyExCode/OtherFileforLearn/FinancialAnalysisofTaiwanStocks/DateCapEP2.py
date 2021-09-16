@@ -47,4 +47,4 @@ for key in total_dict.keys():
     df.to_sql(key, db2, if_exists='replace')
 # 讀取資料庫
 # tail()：顯示後幾筆資料 預設為5
-test = pd.read_sql(con=db2,sql='SELECT * FROM "2330"').tail()
+test = pd.read_sql(con=db2, sql='SELECT * FROM "2330"').tail()

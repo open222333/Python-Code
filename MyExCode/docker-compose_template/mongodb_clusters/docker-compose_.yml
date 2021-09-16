@@ -6,7 +6,7 @@ services:
 		ports:
             - 27017:27017
 		restart: always
-		entrypoint: [ "mongod","--port","27017", "--bind_ip_all",   "--replSet", "rs0" ]
+		entrypoint: [ "mongod", "--port", "27017", "--bind_ip_all", "--replSet", "rs0" ]
 
 	mongo2:
 		container_name: mongo2
@@ -14,7 +14,7 @@ services:
 		ports:
             - 27027:27027
 		restart: always
-		entrypoint: [ "mongod","--port","27027", "--bind_ip_all",   "--replSet", "rs0" ]
+		entrypoint: [ "mongod", "--port", "27027", "--bind_ip_all", "--replSet", "rs0" ]
 
 	mongo3:
 		container_name: mongo3
@@ -22,9 +22,11 @@ services:
 		ports:
             - 27037:27037
 		restart: always
-		entrypoint: [ "mongod","--port","27037", "--bind_ip_all",   "--replSet", "rs0" ]
+		entrypoint: [ "mongod", "--port", "27037", "--bind_ip_all", "--replSet", "rs0" ]
 		healthcheck:
-            test: ["CMD","mongo","--host","mongo1","--port","27017",  "--eval", 'rs.initiate( { _id : "rs0",members: [
+            test: ["CMD", "mongo", "--host", "mongo1", "--port", "27017",  "--eval", 
+                    'rs.initiate
+                    ({ _id : "rs0",members: [
                     { _id: 0, host: "mongo1:27017" },
                     { _id: 1, host: "mongo2:27027" },
                     { _id: 2, host: "mongo3:27037" }
@@ -33,36 +35,3 @@ services:
             timeout: 10s
             retries: 3
             start_period: 10s
-
-    redis:
-        container_name: redis
-        hostname: redis-container
-        image: redis:3
-        ports:
-            - 31119:6379
-    mysql:
-        container_name: mysql
-        hostname: mysql-container
-        image: mysql:5.7
-        ports:
-            - 31116:3306
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-        volumes:
-            - ./docker/data/mysql:/var/lib/mysql
-            - ./docker/log/mysql:/var/log/mysql
-            - ./docker/conf/mysql:/etc/mysql/conf.d
-    admin:
-        container_name: admin
-        build: .
-        hostname: admin-container
-        env_file: ./avnight.env
-        volumes:
-            - .:/usr/src/app
-        ports:
-            - 35000:5000
-        command: ping 127.0.0.1
-        depends_on:
-            - redis
-            - mysql
-            - mongo1Ｆ

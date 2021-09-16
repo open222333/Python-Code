@@ -11,7 +11,7 @@ def Createtable():
 
 
 def AddRecord(SourceFile, dbFileName):
-    
+
     for sheets in SourceFile.sheetnames:
         # 讀取每個資料表
         sheet = SourceFile[sheets]
@@ -64,7 +64,7 @@ else:
         for result in results:
             fileObj.write("%s\t%s\t%s\t%s\t分頁名稱：\t%s\n" % (
                 result[0], result[1], result[2], result[3], result[4]))
-    
+
 while True:
     flag = input("輸入E關閉程式:")
     if flag.upper() == 'E':
