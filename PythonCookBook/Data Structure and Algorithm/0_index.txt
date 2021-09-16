@@ -47,4 +47,14 @@ heapq運作方式：先將資料轉為一個串列，項目以堆積(heap)的形
 討論：
 heapq.heappush() 插入項目
 heapq.heappop() 回傳那個最小的項目
-佇列由(-priority, index, item)這種形式的元組(tuples)
+佇列由(-priority, index, item)這種形式的元組(tuples)，取負的priority使項目從最高優先序排到最低優先序
+Item實體(instances)是無法比較。
+(priority, item)元組，可比較，若有相同優先序就會無法比較。
+(priority, index, item)可以比較且因元組不會有相同的index，不會有無法比較的問題。
+若要將此佇列用在執行緒(threads)之間的通訊，得加入適當的鎖定(locking)與訊號(signaling)機制。
+
+1.6 在一個字典中將鍵值映射至多個值
+問題：
+製作一個字典
+解法：
+討論：
