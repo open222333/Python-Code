@@ -64,3 +64,13 @@ Item實體(instances)是無法比較。
 若不想要自動建立字典條目，可使用setdefult()
 討論：
 使程式碼更簡潔
+
+1.7 維持字典的秩序
+問題：
+建立一個字典(dictionary)，且在迭代(iterating)或序列化(serializing)時，控制其中項目的次序。
+解法：
+collection模組的OrderedDict:在迭代時完全保留資料插入順序。
+若想精準控制JSON編碼中欄位出現的順序，可先建立一個裝有資料的OrderedDict。
+討論：
+OrderedDict在內部維護一個雙向鏈結串列(doubly linked list)，依照插入的次序來安排鍵值的次序。
+一個OrderedDict的大小超過一個正常字典的兩倍大，因創建了額外的鏈結串列。

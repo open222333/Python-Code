@@ -3,7 +3,7 @@ import pymysql
 # 資料庫設定
 db_settings = {
     "host": "172.105.39.26",
-    "port": 31216,
+    "port": 31217,
     "user": "root",
     "password": "root",
     "db": "test_db",
@@ -24,7 +24,7 @@ try:
 
         # 新增
         command = "INSERT INTO test_table(id, name)VALUES(%s, %s)"
-        for num in range(1, 10):
+        for num in range(101, 102):
             cursor.execute(command, (f"{num}", f"test{num}"))
         # 儲存變更
         conn.commit()

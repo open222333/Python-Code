@@ -30,7 +30,7 @@ d3.setdefault('a', []).append(1)
 d3.setdefault('a', []).append(2)
 d3.setdefault('b', []).append(4)
 
-pairs = {1: 'a', 2: 'b'}
+pairs = {1: 'a', 2: 'b.'}
 
 d4 = {}
 for key, value in pairs:
