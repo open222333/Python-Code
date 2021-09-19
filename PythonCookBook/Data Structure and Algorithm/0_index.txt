@@ -74,3 +74,14 @@ collection模組的OrderedDict:在迭代時完全保留資料插入順序。
 討論：
 OrderedDict在內部維護一個雙向鏈結串列(doubly linked list)，依照插入的次序來安排鍵值的次序。
 一個OrderedDict的大小超過一個正常字典的兩倍大，因創建了額外的鏈結串列。
+
+1.8 以字典進行運算
+問題：
+在一個資料字典(dictionary)，進行各種運算。
+解法：
+使用zip()反轉(invert)這個鍵值的keys與values。
+使用zip()搭配sorted()進行排序。
+注意：zip()建立一個只能消耗一次的迭代器(iterator)
+討論：
+若在字典進行常見的資料縮簡(data reductions)，只會處理鍵值(keys)。
+zip()反轉成(values,keys)的序列，先比較value，若剛好有一樣的值，會比較鍵值(key)。
