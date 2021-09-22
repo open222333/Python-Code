@@ -60,7 +60,7 @@ mysql -u{$username} -p{$password}
 
 ＃確認mysql-slave server_id和read_only變數
 show variables like 'server_id%';
-show variables like  'read_only%';
+show variables like 'read_only%';
 
 3.備份mysql-master
 ＃master全表鎖定只讀

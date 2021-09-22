@@ -4,19 +4,14 @@ services:
         container_name: mysql1
         hostname: mysql1-container
         image: mysql:5.7
-        command: 
-            install xtrabackup2.4
-            yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
-            yum list | grep percona
-            yum install percona-xtrabackup-24
         ports: 
             # <Port exposed> : < MySQL Port running inside container>
             - 31216:3306
         environment: 
             - MYSQL_ROOT_PASSWORD=root
-            - MYSQL_REPLICATION_MODE=master
-            - MYSQL_REPLICATION_USER=replication
-            - MYSQL_REPLICATION_PASSWORD=testpassword
+            # - MYSQL_REPLICATION_MODE=master
+            # - MYSQL_REPLICATION_USER=replication
+            # - MYSQL_REPLICATION_PASSWORD=testpassword
         volumes:
             - ./docker/data/mysql1:/var/lib/mysql
             - ./docker/conf/mysql/master.cnf:/etc/mysql/my.cnf
@@ -31,12 +26,12 @@ services:
             - mysql1
         environment: 
             - MYSQL_ROOT_PASSWORD=root
-            - MYSQL_REPLICATION_MODE=slave
-            - MYSQL_REPLICATION_USER=replication
-            - MYSQL_REPLICATION_PASSWORD=testpassword
-            - MYSQL_MASTER_HOST=mysql1
-            - MYSQL_MASTER_PORT_NUMBER=31216
-            - MYSQL_MASTER_ROOT_PASSWORD=root
+            # - MYSQL_REPLICATION_MODE=slave
+            # - MYSQL_REPLICATION_USER=replication
+            # - MYSQL_REPLICATION_PASSWORD=testpassword
+            # - MYSQL_MASTER_HOST=mysql1
+            # - MYSQL_MASTER_PORT_NUMBER=31216
+            # - MYSQL_MASTER_ROOT_PASSWORD=root
         volumes:
             - ./docker/data/mysql2:/var/lib/mysql
             - ./docker/conf/mysql/slave.cnf:/etc/mysql/my.cnf
