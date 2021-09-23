@@ -2,6 +2,7 @@ import scrapy
 from scrapy_splash import SplashRequest
 from bs4 import BeautifulSoup
 
+# https://daimom3020.blogspot.com/2019/12/scrapyjson.html 研究
 
 class LeetcodeSpider(scrapy.Spider):
     name = 'leetcode'
@@ -15,9 +16,10 @@ class LeetcodeSpider(scrapy.Spider):
             yield SplashRequest(url, callback=self.parse, args={'wait': 5})
 
     def parse(self, response):
-        # test = response.css('#__next > div > div > div > div.col-span-4.md\:col-span-2.lg\:col-span-3 > div:nth-child(2) > div.-mx-4.md\:mx-0 > div > div > div:nth-child(2) > div:nth-child(99) > div:nth-child(2) > div > div > div > a').extract()
-        # print(test)
-        soup = BeautifulSoup(response)
+        soup = BeautifulSoup(response.body, 'lxml')
+        # print(response.body)
+        # print(soup.text)
+        with open('test_b.html', 'wb') as f:
+            f.write(response.body)
         with open('test.html', 'w') as f:
-            f.write(soup.text)
-        pass
+            f.write(soup)

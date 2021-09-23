@@ -3,7 +3,7 @@ from scrapy import cmdline
 
 # 方法一
 '''scrapy_myself_ex 須先cd到這資料夾'''
-args = "scrapy crawl ptt".split()
+args = "scrapy crawl leetcode".split()
 cmdline.execute(args)
 
 # 方法二
