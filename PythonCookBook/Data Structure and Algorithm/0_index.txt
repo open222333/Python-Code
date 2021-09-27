@@ -112,6 +112,10 @@ zip()反轉成(values,keys)的序列，先比較value，若剛好有一樣的值
 
 1.11 為一個切片(Slice)命名
 問題：
-
+若清理程式充斥著寫死(hardcoded)在程式碼中的切片索引(slice indices)
 解法：
+程式碼範例
 討論：
+內建的slice()會建立一個slice物件，可用在任何允許切片(slice)的地方。
+假設有個slice實體s，可用s.start、s.stop、s.step取得更多資訊。
+可使用indices(size)會回傳(start, stop, step)元組(tuple)。
