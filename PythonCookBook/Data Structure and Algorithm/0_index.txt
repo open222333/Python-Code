@@ -119,3 +119,15 @@ zip()反轉成(values,keys)的序列，先比較value，若剛好有一樣的值
 內建的slice()會建立一個slice物件，可用在任何允許切片(slice)的地方。
 假設有個slice實體s，可用s.start、s.stop、s.step取得更多資訊。
 可使用indices(size)會回傳(start, stop, step)元組(tuple)。
+
+1.12 找出一個序列中出現最頻繁的項目
+問題：
+有一個由項目所構成的序列，找出出現最頻繁的項目
+解法：
+collections.Counter類別的most_common()方法
+討論：
+Counter物件可接受任何可雜湊(hashable)的項目序列作為輸入。
+Counter是一個映射到出現次數的字典。
+若要手動增加次數可用加法。也能使用update()方法。
+Counter可用各種數學運算。
+Counter物件對於任何需要用到表格資料並進行技術的問題是非常實用的工具。
