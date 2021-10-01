@@ -66,8 +66,8 @@ def download_image(url: str):
     for a in page_a:
         a['href']
     # file_name = url.split("/")[-1]
-    with open(file_name, "wb") as f:
-        shutil.copyfileobj(r.raw, f)
+    # with open(file_name, "wb") as f:
+    #     shutil.copyfileobj(r.raw, f)
 
 
 def create_file(fileName='file', fileFormat='txt', content='', openMode='w'):
@@ -94,3 +94,16 @@ def unquote_encode(url, unicode='utf-8'):
     # >>> 'example.com?title=%D0%BF%D1%80%D0%B0%D0%B2%D0%BE%D0%B2%D0%B0%D1%8F+%D0%B7%D0%B0%D1%89%D0%B8%D1%82%D0%B0'
     # >>> unquote(url)
     # 'example.com?title=правовая+защита'
+
+
+def get_ip_address():
+    '''取的對外IP'''
+    import urllib3
+    url = "https://showip.net/"
+    http = urllib3.PoolManager()
+    http.headers['User-Agent'] = 'curl/7.49.1'
+    r = http.request('GET', url)
+    if r.status == 200:
+        return r.data.decode("utf-8")
+    else:
+        return ""
