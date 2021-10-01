@@ -5,6 +5,8 @@ services:
         container_name: mongo1
         ports:
             - 31141:27017
+        # expose: # 開給內網
+        #     - 5000
         command: mongod --replSet RS --bind_ip_all --dbpath /data/db
         volumes:
             - ./docker/data/mongo1:/data/db

@@ -23,9 +23,10 @@ import requests
 # print(f'url：{reditList[len(reditList)-1].headers["location"]}')
 
 # 20210831
+# verify=False 忽略憑證錯誤
 url = 'http://quotes.toscrape.com/js/'
 r = requests.get('http://localhost:8050/render.html',
-                 params={'url': url, 'wait': 2})
+                 params={'url': url, 'wait': 2}, verify=False)
 
 with open('test.html', 'w') as f:
     f.write(r.text)
