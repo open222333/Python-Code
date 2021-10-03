@@ -12,9 +12,31 @@ Counter可用各種數學運算。
 Counter物件對於任何需要用到表格資料並進行技術的問題是非常實用的工具。
 '''
 from collections import Counter
-word = ['look', 'into', 'my', 'eyes', 'look', 'into', 'my', 'eyes', 'the', 'eyes', 'the', 'eyes', 'the', 'eyes', 'the', 'eyes',
-        'not', 'around', 'the', 'eyes', "don't", 'look', 'around', 'the', 'eyes', 'look', 'into', 'my', 'eyes', "you're", 'under']
+words = ['look', 'into', 'my', 'eyes', 'look', 'into', 'my', 'eyes', 'the', 'eyes', 'the', 'eyes', 'the', 'eyes', 'the', 'eyes',
+         'not', 'around', 'the', 'eyes', "don't", 'look', 'around', 'the', 'eyes', 'look', 'into', 'my', 'eyes', "you're", 'under']
 
-word_counts = Counter(word)
+word_counts = Counter(words)
 top_three = word_counts.most_common(3)
 print(top_three)
+
+print(word_counts['not'])
+print(word_counts['eyes'])
+
+morewords = ['why', 'are', 'you', 'not', 'looking', 'in', 'my', 'eyes']
+# 以下等於 word_counts.update(morewords)
+for word in morewords:
+    word_counts[word] += 1
+print(word_counts['eyes'])
+
+a = Counter(words)
+b = Counter(morewords)
+print(a)
+print(b)
+
+# 結合次數
+c = a + b
+print(c)
+
+# 減去次數
+d = a - b
+print(d)
