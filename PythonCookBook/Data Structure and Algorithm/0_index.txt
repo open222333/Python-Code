@@ -141,3 +141,25 @@ Counter物件對於任何需要用到表格資料並進行技術的問題是非�
 operation.itemgetter()函式可接受的引數是可被用來從rows中的記錄擷取出想要的值的查找索引(lookup indices)，可以是字典鍵值名稱、串列元素或可被未入一個物件的__getitem__()方法的任何值。
 若給itemgetter()多個索引，所產的的可呼叫物件會回傳一個其中含有所有指定的值的元組，而sorted()會依據這些元組的次序輸出。
 itemgetter()的功能可用lambda取代，但itemgetter()會跑得快一點。若有效能考量可使用。
+
+1.14 在不支援原生的比較運算的情形下排序物件
+問題：
+想排序(sort)同一類別(class)的物件，但沒原生支援(natively support)的比較運算可用。
+解法：
+內建的sorted()函式接受一個key引數，可藉此傳入一個可呼叫物件(callable)，這個callable會回傳物件中的某些值，而sorted會用這些值來比較物件。
+可使用lambda以及operator.attrgetter()
+討論：
+可使用lambda以及operator.attrgetter()，attrgetter()速度通常較快一點，且多了「允許同時擷取出多個欄位」的功能。類似為字典使用operator.itemgetter()的選擇(訣竅1.13)。
+也可套用到min()或max()這樣的函式。
+
+1.15 基於一個欄位來為記錄分組
+問題：
+一個由字典(dictionaries)或實體(instances)所構成的序列，基於一個特定欄位(例如日期)的值來分組迭代(iterate over)資料。
+解法：
+itertools.groupby()函式適用。
+討論：
+groupby()函式的運作方式是掃瞄一個序列，尋找連續出現的相同值(或由給定的key函式索回傳得值)加以歸組。
+每次迭代中，會回傳那個值以及一個迭代器(iterator)。
+第一部需依據要分組的欄位進行排序，因groupby()只檢視連續的項目。
+若目標是將資料依照日期歸組，成為一個可隨機存取的大型資料結構。
+使用defaultdict()建置一個multidict(訣竅1.6)
