@@ -1,1 +1,0 @@
-ssh-add -K ~/.ssh/20210126_forGithub
