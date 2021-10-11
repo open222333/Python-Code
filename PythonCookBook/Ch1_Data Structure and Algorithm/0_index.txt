@@ -163,3 +163,53 @@ groupby()函式的運作方式是掃瞄一個序列，尋找連續出現的相�
 第一部需依據要分組的欄位進行排序，因groupby()只檢視連續的項目。
 若目標是將資料依照日期歸組，成為一個可隨機存取的大型資料結構。
 使用defaultdict()建置一個multidict(訣竅1.6)
+
+1.16 過濾序列的元素
+問題：
+一個有資料的序列(sequence)，使用某些條件擷取出值，或縮減(reduce)該佇列。
+解法：
+串列概括式：過濾(filter)序列資料最容易的方式通常是使用一個串列概括式(list comprehension)。
+產生器運算式：也可用產生器運算式(genrtator expressions)透過迭代動作逐次產生過濾後的值。
+filter()函式：若過濾的程序涉及例外處理或其他繁複的細節，可使用內建的filter()函式。
+討論：
+串列概括式和產生器運算式通常過濾簡單資料最簡單也最直接的方式。有過濾同時轉換資料的額外功能。
+以新的值取代不符合條件的值：將過濾條件一到一個條件運算式(conditional expression)。
+itertools.compress()：接受一個可迭代物件(iterable)以及一個搭配的Boolean選擇器序列(selector sequence)作為輸入。
+filter()和compress()都回傳一個迭代器(iterator)
+
+1.17 擷取出一個字典的子集合
+問題：
+製作一個字典，為另個字典的子集(subset)
+解法：
+使用字典概括式(dictionary comprehension)能夠輕易達成目標。
+討論：
+建立一個元組序列(a sequen of tuples)並傳給dict函式。也可達成字典概括能做到的大部分事情。
+
+1.18 將名稱映射至序列元素
+問題：
+有段程式碼會依據位置存取串列(list)或元組(tuple)的元素，想用名稱存取元素，使結構少依賴位置。
+解法：
+collection.namedtuple()。
+討論：
+nametuple：可以用來取代字典，因字典所需儲存空間較大。然而不同於字典的是，nametuple的內容不可變(immutable)。
+若需要變更屬性，可通過nametuple實體的_replace()方法，會建立一個全新的nametuple。
+_replace()巧妙的用途：填充(populate)，具有選擇性欄位或缺少欄位的具名元組。先製作一個有預設值的原型元組，然後用_replace()建立一個植被取代的新實體。
+若是定義一種有效率的資料結構，可以考慮使用__slots__定義一個類別。(訣竅 8.4)
+
+1.19 同時轉換並縮減資料
+問題：需要執行一個縮減函式(reduction function，例如：sum(),min(),max())，但得先轉換或過濾資料。
+解法：
+結合資料縮減動作和轉換動作的方式是使用產生器運算式引數(generator-expression argument)。
+討論：
+
+'''
+1.20 將多個映射結合為單一映射
+問題：
+有多個字典(dictionaries)或映射(mappings)，要合理的方式將他們結合，已進行某種動作，例如：值得查找或檢查鍵值是否存在。
+解法：
+collrctions模組的ChainMap類別。
+討論：
+ChainMap 若有變動都會變動第一個映射的值。
+ChainMap特別適合用於具有範疇的值(scoped values，如全域值、區域值等)
+作為ChainMap的替代方案，可以考慮使用update()方法將字典合併合併再一起。
+'''

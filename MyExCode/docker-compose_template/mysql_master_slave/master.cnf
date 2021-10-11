@@ -1,6 +1,0 @@
-[mysqld]
-server-id = 1
-log-bin = mysql-bin
-# 第一個參數是新增時從第幾個編號開始，第二個參數是每次新增資料要加幾號
-# auto-increment-increment = 1
-# auto-increment-offset = 1
