@@ -2,13 +2,9 @@
 
 > # 資料夾簡介
 > * Kingreturn_Algorithm：王者歸來演算法
->
 > * Kingreturn_Ex：王者歸來
->
 > * MyExCode：自行練習各種範例
->
 > * PythonBase：
->
 > * PythonCookBook：
 
 > # 檔案說明
