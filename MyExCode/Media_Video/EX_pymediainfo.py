@@ -1,9 +1,15 @@
-from pprint import pprint
 import re
 from pymediainfo import MediaInfo
+import pymediainfo
 '''
 https://pymediainfo.readthedocs.io/en/stable/pymediainfo.html
 '''
+
+
+def getVideoInfo(video_path):
+    '''回傳 影片video_tracks'''
+    tracks = MediaInfo.parse(video_path).video_tracks
+    return [info.to_data() for info in tracks][0]
 
 
 def getVideoAspectRatio(video_path):
@@ -14,7 +20,6 @@ def getVideoAspectRatio(video_path):
         media = MediaInfo.parse(video_path)
         width = 0
         height = 0
-        tracks = media.video_tracks
         for track in media.video_tracks:
             width = track.width
             height = track.height
@@ -55,10 +60,11 @@ def getVideoDuration(video_path):
 
 
 # 測試用數據
-test_video_path = '/Users/4ge0/Desktop/Pexels_Videos_2278095.mp4'
+# test_video_path = '/Users/4ge0/Desktop/Pexels_Videos_2278095.mp4'
+test_video_path_1 = '/Users/4ge0/Desktop/test_low.mp4'
+test_video_path_2 = '/Users/4ge0/Desktop/test_hight.mp4'
+test_video_path_3 = '/Users/4ge0/Desktop/test_hight.mp4'
+# print(getVideoDuration(test_video_path))
 # print(getVideoAspectRatio(test_video_path))
-# media = MediaInfo.parse(test_video_path)
-# for tracks in media.video_tracks:
-#     print(tracks.track_type)
-#     for data in tracks.to_data():
-#         print(tracks.to_data()[data])
+print(getVideoInfo(test_video_path_1)['height'])
+print(getVideoInfo(test_video_path_2)['height'])

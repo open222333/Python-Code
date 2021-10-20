@@ -22,7 +22,8 @@ def google_translate_text(project_id, source_language_code, target_language_code
     result = []
     for translation in response.translations:
         result.append(translation.translated_text)
-    
+
     return result
+
 
 print(google_translate_text('dgcmtcloud043', 'th', 'en', 'สวัสดี'))

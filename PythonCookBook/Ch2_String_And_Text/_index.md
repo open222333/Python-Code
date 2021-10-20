@@ -39,3 +39,18 @@ fnmatch模組fnmatchcase()：區分大小寫。
     >       - findall()：找出所有符合。
     >       - finditer()：迭代的匹配。
 * 討論：正則表達式，使用re.compile()編譯一個模式，再使用match()、findall()、finditer()。
+
+2.5 搜尋並取代文字
+* 問題：在一個字串搜尋並取代一個文字模式
+* 解法：
+    > 1. str.replace()：簡單的可使用此函式。
+    > 2. re模組 sub()函式：較為複雜可使用此函式。
+    > 3. calendar模組 month_abbr()函式：更複雜可使用此函式。
+
+    > subn():可知道替換了多少地方。
+* 討論：
+
+2.6 搜尋並取代不區分大小寫的文字
+* 問題：以不區分大小寫(case-insensitive)的方式搜尋並取代文字。
+* 解法：re.IGNORECASE(flag)，不區分大小寫的比對。
+* 討論：
