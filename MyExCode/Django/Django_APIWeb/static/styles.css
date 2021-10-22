@@ -1,0 +1,95 @@
+    a.base {
+        color: darkred;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+    }
+    
+    li.basemenu {
+        font-weight: bold;
+        text-align: right;
+        font-family: fantasy;
+        list-style: none;
+        display: inline;
+        border-style: outset;
+        border-radius: 20px;
+        padding-top: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    
+    li.basesubmenu ol.basesubmenu {
+        font-weight: bold;
+        text-align: right;
+        font-family: fantasy;
+        list-style: none;
+        border-style: dashed solid;
+        border-radius: 10px;
+        padding-top: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    
+    h1.base {
+        background-color: skyblue;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        font-family: fantasy;
+        border-radius: 5px;
+    }
+    
+    h2.loginmessage {
+        color: red;
+    }
+    
+    div.base {
+        text-align: center;
+        background-color: skyblue;
+        border-radius: 5px;
+        /* padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-top: 20%;
+        margin-bottom: 20%;
+        margin-left: 20%;
+        margin-right: 20%; */
+    }
+    
+    div.basetop {
+        font-family: 微軟正黑體;
+        font-weight: bold;
+    }
+    
+    div.loginformdivItem {
+        margin-top: 5%;
+        margin-bottom: 5%;
+        font-family: 微軟正黑體;
+        font-weight: bold;
+        font-size: 120%;
+    }
+    
+    ol.userPage {
+        font-weight: bold;
+        text-align: left;
+        font-family: fantasy;
+    }
+    
+    input.test {
+        display: inline-block;
+        width: 200px;
+        margin-left: 50px;
+        color: hsl(0, 0, 20);
+        font-size: 16px;
+        letter-spacing: 1px;
+    }
+    
+    div.testcenter {
+        margin: 0px auto;
+    }

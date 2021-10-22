@@ -2,6 +2,10 @@
 from datetime import datetime
 
 
+def set_filename(filename: str, num):
+    return f'{filename}_{str(num).zfill(3)}'
+
+
 def get_status_code(img_path) -> int:
     '''測試鏈結 回傳http code'''
     import requests

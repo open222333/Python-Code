@@ -1,0 +1,56 @@
+{% extends "user.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+{% block content %}
+<div class="content">
+    <div class="container-fluid ">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">編輯使用者 </h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="/useradd/" method="post"> 
+                        {% comment %} action="/useradd/"  {% endcomment %}
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>帳號</label>
+                                        {{ editform.account }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>狀態</label>
+                                        {{ editform.accountState }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>備註</label>
+                                        {{ editform.detail }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% comment %} <input type='hidden' name='csrfmiddlewaretoken' value={{ csrftoken }}> {% endcomment %}
+                            <button class="btn btn-info btn-fill pull-right" type='submit'>送出</button>
+                            {% comment %} onclick="location.href={% url 'Login:useradd' %}" {% endcomment %}
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+</body>

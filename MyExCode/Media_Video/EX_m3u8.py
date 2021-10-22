@@ -1,9 +1,20 @@
 import os
 import re
 
+'''
+convertVideo_ts:轉換影片成ts格式
+
+'''
+
 
 def convertVideo_ts(video_path, output_dir, output_name, p):
-    '''轉換影片成 ts'''
+    '''
+    轉換影片成ts格式
+    video_path:影片位置
+    output_dir:輸出資料夾位置
+    output_name:輸出檔名
+    p:畫質
+    '''
     from EX_pymediainfo import getVideoInfo
     if os.path.exists(output_dir) == False:
         os.mkdir(output_dir)
@@ -33,6 +44,39 @@ def convertVideo_ts(video_path, output_dir, output_name, p):
     print(command)
     os.system(command)
     return video_name
+
+
+def generateKey(out_dir_path, key_name, extension='key', option_hex='16'):
+    '''
+    使用 openssl 生產 key
+    out_dir_path:輸出檔案位置
+    key_name:key檔名
+    extension:副檔名
+    option_hex:位元
+    '''
+    command = f'openssl rand -hex {option_hex} > {out_dir_path}/{key_name}.{extension}'
+    os.system(command)
+    return
+
+
+def generateKeyInfo(key_file_path, filename, key_URI=None, IV=''):
+    '''
+    key info format(KeyInfo 內容格式):
+        key URI        = key_URI
+        key file path  = key_file_path
+        IV (optional)  = IV
+
+    Key info file example:
+        http://server/file.key
+        /path/to/file.key
+        0123456789ABCDEF0123456789ABCDEF
+    '''
+    if key_URI == None:
+        key_URI = key_file_path
+
+    data = f'{key_URI}\n{key_file_path}\n{IV}\n'
+    with open(f'{filename}.keyinfo', 'w') as f:
+        f.write(data)
 
 
 def mergeVideo_m3u8(m3u8_link, video_name, output_dir):

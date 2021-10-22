@@ -1,0 +1,20 @@
+{% extends "template.html" %}
+<!DOCTYPE html>{% load static %}
+<html lang="en">
+
+
+<body>
+    {% block Mainnavitemactive %}
+    <li>
+    {% endblock Mainnavitemactive %}
+    {% block Stocknavitemactive %}
+    <li class="nav-item active">
+    {% endblock Stocknavitemactive %}
+    {% block pagename %}
+    <p class="navbar-brand">Stock</p>
+    {% endblock pagename %} 
+    {% block content %}
+    {% endblock content %}
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+<!doctype html> {% load static %}
+<html>
+
+<head>
+    <!-- <link rel="stylesheet" href="{% static 'styles.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'stylesLogin.css' %}">
+    <meta charset="utf-8">
+    <title>登入</title>
+</head>
+
+<body>
+    <div class="login-root">
+        <div class="box-root flex-flex flex-direction--column" style="min-height: 100vh;flex-grow: 1;">
+            <div class="box-root padding-top--24 flex-flex flex-direction--column" style="flex-grow: 1; z-index: 9;">
+                <div class="formbg-outer">
+                    <div class="formbg">
+                        <div class="formbg-inner padding-horizontal--48">
+                            <span class="padding-bottom--15">輸入你的帳號</span>
+                            <form id="stripe-login" ,method="POST">
+                                <div class="field padding-bottom--24">
+                                    <label for="id_account">帳號</label>
+                                    <input type="text" name="account" maxlength="20" required id="id_account">
+                                </div>
+                                <div class="field padding-bottom--24">
+                                    <div class="grid--50-50">
+                                        <label for="id_password">密碼</label>
+                                    </div>
+                                    <input type="password" name="password" required id="id_password">
+                                </div>
+                                <div class="field field-checkbox padding-bottom--24 flex-flex align-center">
+                                    <h2 class="loginmessage">{{ message }}</h2>
+                                </div>
+                                <div class="field padding-bottom--24">
+                                    <input type="hidden" name="ok">
+                                    <input type="submit" value="登入">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

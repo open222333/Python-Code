@@ -10,6 +10,6 @@ git add *
 git commit -m"${time}"
 # git checkout master
 # git merge a # 合併
-#git pull # 將上面的拉下來
+# git pull # 將上面的拉下來
 git push
 # git branch -D a
