@@ -1,3 +1,4 @@
+from genericpath import exists
 import os
 import re
 
@@ -71,22 +72,36 @@ def generateKeyInfo(key_file_path, filename, key_URI=None, IV=''):
         /path/to/file.key
         0123456789ABCDEF0123456789ABCDEF
     '''
-    if key_URI == None:
-        key_URI = key_file_path
+    try:
+        if key_URI == None:
+            key_URI = key_file_path
 
-    data = f'{key_URI}\n{key_file_path}\n{IV}\n'
-    with open(f'{filename}.keyinfo', 'w') as f:
-        f.write(data)
+        data = f'{key_URI}\n{key_file_path}\n{IV}\n'
+        with open(f'{filename}.keyinfo', 'w') as f:
+            f.write(data)
+    except Exception as err:
+        return err
+    return 'OK'
 
 
 def mergeVideo_m3u8(m3u8_link, video_name, output_dir):
     '''
+    將 m3u8 的影片, 合併成一個 ts 影片, 回傳 ts 檔名稱
     合併m3u8
     '''
     name = f'{video_name}.ts'
     command = f'ffmpeg -i {m3u8_link} -c copy {output_dir}/{name} -y'
     os.system(command)
     return name
+
+
+def videoTSConvertToEncryptedM3U8(video_ts, keyinfo, output_dir, output_name):
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    command = f'ffmpeg -i {video_ts} -c copy -hls_segment_type mpegts -hls_time 1- -start_number 1 -hls_key_info_file {keyinfo} -hls_segment_filename {output_dir}/{output_name}_%05d.ts -hls_list_size 0 -hls_playlist_type vod -hls_flasg delete_segments+split_by_time {output_dir}/{output_name}.m3u8 -y'
+    os.system(command)
+
 
 
 test_path = '/Users/4ge0/Desktop/test_hight.mp4'

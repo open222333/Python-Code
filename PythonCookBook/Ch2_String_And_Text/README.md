@@ -54,3 +54,8 @@ fnmatch模組fnmatchcase()：區分大小寫。
 * 問題：以不區分大小寫(case-insensitive)的方式搜尋並取代文字。
 * 解法：re.IGNORECASE(flag)，不區分大小寫的比對。
 * 討論：
+
+2.7 為最短匹配指定一個正規表達式
+* 問題：使用一個正規表達式(regular expressions)比對一個文字模式(text pattern)，但所識別出來的是符合一個模式的最長匹配，需改成最短匹配。
+* 解法：.*加上？ 就會進行最短匹配。
+* 討論：
