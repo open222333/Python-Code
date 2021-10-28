@@ -17,12 +17,11 @@ def convertVideo_ts(video_path, output_dir, output_name, p):
     p:畫質
     '''
     from EX_pymediainfo import getVideoInfo
-    if os.path.exists(output_dir) == False:
-        os.mkdir(output_dir)
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
     internet_media_type = getVideoInfo(video_path)['internet_media_type']
-    internet_media_type = str(re.findall(
-        r'H\d{3}', internet_media_type)[0]).lower()
+    internet_media_type = str(re.findall(r'H\d{3}', internet_media_type)[0]).lower()
     print(internet_media_type)
     encode = ''
 
@@ -104,6 +103,6 @@ def videoTSConvertToEncryptedM3U8(video_ts, keyinfo, output_dir, output_name):
 
 
 
-test_path = '/Users/4ge0/Desktop/test_hight.mp4'
-test_dir = '/Users/4ge0/Desktop/test'
-# convertVideo_ts(test_path, test_dir, 'test_hight', 480)
+test_path = '/Users/4ge0/Desktop/test/tmp/XXXOOPZ-00001/XXXOOPZ-00001.mp4'
+test_dir = '/Users/4ge0/Desktop/test/'
+convertVideo_ts(test_path, test_dir, 'XXXOOPZ-00001', 480)

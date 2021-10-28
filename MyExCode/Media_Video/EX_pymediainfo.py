@@ -66,13 +66,13 @@ def getVideoDuration(video_path):
 
 
 # 測試用數據
-test_video_path = '/Users/4ge0/Desktop/tmp/XXXOOPZ-00001/XXXOOPZ-00001.mp4'
+# test_video_path = '/Users/4ge0/Desktop/tmp/XXXOOPZ-00001/XXXOOPZ-00001.mp4'
 # test_video_path_1 = '/Users/4ge0/Desktop/test_low.mp4'
 # test_video_path_2 = '/Users/4ge0/Desktop/test_hight.mp4'
 # test_video_path_3 = '/Users/4ge0/Desktop/test_hight.mp4'
 # print(getVideoDuration(test_video_path))
 # print(getVideoAspectRatio(test_video_path))
-print(getVideoInfo_oldVersion(test_video_path)['height'])
+# print(getVideoInfo_oldVersion(test_video_path)['height'])
 # tracks = MediaInfo.parse(test_video_path).to_data()
 # print(tracks)
 

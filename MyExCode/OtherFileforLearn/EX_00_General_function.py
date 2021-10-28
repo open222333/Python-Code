@@ -111,3 +111,7 @@ def get_ip_address():
         return r.data.decode("utf-8")
     else:
         return ""
+
+def creatDirTree(dir_path):
+    import os
+    os.makedirs(dir_path)
