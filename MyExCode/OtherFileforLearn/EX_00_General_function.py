@@ -112,6 +112,7 @@ def get_ip_address():
     else:
         return ""
 
+
 def creatDirTree(dir_path):
     import os
     os.makedirs(dir_path)

@@ -24,6 +24,24 @@ db.insert_many(datas)
 
 # query查詢 EX_mongodb_pymongo_aggregate.py
 
+myclient = MongoClient("mongodb://localhost:27017/")
+mydb = myclient["runoobdb"]
+mycol = mydb["sites"]
+
+myquery = {"alexa": "10000"}
+newvalues = {"$set": {"alexa": "12345"}}
+
+mycol.update_one(myquery, newvalues)
+
+
+myclient = MongoClient("mongodb://localhost:27017/")
+mydb = myclient["runoobdb"]
+mycol = mydb["sites"]
+
+myquery = {"name": {"$regex": "^F"}}
+newvalues = {"$set": {"alexa": "123"}}
+
+x = mycol.update_many(myquery, newvalues)
 # update 更新
 db.test_db.update_many()
 
