@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 
 # https://daimom3020.blogspot.com/2019/12/scrapyjson.html 研究
 
+'''爬取leetcode'''
+
 class LeetcodeSpider(scrapy.Spider):
     name = 'leetcode'
     # allowed_domains = ['http://quotes.toscrape.com/js/']

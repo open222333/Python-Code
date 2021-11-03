@@ -3,6 +3,8 @@ from scrapy.exceptions import CloseSpider
 from scrapy_myself_ex.items import PttItem
 # https://ithelp.ithome.com.tw/articles/10205893
 
+'''爬取ptt'''
+
 
 class PttSpider(scrapy.Spider):
     count_page = 1

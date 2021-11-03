@@ -7,6 +7,7 @@ from scrapy_splash import SplashRequest
 
 class SplashPostSpider(scrapy.Spider):
     name = "splash_post"
+    http_proxy = 'http://proxy.example.com:1111' # 範例 無效的鏈結
 
     lua_script = """
     function main(splash, args)
@@ -21,13 +22,13 @@ class SplashPostSpider(scrapy.Spider):
       }
     end
     """
-
+    # has_proxy = {'wait': self.wait_sec, 'splash_headers': self.header}
     def start_requests(self):
         post_url = 'https://httpbin.org/post'
         post_data = 'foo=bar'
         yield SplashRequest(post_url, self.parse, endpoint='execute',
                             magic_response=True, meta={'handle_httpstatus_all': True},
-                            args={'lua_source': self.lua_script, 'http_method': 'POST', 'body': post_data})
+                            args={'lua_source': self.lua_script, 'http_method': 'POST', 'body': post_data, 'proxy':self.http_proxy})
 
     def parse(self, response):
         with open('test.txt', 'a') as f:
