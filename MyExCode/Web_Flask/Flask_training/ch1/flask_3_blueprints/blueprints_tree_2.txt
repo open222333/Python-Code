@@ -1,0 +1,22 @@
+ecommerce/
+|
+├── static/
+|   ├── logo.png
+|   └── main.css
+|
+├── templates/
+|   ├── auth/
+|   |   ├── login.html
+|   |   ├── forgot_password.html
+|   |   └── signup.html
+|   └── cart/
+|       ├── checkout.html
+|       └── view.html
+|
+├── view/
+|   ├── auth.py
+|   └── cart.py
+|
+├── app.py
+├── config.py
+└── models.py
