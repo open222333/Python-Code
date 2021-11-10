@@ -4,6 +4,10 @@ https://stackoverflow.com/questions/16694907/download-large-file-in-python-with-
 '''
 
 
+import sys
+import requests
+
+
 def downloadVideo_wget(url, file_name, output_dir=None):
     pass
     # import wget
@@ -73,5 +77,46 @@ def downloadImage(url, file_name, file_format='png', output_dir=None):
         print(traceback.format_exc())
 
 
-url = ''
-downloadVideo(url, 'test', output_dir='/Users/4ge0/Desktop/test')
+def downloadVideo_ProgressBar(url, file_name, output_dir=None, file_format="mp4"):
+    '''
+    下載影片函式
+
+    進度條
+    https://stackoverflow.com/questions/15644964/python-progress-bar-and-downloads
+    '''
+    import os
+    import requests
+    import traceback
+
+    if os.path.exists(output_dir) == False:
+        os.makedirs(output_dir)
+
+    try:
+        response = requests.get(url, stream=True)
+        if response.status_code == 200:
+            file = f'{output_dir}/{file_name}.{file_format}'
+            with open(file, 'wb') as f:
+                total_length = response.headers.get('content-length')
+
+                dl = 0
+                total_length = int(total_length)
+                for chunk in response.iter_content(chunk_size=4096):
+                    dl += len(chunk)
+                    f.write(chunk)
+                    done = int(50 * dl / total_length)
+                    left_s = '=' * done
+                    right_s = ' ' * (50 - done)
+                    # 顯示進度條
+                    sys.stdout.write(f"\r[{left_s}{right_s}] {round(100 * dl / total_length, 1)}%")
+                    sys.stdout.flush()
+            return file
+        else:
+            print(response.status_code)
+            return False
+    except:
+        print(traceback.format_exc())
+
+
+url = 'https://www.pexels.com/zh-tw/video/3196600/download/?search_query=%E6%B8%AC%E8%A9%A6&tracking_id=01t32lpgsyg4'
+
+downloadVideo_ProgressBar(url, 'test', output_dir='/Users/4ge0/Desktop/test')
