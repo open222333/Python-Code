@@ -1,12 +1,11 @@
 from __future__ import print_function
-from time import sleep
 import sys
 import re
 
 
-class ProgressBar():
+class ProgressBar(object):
     DEFAULT = 'Progress: %(bar)s %(percent)3d%%'
-    FULL = '%(bar)s %(current)d/%(total)d (%(percent)3d%%) %(remaining)d'
+    FULL = '%(bar)s %(current)d/%(total)d (%(percent)3d%%) %(remaining)d to go'
 
     def __init__(self, total, width=40, fmt=DEFAULT, symbol='=',
                  output=sys.stderr):
@@ -17,7 +16,7 @@ class ProgressBar():
         self.symbol = symbol
         self.output = output
         self.fmt = re.sub(r'(?P<name>%\(.+?\))d',
-                          r'\g<name>%dd' % len(str(total)), fmt)
+            r'\g<name>%dd' % len(str(total)), fmt)
 
         self.current = 0
 
@@ -40,7 +39,8 @@ class ProgressBar():
         self.current = self.total
         self()
         print('', file=self.output)
-
+        
+from time import sleep
 
 progress = ProgressBar(80, fmt=ProgressBar.FULL)
 
