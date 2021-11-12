@@ -9,25 +9,41 @@ import requests
 
 
 class ProgressBar():
-    def __init__(self, title, symbol='=', bar_size=50) -> None:
+    def __init__(self, title='Progress', symbol='=', bar_size=50) -> None:
+        '''進度表屬性'''
         self.title = title
         self.symbol = symbol
         self.bar_size = bar_size
 
-    def __call__(self, done, total):
+    def __call__(self, total: int, done=1, decimal=1):
+        count = 0
         while True:
-            done += done
-            self.__print_progress_bar(done, total)
-            if done == total:
+            count += done
+            if count >= total:
+                count = total
+            self.__print_progress_bar(count, total, decimal)
+            if count == total:
                 break
-        print()
+        self.__done()
 
-    def __print_progress_bar(self, done, total):
-        left = self.symbol * done
-        right = ' ' * (self.bar_size - done)
-        precent = round(100 * done / total, 2)
-        sys.stdout.write(f"\r{self.title}:[{left}{right}] {precent}% {done}/{total}")
+    def __print_progress_bar(self, done, total, decimal):
+        '''
+        繪製 進度表
+        done:完成數
+        total:總任務數
+        decimal: 百分比顯示到後面幾位
+        '''
+        # 計算百分比
+        precent = float(round(100 * done / total, decimal))
+        done_symbol = int(precent / 100 * self.bar_size)
+        left = self.symbol * done_symbol
+        right = ' ' * (self.bar_size - done_symbol)
+        # 顯示進度條
+        sys.stdout.write(f"\r{self.title}:[{left}{right}] {format(precent, f'.{decimal}f')}% {done}/{total}")
         sys.stdout.flush()
+
+    def __done(self):
+        print()
 
 
 def downloadVideo_wget(url, file_name, output_dir=None):
@@ -36,19 +52,32 @@ def downloadVideo_wget(url, file_name, output_dir=None):
     # wget.download(url)
 
 
-def download_file(url):
+def download_file(url, chunk_size=10240):
     '''下載大文件'''
-    import requests
     local_filename = url.split('/')[-1]
-    # NOTE the stream=True parameter below
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
         with open(local_filename, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=8192):
-                # If you have chunk encoded response uncomment if
-                # and set chunk_size parameter to None.
-                # if chunk:
+            for chunk in r.iter_content(chunk_size=chunk_size):
                 f.write(chunk)
+    return local_filename
+
+
+def download_file_progress_bar(url, chunk_size=10240):
+    '''下載大文件 進度條
+    chunk_size:byte數
+    output_dir:輸出資料夾位置
+    '''
+    bar = ProgressBar()
+    local_filename = url.split('/')[-1]
+
+    r = requests.get(url, stream=True, timeout=10)
+    total = int(r.headers.get('content-length'))
+    r.raise_for_status() # 丟出異常
+    with open(local_filename, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=chunk_size):
+            bar(total)
+            f.write(chunk)
     return local_filename
 
 
@@ -155,6 +184,5 @@ def downloadVideo_ProgressBar(url, file_name, output_dir=None, file_format="mp4"
 
 # downloadVideo_ProgressBar(url, 'test', output_dir='/Users/4ge0/Desktop/test')
 
-
-url = 'https://video-hw.xvideos-cdn.com/videos/mp4/d/7/a/xvideos.com_d7ac3d8589f8e6a42e9098668fd12831.mp4?e=1636622451&ri=1024&rs=85&h=e5a10b75f60db552208aba06924b40bd'
-requests.get(url)
+url = 'https://www.pexels.com/zh-tw/video/3196600/download/?search_query=%E6%B8%AC%E8%A9%A6&tracking_id=01t32lpgsyg4'
+download_file_progress_bar(url)
