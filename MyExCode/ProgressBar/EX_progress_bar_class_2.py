@@ -1,33 +1,39 @@
-from time import sleep
 import sys
 
 
 class ProgressBar():
+    '''自己設計的進度條'''
+
     def __init__(self, title='Progress', symbol='=', bar_size=50) -> None:
         '''進度表屬性'''
         self.title = title
         self.symbol = symbol
         self.bar_size = bar_size
+        self.done = 0  # mode b 使用
 
-    def __call__(self, total: int, done=1, decimal=1):
-        count = 0
-        while True:
-            count += done
-            if count >= total:
-                count = total
-            self.__print_progress_bar(count, total, decimal)
-            sleep(0.1)
-            if count == total:
-                break
-        self.__done()
-        
-        # for i in range(total):
-        #     count += done
-        #     if count >= total:
-        #         count = total
-        #     self.__print_progress_bar(count, total, decimal)
-        #     if count == total:
-        #         break
+    def __call__(self, total: int, done=1, decimal=1, mode='a'):
+        '''
+        mode: 
+            a: 建立的實體不在迴圈內使用
+            b: 建立的實體在迴圈內使用
+        '''
+        if mode == 'a':
+            count = 0
+            while True:
+                count += done
+                if count >= total:
+                    count = total
+                self.__print_progress_bar(count, total, decimal)
+                if count == total:
+                    break
+            self.__done()
+        elif mode == 'b':
+            self.done += done
+            if self.done >= total:
+                self.done = total
+            self.__print_progress_bar(self.done, total, decimal)
+            if self.done == total:
+                self.__done()
 
     def __print_progress_bar(self, done, total, decimal):
         '''
@@ -37,19 +43,29 @@ class ProgressBar():
         decimal: 百分比顯示到後面幾位
         '''
         # 計算百分比
-        precent = format(float(round(100 * done / total, decimal)), f'.{decimal}f')
+        precent = float(round(100 * done / total, decimal))
         done_symbol = int(precent / 100 * self.bar_size)
         left = self.symbol * done_symbol
         right = ' ' * (self.bar_size - done_symbol)
         # 顯示進度條
-        sys.stdout.write(f"\r{self.title}:[{left}{right}] {precent}% {done}/{total}")
+        bar = f"\r{self.title}:[{left}{right}] {format(precent, f'.{decimal}f')}% {done}/{total}"
+        sys.stdout.write(bar)
         sys.stdout.flush()
 
     def __done(self):
         print()
 
 
-test_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 test_url = 'https://www.pexels.com/zh-tw/video/3196600/download/?search_query=%E6%B8%AC%E8%A9%A6&tracking_id=01t32lpgsyg4'
-bar = ProgressBar2()
-bar(100000, 1024)
+
+bar = ProgressBar()
+max_num = 100000
+step = 1024
+decimal = 2
+
+# mode a 預設
+bar(max_num, step, decimal=decimal, mode='a')
+
+# mode b
+for i in range(0, max_num, step):
+    bar(max_num, step, decimal=decimal, mode='b')

@@ -1,11 +1,14 @@
+import os
+import sys
+import traceback
+import requests
 '''
 下載大文件
 https://stackoverflow.com/questions/16694907/download-large-file-in-python-with-requests
+
+斷點續傳
+https://www.itread01.com/content/1546369412.html
 '''
-
-
-import sys
-import requests
 
 
 class ProgressBar():
@@ -15,16 +18,32 @@ class ProgressBar():
         self.symbol = symbol
         self.bar_size = bar_size
 
-    def __call__(self, total: int, done=1, decimal=1):
-        count = 0
-        while True:
-            count += done
-            if count >= total:
-                count = total
-            self.__print_progress_bar(count, total, decimal)
-            if count == total:
-                break
-        self.__done()
+        # mode b 使用
+        self.done = 0
+
+    def __call__(self, total: int, done=1, decimal=1, mode='a'):
+        '''
+        mode: 
+            a: 建立的實體不在迴圈內使用
+            b: 建立的實體在迴圈內使用
+        '''
+        if mode == 'a':
+            count = 0
+            while True:
+                count += done
+                if count >= total:
+                    count = total
+                self.__print_progress_bar(count, total, decimal)
+                if count == total:
+                    break
+            self.__done()
+        elif mode == 'b':
+            self.done += done
+            if self.done >= total:
+                self.done = total
+            self.__print_progress_bar(self.done, total, decimal)
+            if self.done == total:
+                self.__done()
 
     def __print_progress_bar(self, done, total, decimal):
         '''
@@ -39,14 +58,17 @@ class ProgressBar():
         left = self.symbol * done_symbol
         right = ' ' * (self.bar_size - done_symbol)
         # 顯示進度條
-        sys.stdout.write(f"\r{self.title}:[{left}{right}] {format(precent, f'.{decimal}f')}% {done}/{total}")
+        bar = f"\r{self.title}:[{left}{right}] {format(precent, f'.{decimal}f')}% {done}/{total}"
+        sys.stdout.write(bar)
         sys.stdout.flush()
 
     def __done(self):
-        print()
+        '''進度條100%後 進行'''
+        print()  # 跳行
 
 
-def downloadVideo_wget(url, file_name, output_dir=None):
+def download_wget(url, file_name, output_dir=None):
+    '''使用 wget模組 下載檔案'''
     pass
     # import wget
     # wget.download(url)
@@ -73,12 +95,62 @@ def download_file_progress_bar(url, chunk_size=10240):
 
     r = requests.get(url, stream=True, timeout=10)
     total = int(r.headers.get('content-length'))
-    r.raise_for_status() # 丟出異常
+    r.raise_for_status()  # 丟出異常
     with open(local_filename, 'wb') as f:
         for chunk in r.iter_content(chunk_size=chunk_size):
-            bar(total)
+            bar(total, done=len(chunk), mode='b')
             f.write(chunk)
     return local_filename
+
+
+def download_resume_transfer(url, chunk_size=10240, file_name='test', file_extension='', output_dir=None):
+    '''下載檔案 斷點續傳 功能
+    headers Range 說明
+    https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Range
+    '''
+
+    # 若有副檔名
+    if file_extension != '':
+        file_name = f'{file_name}.{file_extension}'
+
+    if output_dir != None:
+        os.makedirs(output_dir)
+        file_name = f'{output_dir}/{file_name}'
+
+    # 解析已下載的大小
+    if os.path.exists(file_name):
+        # 如果存在 斷點續傳
+        file_size = os.path.getsize(file_name)
+        open_file_mode = 'ab'
+    else:
+        # 如果不存在 非斷點續傳
+        open_file_mode = 'wb'
+        file_size = 0
+
+    headers = {'Range': f'bytes={file_size}-'}
+    r = requests.get(url, stream=True, timeout=15, headers=headers)
+    if r.status_code != 206:
+        r.raise_for_status()
+        return
+    total = r.headers.get('content-length')
+
+    # 已是完成下載的檔案
+    if int(total) == file_size:
+        return
+
+    bar = ProgressBar()
+
+    with open(file_name, open_file_mode) as f:
+        count = 0
+        for chunk in r.iter_content(chunk_size=chunk_size):
+            if count == 0:
+                done = len(chunk) + file_size
+            else:
+                done = len(chunk)
+            bar(int(total) + file_size, done, mode='b')
+            f.write(chunk)
+            count += 1
+    print(file_name)
 
 
 def downloadVideo(url, file_name, output_dir=None, file_format="mp4", proxies=None):
@@ -95,9 +167,6 @@ def downloadVideo(url, file_name, output_dir=None, file_format="mp4", proxies=No
                     "ftp"   : ftp_proxy
                     }
     '''
-    import os
-    import requests
-    import traceback
 
     if os.path.exists(output_dir) == False:
         os.makedirs(output_dir)
@@ -117,9 +186,7 @@ def downloadVideo(url, file_name, output_dir=None, file_format="mp4", proxies=No
 
 
 def downloadImage(url, file_name, file_format='png', output_dir=None):
-    import os
-    import requests
-    import traceback
+    '''下載圖片'''
 
     if os.path.exists(output_dir) == False:
         os.makedirs(output_dir)
@@ -145,9 +212,6 @@ def downloadVideo_ProgressBar(url, file_name, output_dir=None, file_format="mp4"
     進度條
     https://stackoverflow.com/questions/15644964/python-progress-bar-and-downloads
     '''
-    import os
-    import requests
-    import traceback
 
     if os.path.exists(output_dir) == False:
         os.makedirs(output_dir)
@@ -180,9 +244,6 @@ def downloadVideo_ProgressBar(url, file_name, output_dir=None, file_format="mp4"
         print(traceback.format_exc())
 
 
-# url = 'https://www.pexels.com/zh-tw/video/3196600/download/?search_query=%E6%B8%AC%E8%A9%A6&tracking_id=01t32lpgsyg4'
-
-# downloadVideo_ProgressBar(url, 'test', output_dir='/Users/4ge0/Desktop/test')
-
 url = 'https://www.pexels.com/zh-tw/video/3196600/download/?search_query=%E6%B8%AC%E8%A9%A6&tracking_id=01t32lpgsyg4'
-download_file_progress_bar(url)
+# download_file_progress_bar(url)
+download_resume_transfer(url, chunk_size=4096, file_extension='mp4')
