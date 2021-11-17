@@ -9,15 +9,20 @@ class ProgressBar():
         self.title = title
         self.symbol = symbol
         self.bar_size = bar_size
-        self.done = 0  # mode b 使用
+        self.done = 0  # 迴圈內 使用
 
-    def __call__(self, total: int, done=1, decimal=1, mode='a'):
+    def __call__(self, total: int, done=1, decimal=1, in_loop=False):
         '''
-        mode: 
-            a: 建立的實體不在迴圈內使用
-            b: 建立的實體在迴圈內使用
+        in_loop: 建立的實體是否在迴圈內使用
         '''
-        if mode == 'a':
+        if in_loop:
+            self.done += done
+            if self.done >= total:
+                self.done = total
+            self.__print_progress_bar(self.done, total, decimal)
+            if self.done == total:
+                self.__done()
+        else:
             count = 0
             while True:
                 count += done
@@ -27,13 +32,6 @@ class ProgressBar():
                 if count == total:
                     break
             self.__done()
-        elif mode == 'b':
-            self.done += done
-            if self.done >= total:
-                self.done = total
-            self.__print_progress_bar(self.done, total, decimal)
-            if self.done == total:
-                self.__done()
 
     def __print_progress_bar(self, done, total, decimal):
         '''
@@ -64,8 +62,8 @@ step = 1024
 decimal = 2
 
 # mode a 預設
-bar(max_num, step, decimal=decimal, mode='a')
+bar(max_num, step, decimal=decimal)
 
 # mode b
 for i in range(0, max_num, step):
-    bar(max_num, step, decimal=decimal, mode='b')
+    bar(max_num, step, decimal=decimal, in_loop=True)

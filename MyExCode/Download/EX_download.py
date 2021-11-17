@@ -58,7 +58,7 @@ class ProgressBar():
         left = self.symbol * done_symbol
         right = ' ' * (self.bar_size - done_symbol)
         # 顯示進度條
-        bar = f"\r{self.title}:[{left}{right}] {format(precent, f'.{decimal}f')}% {done}/{total}"
+        bar = f"\r{self.title}: [{left}{right}] {format(precent, f'.{decimal}f')}% {done}/{total}"
         sys.stdout.write(bar)
         sys.stdout.flush()
 
@@ -136,9 +136,10 @@ def download_resume_transfer(url, chunk_size=10240, file_name='test', file_exten
 
     # 已是完成下載的檔案
     if int(total) == file_size:
-        return
+        return f"{file_name} 已完成下載"
 
     bar = ProgressBar()
+    bar.title = file_name
 
     with open(file_name, open_file_mode) as f:
         count = 0
@@ -150,7 +151,6 @@ def download_resume_transfer(url, chunk_size=10240, file_name='test', file_exten
             bar(int(total) + file_size, done, mode='b')
             f.write(chunk)
             count += 1
-    print(file_name)
 
 
 def downloadVideo(url, file_name, output_dir=None, file_format="mp4", proxies=None):

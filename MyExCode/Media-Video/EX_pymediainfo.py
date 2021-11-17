@@ -12,6 +12,18 @@ def getVideoInfo(video_path):
     return [info.to_data() for info in tracks][0]
 
 
+def getVideoInfo_2(video_path):
+    '''回傳 影片video_tracks'''
+    from pymediainfo import MediaInfo
+    import traceback
+    try:
+        tracks = MediaInfo.parse(video_path).to_data()['tracks']
+        return [track for track in tracks if track['track_type'] == 'Video'][0]
+    except:
+        print(traceback.format_exc())
+        return False
+
+
 def getVideoInfo_oldVersion(video_path):
     '''回傳 影片video_tracks 舊版沒有快捷方式'''
     tracks = MediaInfo.parse(video_path).to_data()['tracks']
