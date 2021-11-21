@@ -33,7 +33,9 @@ def show_all_files(path):
     files.sort()
     return files
 
-path = '/Users/4ge0/Desktop/test/back/XXXOOPZ-00002'
+# path = '/Users/4ge0/Desktop/test2/back/XXXOOPZ-00002'
+# files = show_all_files(path)
+# print(files)
 
-files = show_all_files(path)
-print(files)
+path = '/Users/4ge0/Desktop/test2/'
+print(os.path.isdir(path))
