@@ -12,22 +12,27 @@ https://www.itread01.com/content/1546369412.html
 
 
 class ProgressBar():
+    '''自己設計的進度條'''
+
     def __init__(self, title='Progress', symbol='=', bar_size=50) -> None:
         '''進度表屬性'''
         self.title = title
         self.symbol = symbol
         self.bar_size = bar_size
+        self.done = 0  # 迴圈內 使用
 
-        # mode b 使用
-        self.done = 0
-
-    def __call__(self, total: int, done=1, decimal=1, mode='a'):
+    def __call__(self, total: int, done=1, decimal=1, in_loop=False):
         '''
-        mode: 
-            a: 建立的實體不在迴圈內使用
-            b: 建立的實體在迴圈內使用
+        in_loop: 建立的實體是否在迴圈內使用
         '''
-        if mode == 'a':
+        if in_loop:
+            self.done += done
+            if self.done >= total:
+                self.done = total
+            self.__print_progress_bar(self.done, total, decimal)
+            if self.done == total:
+                self.__done()
+        else:
             count = 0
             while True:
                 count += done
@@ -37,13 +42,6 @@ class ProgressBar():
                 if count == total:
                     break
             self.__done()
-        elif mode == 'b':
-            self.done += done
-            if self.done >= total:
-                self.done = total
-            self.__print_progress_bar(self.done, total, decimal)
-            if self.done == total:
-                self.__done()
 
     def __print_progress_bar(self, done, total, decimal):
         '''
@@ -58,13 +56,12 @@ class ProgressBar():
         left = self.symbol * done_symbol
         right = ' ' * (self.bar_size - done_symbol)
         # 顯示進度條
-        bar = f"\r{self.title}: [{left}{right}] {format(precent, f'.{decimal}f')}% {done}/{total}"
+        bar = f"\r{self.title}:[{left}{right}] {format(precent, f'.{decimal}f')}% {done}/{total}"
         sys.stdout.write(bar)
         sys.stdout.flush()
 
     def __done(self):
-        '''進度條100%後 進行'''
-        print()  # 跳行
+        print()
 
 
 def download_wget(url, file_name, output_dir=None):
@@ -103,8 +100,13 @@ def download_file_progress_bar(url, chunk_size=10240):
     return local_filename
 
 
-def download_resume_transfer(url, chunk_size=10240, file_name='test', file_extension='', output_dir=None):
+def download_resume_transfer(url, chunk_size=10240, file_name='test', file_extension='', output_dir=None) -> bool:
     '''下載檔案 斷點續傳 功能
+    url:網址
+    chunk_size:區塊
+    file_name:檔名
+    file_extension:副檔名
+    output_dir:輸出資料夾
     headers Range 說明
     https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Range
     '''
@@ -122,6 +124,11 @@ def download_resume_transfer(url, chunk_size=10240, file_name='test', file_exten
         # 如果存在 斷點續傳
         file_size = os.path.getsize(file_name)
         open_file_mode = 'ab'
+
+        # 已是完成下載的檔案
+        r_first = requests.get(url)
+        if int(r_first.headers.get('content-length')) == file_size:
+            return True
     else:
         # 如果不存在 非斷點續傳
         open_file_mode = 'wb'
@@ -129,14 +136,11 @@ def download_resume_transfer(url, chunk_size=10240, file_name='test', file_exten
 
     headers = {'Range': f'bytes={file_size}-'}
     r = requests.get(url, stream=True, timeout=15, headers=headers)
-    if r.status_code != 206:
-        r.raise_for_status()
-        return
     total = r.headers.get('content-length')
 
-    # 已是完成下載的檔案
-    if int(total) == file_size:
-        return f"{file_name} 已完成下載"
+    if r.status_code != 206:
+        r.raise_for_status()
+        return False
 
     bar = ProgressBar()
     bar.title = file_name
@@ -148,9 +152,25 @@ def download_resume_transfer(url, chunk_size=10240, file_name='test', file_exten
                 done = len(chunk) + file_size
             else:
                 done = len(chunk)
-            bar(int(total) + file_size, done, mode='b')
+            bar(int(total) + file_size, done, in_loop=True)
             f.write(chunk)
             count += 1
+
+    return True
+
+
+def check_file_integrity(local_file_path, romate_file_size: int):
+    '''檢查檔案完整性 若本地檔案完整 回傳True
+    local_file_path: 本地檔案路徑
+    romate_file_size: 遠程檔案大小 單位bytes
+    '''
+    if os.path.exists(local_file_path):
+        if romate_file_size == os.path.getsize(local_file_path):
+            return True
+        else:
+            return False
+    else:
+        return False
 
 
 def downloadVideo(url, file_name, output_dir=None, file_format="mp4", proxies=None):

@@ -36,5 +36,6 @@ with open('test.html', 'w') as f:
 # AutoKeyInForms
 
 url = 'https://docs.google.com/forms/d/e/1FAIpQLSc7fZg0bAjD5fQOsdxtIHlV3m-OPECu3VHahfJYJH2_-KGCmQ/viewform'
-text = requests.get(url)
-print(text.headers)
+res = requests.get(url)
+length = res.headers.get('content-length')
+print(res.headers)

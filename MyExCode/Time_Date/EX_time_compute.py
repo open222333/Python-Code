@@ -12,11 +12,20 @@ def spend_time(start: datetime, end: datetime) -> str:
 
 def spend_time_secends(total_secends: int) -> str:
     '''依照秒數 回傳時間差'''
+    msg = ''
     seconds = total_secends % 60
     minutes = (total_secends // 60) % 60
     hours = ((total_secends // 60) // 60) % 24
     days = ((total_secends // 60) // 60) // 24
-    return f"{days}天 {hours}時 {minutes}分 {seconds}秒"
+    if days != 0:
+        msg += f"{days}天"
+    if hours != 0:
+        msg += f"{hours}時"
+    if minutes != 0:
+        msg += f"{minutes}分"
+    if seconds != 0:
+        msg += f"{seconds}秒"
+    return msg
 
 
 def compute_time(sec):
@@ -30,4 +39,4 @@ def compute_time(sec):
           datetime.strptime(now_time, date_format))
 
 
-print(spend_time_secends(11555))
+print(spend_time_secends(900))
