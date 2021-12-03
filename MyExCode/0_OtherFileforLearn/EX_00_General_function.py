@@ -3,6 +3,7 @@ from datetime import datetime
 
 
 def set_filename(filename: str, num):
+    '''數字 空位補零'''
     return f'{filename}_{str(num).zfill(3)}'
 
 
@@ -114,5 +115,12 @@ def get_ip_address():
 
 
 def creatDirTree(dir_path):
+    '''創建路徑所有未存在的資料夾'''
     import os
     os.makedirs(dir_path)
+
+
+def get_random_num(min_num: int, max_num: int) -> int:
+    '''取得隨機整數'''
+    from random import randint
+    return randint(min_num, max_num)

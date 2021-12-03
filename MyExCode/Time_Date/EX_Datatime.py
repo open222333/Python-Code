@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 '''
 datetime 文檔
 https://docs.python.org/zh-tw/3/library/datetime.html
@@ -10,6 +10,8 @@ https://docs.python.org/zh-tw/3/library/datetime.html
 # 如果輸入的值不是一個合法的時間，將觸發OverflowError 或ValueError。
 # print(time.mktime(datetime.today().timetuple()))
 
+# 計算30天
+date_30_days_ago = (datetime.utcnow() - timedelta(days=30)).timestamp()
 # 格式
 now_time = datetime.now()
 now_utctime = datetime.utcnow()

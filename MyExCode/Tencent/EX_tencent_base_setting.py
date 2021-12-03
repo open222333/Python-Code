@@ -15,7 +15,7 @@ env = dotenv.dotenv_values("test_config.env")
 # 日誌設定
 # 正常情形，別使用INFO
 # 需定位可使用DEBUG，此時SDK會印出與伺服器端的通信訊息
-# logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
 # 設置用戶屬性
 config = CosConfig(

@@ -158,6 +158,57 @@ def download_resume_transfer(url, chunk_size=10240, file_name='test', file_exten
 
     return True
 
+def download_file_resume_transfer_and_bar(url, file_path, print_bar=True, chunk_size=10240):
+    '''下載檔案 斷點續傳 功能 進度條 功能
+    url:網址
+    chunk_size:區塊(數字)
+    file_path:檔案位置 ex:/Users/4ge0/Desktop/test.mp4
+    print_bar:顯示進度條
+    '''
+
+    # 解析已下載的大小
+    if os.path.exists(file_path):
+        # 如果存在 斷點續傳
+        file_size = os.path.getsize(file_path)
+        open_file_mode = 'ab'
+
+        r_first = requests.get(url)
+        # 已是完成下載的檔案
+        if int(r_first.headers.get('content-length')) == file_size:
+            return True
+    else:
+        # 如果不存在 非斷點續傳
+        open_file_mode = 'wb'
+        file_size = 0
+
+    headers = {'Range': f'bytes={file_size}-'}
+    r = requests.get(url, stream=True, timeout=15, headers=headers)
+    total = r.headers.get('content-length')
+
+    if r.status_code != 206:
+        r.raise_for_status()
+        return False
+
+    bar = ProgressBar()
+    bar.title = os.path.basename(file_path)
+
+    with open(file_path, open_file_mode) as f:
+        count = 0
+        if print_bar:
+            for chunk in r.iter_content(chunk_size=chunk_size):
+                if count == 0:
+                    done = len(chunk) + file_size
+                else:
+                    done = len(chunk)
+                bar(int(total) + file_size, done, in_loop=True)
+                f.write(chunk)
+                count += 1
+        else:
+            for chunk in r.iter_content(chunk_size=chunk_size):
+                f.write(chunk)
+    return True
+
+
 
 def check_file_integrity(local_file_path, romate_file_size: int):
     '''檢查檔案完整性 若本地檔案完整 回傳True
@@ -266,4 +317,5 @@ def downloadVideo_ProgressBar(url, file_name, output_dir=None, file_format="mp4"
 
 url = 'https://www.pexels.com/zh-tw/video/3196600/download/?search_query=%E6%B8%AC%E8%A9%A6&tracking_id=01t32lpgsyg4'
 # download_file_progress_bar(url)
-download_resume_transfer(url, chunk_size=4096, file_extension='mp4')
+# download_resume_transfer(url, chunk_size=4096, file_extension='mp4')
+download_file_resume_transfer_and_bar(url, '/Users/4ge0/Desktop/test.mp4')

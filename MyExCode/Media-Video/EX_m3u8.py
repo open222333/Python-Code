@@ -1,4 +1,3 @@
-from genericpath import exists
 import os
 import re
 
@@ -102,7 +101,105 @@ def videoTSConvertToEncryptedM3U8(video_ts, keyinfo, output_dir, output_name):
     os.system(command)
 
 
+def check_m3u8_url(url):
+    command = f'ffprobe {url}'
+    result = os.system(command)
+    return result
 
-test_path = '/Users/4ge0/Desktop/test/tmp/XXXOOPZ-00001/XXXOOPZ-00001.mp4'
-test_dir = '/Users/4ge0/Desktop/test/'
-convertVideo_ts(test_path, test_dir, 'XXXOOPZ-00001', 480)
+
+def check_m3u8_local(path):
+    command = f'ffprobe {path}'
+    result = os.system(command)
+    return result
+
+
+def check_m3u8_urls(s3_bucket, origin: str, max_num: int, min_num=1, qualitys=[240, 480], show_summary=True) -> dict:
+    '''判斷m3u8內的 #EXT-X-KEY:METHOD=AES-128,URI= 是否正確的值(key_240.key key_480.key)
+    回傳:
+    result = {
+        '240':{
+            'successful': list(code),
+            'failed': list(code),
+            'unknown': list(code),
+            'no_exists': list(code)
+        }
+        '480':{
+            'successful': list(code),
+            'failed': list(code),
+            'unknown': list(code),
+            'no_exists': list(code)
+        }
+    }
+    EX:
+    result = check_m3u8_urls(s3_bucket, 'test', 2, qualitys=[240])
+
+    min_num:code的最小編號。預設1。
+    max_num:要執行到的code最大編號。
+    origin:產品資料夾。
+    s3_bucket:AWS的存儲桶CloudFront域名。
+    qualitys:畫質。使用list。預設[240, 480]
+    show_summary:顯示數據。'''
+    import requests
+    import re
+    import os
+
+    # #EXT-X-KEY:METHOD=AES-128,URI="key_240.key"
+    s = r'#EXT-X-KEY:METHOD=AES-128,URI="(.*?)"'
+    result = {}
+    summary = {}
+
+    for quality in qualitys:
+
+        successful = []
+        failed = []
+        unknown = []
+        no_exists = []
+
+        for num in range(min_num, max_num + 1):
+            code = f'{origin.upper()}-{str(num).zfill(5)}'
+            url = f'{s3_bucket}{origin}/{code}/h264/{code}-{str(quality)}.m3u8'
+            response = requests.get(url)
+            n = os.system(f'ffprobe {url}')
+            if response.status_code == 200:
+                res = re.findall(s, response.text)
+                try:
+                    if res[0] != f"key_{str(quality)}.key" or n != 0:
+                        failed.append(code)
+                    else:
+                        successful.append(code)
+                except:
+                    unknown.append(code)
+            else:
+                no_exists.append(code)
+
+        result[str(quality)] = {
+            'successful': successful,
+            'failed': failed,
+            'unknown': unknown,
+            'no_exists': no_exists
+        }
+        summary[str(quality)] = {
+            'successful': len(successful),
+            'failed': len(failed),
+            'unknown': len(unknown),
+            'no_exists': len(no_exists)
+        }
+    if show_summary:
+        for q in summary.keys():
+            for item in summary[q].keys():
+                print(f'{q}_{item}:{summary[q][item]}')
+    return result
+
+
+s3_bucket = "https://tttttttttt.cloudfront.net/"
+# result = check_m3u8_urls(s3_bucket, 'test', 2, qualitys=[240])
+
+
+# test_path = '/Users/4ge0/Desktop/test/tmp/XXXOOPZ-00001/XXXOOPZ-00001.mp4'
+# test_dir = '/Users/4ge0/Desktop/test/'
+# convertVideo_ts(test_path, test_dir, 'XXXOOPZ-00001', 480)
+
+url = 'https://d24akpfg32rmrn.cloudfront.net/xxxoopz/XXXOOPZ-00006/h264/XXXOOPZ-00006-240.m3u8'
+path = '/Users/4ge0/Library/Mobile\ Documents/com~apple~CloudDocs/GitRepositories/Python_Code/MyExCode/Media-Video/XXXOOPZ-00003-240.m3u8'
+r = check_m3u8_local(path)
+print(r)
