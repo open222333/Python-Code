@@ -1,47 +1,50 @@
 version: '3'
 services:
     worker_0:
-       build: .
-       env_file: worker.env
-       hostname: worker_0
-       volumes:
-           - .:/usr/src/app
-       command: celery worker -A ${CELERY_PROJECT} -l info -E -P gevent --purge --autoscale=3,1
-       depends_on:
-           - redis
-           - mongo
-       logging:
-           driver: "json-file"
-           options:
-               max-size: "1g"
+        container_name: worker_0
+        build: .
+        env_file: worker.env
+        hostname: worker_0
+        volumes:
+            - .:/usr/src/app
+        command: celery worker -A ${CELERY_PROJECT} -l info -E -P gevent --purge --autoscale=3,1
+        depends_on:
+            - redis
+            - mongo
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "1g"
     worker_1:
-       build: .
-       env_file: worker.env
-       hostname: worker_1
-       volumes:
-           - .:/usr/src/app
-       command: celery worker -A ${CELERY_PROJECT} -l info -E -P gevent --purge --autoscale=3,1
-       depends_on:
-           - redis
-           - mongo
-       logging:
-           driver: "json-file"
-           options:
-               max-size: "1g"
+        container_name: worker_1
+        build: .
+        env_file: worker.env
+        hostname: worker_1
+        volumes:
+            - .:/usr/src/app
+        command: celery worker -A ${CELERY_PROJECT} -l info -E -P gevent --purge --autoscale=3,1
+        depends_on:
+            - redis
+            - mongo
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "1g"
     worker_2:
-       build: .
-       env_file: worker.env
-       hostname: worker_2
-       volumes:
-           - .:/usr/src/app
-       command: celery worker -A ${CELERY_PROJECT} -l info -E -P gevent --purge --autoscale=3,1
-       depends_on:
-           - redis
-           - mongo
-       logging:
-           driver: "json-file"
-           options:
-               max-size: "1g"
+        container_name: worker_2
+        build: .
+        env_file: worker.env
+        hostname: worker_2
+        volumes:
+            - .:/usr/src/app
+        command: celery worker -A ${CELERY_PROJECT} -l info -E -P gevent --purge --autoscale=3,1
+        depends_on:
+            - redis
+            - mongo
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "1g"
     beat:
         container_name: beat
         build: .
@@ -69,5 +72,6 @@ services:
         container_name: redis
         hostname: redis-container
         image: redis:3
-        ports:
-            - 31119:6379
+        # 對內給beat發任務 使用 不用開出去
+        # ports:
+        #     - 31119:6379

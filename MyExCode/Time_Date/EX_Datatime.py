@@ -18,13 +18,14 @@ now_utctime = datetime.utcnow()
 print(f"now_time: {now_time}")
 print(f"now_utctime: {now_utctime}")
 print(f"now_utctime: {now_utctime}")
-print('datetime.strptime(datetime.utcnow(), "%Y-%m-%dT%H:%M:%S+00:00"):',
-      datetime.strptime(str(datetime.utcnow()), "%Y-%m-%dT%H:%M:%S+00:00"))
+# print('datetime.strptime(datetime.utcnow(), "%Y-%m-%dT%H:%M:%S+00:00"):',
+#       datetime.strptime(str(datetime.utcnow()), "%Y-%m-%dT%H:%M:%S+00:00"))
 datati = '2021-08-13 17:00:02'
 
 # Python time strptime() 函數根據指定的格式把一個時間字符串解析為時間元組。
 print("datetime.strptim:", datetime.strptime(datati, '%Y-%m-%d %H:%M:%S'))
 print("datetime.now().__format__:", datetime.now().__format__('%Y-%m-%d %H:%M:%S'))
+print("datetime.now().__format__:", datetime.now().__format__('%Y-%m-%d'))
 print("type(datetime.now().__format__()):", type(datetime.now().__format__('%Y-%m-%d %H:%M:%S')))
 print(f"time.mktime: {time.mktime(now_time.timetuple())}")
 print("datetime.utctimetuple:", datetime.utctimetuple(now_time))

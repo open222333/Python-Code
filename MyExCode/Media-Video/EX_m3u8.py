@@ -1,9 +1,11 @@
 import os
 import re
+import requests
+from datetime import datetime
+from pymongo import MongoClient
 
 '''
 convertVideo_ts:轉換影片成ts格式
-
 '''
 
 
@@ -113,36 +115,57 @@ def check_m3u8_local(path):
     return result
 
 
+mongo_host = os.environ.get('MONGO_HOST')
+mongo_database = os.environ.get('MONGO_DATABASE')
+mongo_collection = os.environ.get('MONGO_COLLECTION')
+
+client = MongoClient(mongo_host)
+col = client[mongo_database][mongo_collection]
+
+
 def check_m3u8_urls(s3_bucket, origin: str, max_num: int, min_num=1, qualitys=[240, 480], show_summary=True) -> dict:
-    '''判斷m3u8內的 #EXT-X-KEY:METHOD=AES-128,URI= 是否正確的值(key_240.key key_480.key)
+    '''判斷已下載並上傳的m3u8內的 #EXT-X-KEY:METHOD=AES-128,URI= 是否正確的值(key_240.key key_480.key)
     回傳:
     result = {
         '240':{
             'successful': list(code),
             'failed': list(code),
             'unknown': list(code),
-            'no_exists': list(code)
+            'no_exists': list(code),
+            'no_download': list(no_download),
         }
         '480':{
             'successful': list(code),
             'failed': list(code),
             'unknown': list(code),
             'no_exists': list(code)
+            'no_download': list(no_download),
+        }
+
+        summary: {
+            '240':{
+                'successful': int,
+                'failed': int,
+                'unknown': int,
+                'no_exists': int,
+                'no_download': int,
+            }
+            '480':{
+                'successful': int,
+                'failed': int,
+                'unknown': int,
+                'no_exists': int,
+                'no_download': int,
+            }
         }
     }
-    EX:
-    result = check_m3u8_urls(s3_bucket, 'test', 2, qualitys=[240])
-
     min_num:code的最小編號。預設1。
     max_num:要執行到的code最大編號。
     origin:產品資料夾。
     s3_bucket:AWS的存儲桶CloudFront域名。
     qualitys:畫質。使用list。預設[240, 480]
-    show_summary:顯示數據。'''
-    import requests
-    import re
-    import os
-
+    show_summary:顯示數據。
+    result_file:建立檔案顯示數據。'''
     # #EXT-X-KEY:METHOD=AES-128,URI="key_240.key"
     s = r'#EXT-X-KEY:METHOD=AES-128,URI="(.*?)"'
     result = {}
@@ -154,52 +177,64 @@ def check_m3u8_urls(s3_bucket, origin: str, max_num: int, min_num=1, qualitys=[2
         failed = []
         unknown = []
         no_exists = []
+        no_download = []
 
         for num in range(min_num, max_num + 1):
             code = f'{origin.upper()}-{str(num).zfill(5)}'
-            url = f'{s3_bucket}{origin}/{code}/h264/{code}-{str(quality)}.m3u8'
-            response = requests.get(url)
-            n = os.system(f'ffprobe {url}')
-            if response.status_code == 200:
-                res = re.findall(s, response.text)
-                try:
-                    if res[0] != f"key_{str(quality)}.key" or n != 0:
-                        failed.append(code)
-                    else:
-                        successful.append(code)
-                except:
-                    unknown.append(code)
+            if get_download_status(code):
+                url = f'{s3_bucket}{origin}/{code}/h264/{code}-{str(quality)}.m3u8'
+                response = requests.get(url)
+                n = os.system(f'ffprobe {url}')
+                if response.status_code == 200:
+                    res = re.findall(s, response.text)
+                    try:
+                        if res[0] != f"key_{str(quality)}.key" or n != 0:
+                            failed.append(code)
+                        else:
+                            successful.append(code)
+                    except:
+                        unknown.append(code)
+                else:
+                    no_exists.append(code)
             else:
-                no_exists.append(code)
+                no_download.append(code)
 
         result[str(quality)] = {
             'successful': successful,
             'failed': failed,
             'unknown': unknown,
-            'no_exists': no_exists
+            'no_exists': no_exists,
+            'no_download': no_download,
         }
         summary[str(quality)] = {
             'successful': len(successful),
             'failed': len(failed),
             'unknown': len(unknown),
-            'no_exists': len(no_exists)
+            'no_exists': len(no_exists),
+            'no_download': len(no_download),
         }
+
+    os.chdir(os.path.dirname(__file__))
+    with open(f"check_m3u8_result_{datetime.now().__format__('%Y-%m-%d')}.txt", 'w') as f:
+        f.write(f'總結:\n{summary}\n')
+        f.write(f'結果:\n{result}\n')
+
     if show_summary:
-        for q in summary.keys():
-            for item in summary[q].keys():
-                print(f'{q}_{item}:{summary[q][item]}')
+        result['summary'] = summary
+
     return result
 
 
-s3_bucket = "https://tttttttttt.cloudfront.net/"
-# result = check_m3u8_urls(s3_bucket, 'test', 2, qualitys=[240])
+def get_download_status(code) -> bool:
+    '''依照code 取得 download status'''
+    data = col.find_one({'code': code})
+    return data['download']
 
 
-# test_path = '/Users/4ge0/Desktop/test/tmp/XXXOOPZ-00001/XXXOOPZ-00001.mp4'
-# test_dir = '/Users/4ge0/Desktop/test/'
-# convertVideo_ts(test_path, test_dir, 'XXXOOPZ-00001', 480)
+def set_download_false(code):
+    '''依照code 設置 download status 為 false
+    以check_m3u8_urls檢查結果 做依據'''
 
-url = 'https://d24akpfg32rmrn.cloudfront.net/xxxoopz/XXXOOPZ-00006/h264/XXXOOPZ-00006-240.m3u8'
-path = '/Users/4ge0/Library/Mobile\ Documents/com~apple~CloudDocs/GitRepositories/Python_Code/MyExCode/Media-Video/XXXOOPZ-00003-240.m3u8'
-r = check_m3u8_local(path)
-print(r)
+    myquery = {"code": code}
+    newvalues = {"$set": {"download": False}}
+    col.update_one(myquery, newvalues)
