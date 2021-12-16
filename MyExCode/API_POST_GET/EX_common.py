@@ -1,7 +1,9 @@
 import requests
+from flask import request
 
 def get(self):
 
+    # 取得request的值
     msg = request.args.get('msg')
     with Database() as db, db.connect() as conn:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:

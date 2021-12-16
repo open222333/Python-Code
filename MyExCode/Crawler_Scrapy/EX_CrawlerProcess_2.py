@@ -1,7 +1,7 @@
 import scrapy
 from scrapy.crawler import CrawlerProcess
 
-
+'''啟動方法'''
 class MySpider(scrapy.Spider):
     # Your spider definition
     ...

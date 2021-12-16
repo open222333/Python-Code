@@ -2,6 +2,20 @@
 from datetime import datetime
 
 
+def get_priority_objects(datas: list, priority: dict):
+    '''取的優先物件 數字大的優先回傳
+    datas:資料
+    priority: 優先條件 ex:{1:'a', 2:'b'}
+    '''
+    result = 0
+    for key, value in priority.items():
+        if value in datas:
+            result = max(result, key)
+    if result == 0:
+        return None
+    return result
+
+
 def set_filename(filename: str, num):
     '''數字 空位補零'''
     return f'{filename}_{str(num).zfill(3)}'

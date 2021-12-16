@@ -89,7 +89,7 @@ class MongoDBPipeline:
 
     def process_item(self, item, spider):
         self.insert_article(item)
-        return item
+        # return item
 
     def insert_article(self, item):
         item = dict(item)

@@ -10,5 +10,5 @@ app2 = Blueprint('app2', __name__)
 
 
 @app2.route('/app2')
-def show(page):
+def show():
     return "Hello Blueprint app2"

@@ -16,8 +16,12 @@ url = soup.find('a').get('href')
 
 soup.find_all('h4', 'card-title')
 soup.find_all('h4', {'class': 'card-title'})
-
 soup.find_all('h4', class_='card-title')
+
+# 取得find_all內的內容
+results = soup.find_all('a', {'class': 'test'})
+for res in results:
+    url = res.get('href')
 
 print(div)
 print(url)
