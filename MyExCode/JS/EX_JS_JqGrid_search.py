@@ -78,12 +78,20 @@ def get_filter_trans_jqGrid_to_pymongo(request_args):
     return msg
 
 
+def get_sord(request_args):
+    sord = request_args['sord']
+    if sord == 'asc':
+        return 1
+    elif sord == 'desc':
+        return -1
+
+
 filter = get_filter_trans_jqGrid_to_pymongo(request_args)
 print(filter)
 client = MongoClient('127.0.0.1:31117')
 col = client['avnight']['temp_upload_tencent']
 
-datas = col.find(filter['result'])
+datas = col.find(filter['result']).sort(request_args['sidx'], get_sord(request_args))
 print(datas.count())
 for data in datas:
     print(data)
