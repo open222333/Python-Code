@@ -138,3 +138,24 @@ def get_random_num(min_num: int, max_num: int) -> int:
     '''取得隨機整數'''
     from random import randint
     return randint(min_num, max_num)
+
+
+def get_SI_prefix_num(target: str) -> int:
+    '''國際單位制接頭詞 SI prefix 轉為數字
+    參考https://en.wikipedia.org/wiki/Metric_prefix'''
+    from math import pow
+
+    SI_prefix = {
+        'K': pow(10, 3),
+        'M': pow(10, 6),
+        'G': pow(10, 9),
+        'T': pow(10, 12),
+        'P': pow(10, 15),
+        'E': pow(10, 18),
+        'Z': pow(10, 21),
+        'Y': pow(10, 24)
+    }
+    symbol = target[-1].upper()
+    x = target[0: len(target) - 1]
+    y = SI_prefix[symbol]
+    return int(round(float(x) * y, 0))

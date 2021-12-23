@@ -7,16 +7,14 @@ import scrapy
 
 
 class ScrapyMyselfExItem(scrapy.Item):
+    # 範例
     # define the fields for your item here like:
     # name = scrapy.Field()
     pass
 
-# 給 pttSpider 用
-
 
 class PttItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
+    # 給 pttSpider 用
     title = scrapy.Field()
     author = scrapy.Field()
     push = scrapy.Field()
@@ -25,6 +23,11 @@ class PttItem(scrapy.Item):
 
 
 class LeetcodeItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
     title = scrapy.Field()
+
+
+class PronhubItem(scrapy.Item):
+    cover = scrapy.Field()
+    title = scrapy.Field()
+    views = scrapy.Field()
+    video_page_url = scrapy.Field()
