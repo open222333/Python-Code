@@ -15,21 +15,28 @@ class PornhubSpider(scrapy.Spider):
     def __init__(self, pages=5, wait_sec=5):
         self.pages = int(pages)
         self.wait_sec = int(wait_sec)
-        self.start_urls = []
-
-        for filter in self.textFilter.values():
-            for page in range(1, self.pages + 1):
-                url = f"https://www.pornhub.com/video?o={filter}&page={page}"
-                self.start_urls.append(url)
 
     def start_requests(self):
-        for url in self.start_urls:
-            yield SplashRequest(url=url, callback=self.parse, args={'wait': self.wait_sec})
+        for key in self.textFilter.keys():
+            for page in range(1, self.pages + 1):
+                url = f"https://www.pornhub.com/video?o={self.textFilter[key]}&page={page}"
+                datas = {
+                    'datas': {
+                        'textFilter': key
+                    }
+                }
+                yield SplashRequest(
+                    url=url,
+                    callback=self.parse,
+                    meta=datas,
+                    args={'wait': self.wait_sec}
+                )
 
     def parse(self, response):
         item = PronhubItem()
         soup = BeautifulSoup(response.text, 'lxml')
         targets = soup.select('div.wrap')
+        item['text_filter'] = response.request.meta['datas']['textFilter']
         for tar in targets:
             video_select = tar.select('div.phimage a')
             img_select = video_select[0].select('img')

@@ -159,3 +159,9 @@ def get_SI_prefix_num(target: str) -> int:
     x = target[0: len(target) - 1]
     y = SI_prefix[symbol]
     return int(round(float(x) * y, 0))
+
+
+def set_datas(**datas):
+    '''兩個*號'''
+    for key, value in datas.items():
+        print(key, value)

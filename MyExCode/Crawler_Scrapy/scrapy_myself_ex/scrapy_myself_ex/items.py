@@ -27,6 +27,7 @@ class LeetcodeItem(scrapy.Item):
 
 
 class PronhubItem(scrapy.Item):
+    text_filter = scrapy.Field()
     cover = scrapy.Field()
     title = scrapy.Field()
     views = scrapy.Field()
