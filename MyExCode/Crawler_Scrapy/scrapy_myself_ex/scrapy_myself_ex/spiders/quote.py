@@ -1,7 +1,7 @@
 import scrapy
 from bs4 import BeautifulSoup
 from scrapy_splash import SplashRequest
-
+'''提供爬蟲練習的網站'''
 
 class QuoteSpider(scrapy.Spider):
     name = 'quote'

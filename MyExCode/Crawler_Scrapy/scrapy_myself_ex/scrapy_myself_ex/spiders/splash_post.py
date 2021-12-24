@@ -43,10 +43,18 @@ class SplashPostSpider(scrapy.Spider):
     def start_requests(self):
         post_url = 'https://httpbin.org/post'
         self.args['body'] = 'foo=bar'
-        yield SplashRequest(post_url, self.parse, endpoint='execute',
-                            magic_response=True, meta={'handle_httpstatus_all': True},
-                            args=self.args)
+        yield SplashRequest(
+            post_url,
+            self.parse,
+            endpoint='execute',
+            magic_response=True,
+            meta={'handle_httpstatus_all': True},
+            args=self.args
+        )
 
     def parse(self, response):
         with open('test.txt', 'a') as f:
             f.write(bytes(response.body).decode('utf-8'))
+
+
+Ｆ
