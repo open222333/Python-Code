@@ -8,7 +8,8 @@ def google_translate_text(project_id, source_language_code, target_language_code
     project_id:
     source_language_code:
     target_language_code:
-    text:'''
+    text:
+    auto 用在環境變數'''
     client = translate.TranslationServiceClient()
     location = "global"
     parent = f"projects/{project_id}/locations/{location}"

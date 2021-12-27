@@ -4,6 +4,7 @@ Git_PC.sh
 resetGitCache.sh
 test*.*
 test*.sh
+*token.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
