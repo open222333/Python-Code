@@ -1,5 +1,0 @@
-Python 入門到高手之路
-作者：洪錦魁
-深石數位科技
-DeepStone Corporation
-Deep Learning
