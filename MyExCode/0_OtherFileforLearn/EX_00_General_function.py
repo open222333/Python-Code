@@ -140,10 +140,10 @@ def get_random_num(min_num: int, max_num: int) -> int:
     return randint(min_num, max_num)
 
 
-def get_SI_prefix_num(target: str) -> int:
+def get_SI_prefix_num(target: str):
     '''國際單位制接頭詞 SI prefix 轉為數字
     參考https://en.wikipedia.org/wiki/Metric_prefix'''
-    from math import pow
+    import re
 
     SI_prefix = {
         'K': pow(10, 3),
@@ -155,10 +155,18 @@ def get_SI_prefix_num(target: str) -> int:
         'Z': pow(10, 21),
         'Y': pow(10, 24)
     }
-    symbol = target[-1].upper()
-    x = target[0: len(target) - 1]
-    y = SI_prefix[symbol]
-    return int(round(float(x) * y, 0))
+    try:
+        split_str = re.findall(r'(.*)(\D)', target)[0]
+        if len(split_str) != 0:
+            symbol = split_str[1]
+            num = float(split_str[0])
+
+            symbol = str(symbol).upper()
+            unit = SI_prefix[symbol]
+            return int(round(float(num) * unit, 0))
+        return int(target)
+    except:
+        return target
 
 
 def set_datas(**datas):
