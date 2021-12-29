@@ -10,7 +10,6 @@ import traceback
 
 class PornhubSpider(scrapy.Spider):
     name = 'pornhub'
-    allowed_domains = ['www.pornhub.com']
     target_url = 'https://www.pornhub.com'
 
     textFilter = {
@@ -84,7 +83,6 @@ class PornhubSpider(scrapy.Spider):
 class XvideosSpider(scrapy.Spider):
     name = 'xvideos'
     target_url = 'https://www.xvideos.com'
-    allowed_domains = ['www.xvideos.com']
 
     def __init__(self, pages=1, wait_sec=5):
         self.pages = int(pages)
@@ -170,3 +168,28 @@ class XvideosSpider(scrapy.Spider):
         item.set_item(data)
         print(item)
         # yield item
+
+
+class XxxyedSpider(scrapy.Spider):
+    name = 'xxxyed'
+    target_url = 'https://xxxyed.com/'
+
+    def __init__(self, pages=1, wait_sec=5):
+        self.pages = int(pages)
+        self.wait_sec = int(wait_sec)
+
+    def start_requests(self):
+        for page in range(1, self.pages + 1):
+            url = f'{self.target_url}page/{page}/'
+
+            yield SplashRequest(
+                url=url,
+                callback=self.parse,
+                args={'wait': self.wait_sec}
+            )
+
+    def parse(self, response):
+        item = VideoItem()
+        soup = BeautifulSoup(response.body, 'lxml')
+        data = {}
+        videos = soup.select('#main > div.videos-list > article.loop-video')
