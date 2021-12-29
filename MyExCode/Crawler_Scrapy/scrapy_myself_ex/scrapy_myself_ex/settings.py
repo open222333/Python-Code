@@ -14,7 +14,7 @@ NEWSPIDER_MODULE = 'scrapy_myself_ex.spiders'
 
 # 配置Splash服務的地址
 SPLASH_URL = 'http://localhost:8050'
-
+# SPLASH_URL = 'http://192.168.31.56:8050'
 
 MONGODB_HOST = '127.0.0.1:31117'
 

@@ -55,6 +55,3 @@ class SplashPostSpider(scrapy.Spider):
     def parse(self, response):
         with open('test.txt', 'a') as f:
             f.write(bytes(response.body).decode('utf-8'))
-
-
-Ｆ

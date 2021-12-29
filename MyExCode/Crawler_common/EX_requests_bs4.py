@@ -7,8 +7,8 @@ http://python-learnnotebook.blogspot.com/2018/01/beautifulsoup-instructions.html
 '''
 
 url = 'https://www.w3schools.com/cssref/css_selectors.asp'
-text = requests.get(url)
-soup = BeautifulSoup(text.text, 'lxml')
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'lxml')
 # print(soup.prettify())
 div = soup.select('div.w3-col.l3.m3.s12 a')
 # soup.select('[aria-label="Last Page"]')

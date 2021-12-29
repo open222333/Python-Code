@@ -38,8 +38,8 @@ def write_logs(file: str, message: str) -> None:
     f.close()
 
 
-def spend_time(start: datetime, end: datetime) -> str:
-    '''回傳時間差'''
+def get_time_zhstr(start: datetime, end: datetime) -> str:
+    '''回傳時間'''
     seconds = (end - start).seconds % 60
     minutes = ((end - start).seconds // 60) % 60
     hours = (((end - start).seconds // 60) // 60) % 24
@@ -47,8 +47,8 @@ def spend_time(start: datetime, end: datetime) -> str:
     return f"{days}天 {hours}時 {minutes}分 {seconds}秒"
 
 
-def spend_time_secends(total_secends: int) -> str:
-    '''依照秒數 回傳時間差'''
+def get_time_trans_sec_zhstr(total_secends: int) -> str:
+    '''依照秒數 回傳時間'''
     seconds = total_secends % 60
     minutes = (total_secends // 60) % 60
     hours = ((total_secends // 60) // 60) % 24
@@ -56,7 +56,25 @@ def spend_time_secends(total_secends: int) -> str:
     return f"{days}天 {hours}時 {minutes}分 {seconds}秒"
 
 
-def checke_url(url: str):
+def get_time_str(total_secends: int) -> str:
+    '''依照秒數 回傳時間'''
+    msg = ''
+    seconds = total_secends % 60
+    minutes = (total_secends // 60) % 60
+    hours = ((total_secends // 60) // 60) % 24
+    days = ((total_secends // 60) // 60) // 24
+    if days != 0:
+        msg += f"{days}天"
+    if hours != 0:
+        msg += f"{hours}時"
+    if minutes != 0:
+        msg += f"{minutes}分"
+    if seconds != 0:
+        msg += f"{seconds}秒"
+    return msg
+
+
+def get_url_status_code(url: str):
     '''檢查網址 回傳http code'''
     import requests
     try:
@@ -103,7 +121,8 @@ def create_file(fileName='file', fileFormat='txt', content='', openMode='w'):
         # f.close() # with open 會close()
 
 
-def unquote_encode(url, unicode='utf-8'):
+def trans_url_unquote_encode(url, unicode='utf-8'):
+    '''轉碼'''
     from urllib.parse import unquote
 
     url = unquote(url).encode(unicode)
@@ -140,7 +159,7 @@ def get_random_num(min_num: int, max_num: int) -> int:
     return randint(min_num, max_num)
 
 
-def get_SI_prefix_num(target: str):
+def get_trans_SI_prefix_to_num(target: str):
     '''國際單位制接頭詞 SI prefix 轉為數字
     參考https://en.wikipedia.org/wiki/Metric_prefix'''
     import re
