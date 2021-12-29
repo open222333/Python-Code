@@ -118,7 +118,7 @@ class XvideosSpider(scrapy.Spider):
             try:
                 thumbnum = 0
                 while True:
-                    cover = soup.select_one(f'#pic_{data_id}').attrs['src']
+                    cover = soup.select_one(f'#pic_{data_id}').attrs['data-src']
                     cover = cover.replace('THUMBNUM', str(thumbnum))
                     if requests.get(cover).status_code == 200:
                         break
