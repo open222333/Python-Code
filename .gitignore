@@ -5,6 +5,8 @@ resetGitCache.sh
 test*.*
 test*.sh
 *token.json
+service-account.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

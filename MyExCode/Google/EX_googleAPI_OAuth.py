@@ -24,3 +24,21 @@ def oauth(token_file):
         with open(token_file, 'w') as token:
             token.write(creds.to_json())
     return creds
+
+
+def oauth_service_account(subject, filename='service-account.json', *scopes):
+    '''使用 服務帳戶service_account 進行OAuth驗證
+    詳細說明
+    https://google-auth.readthedocs.io/en/master/reference/google.oauth2.service_account.html#module-google.oauth2.service_account'''
+    from google.oauth2.service_account import Credentials
+
+    credentials = None
+    try:
+        credentials = Credentials.from_service_account_file(
+            filename,
+            scopes=[scope for scope in scopes],
+            subject=subject
+        )
+    except:
+        pass
+    return credentials
