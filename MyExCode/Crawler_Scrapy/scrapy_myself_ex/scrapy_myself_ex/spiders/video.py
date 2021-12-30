@@ -184,12 +184,56 @@ class XxxyedSpider(scrapy.Spider):
 
             yield SplashRequest(
                 url=url,
+                callback=self.first_parse,
+                args={'wait': self.wait_sec}
+            )
+
+    def first_parse(self, response):
+        soup = BeautifulSoup(response.body, 'lxml')
+        data = {}
+        # 爬取資訊
+        videos = soup.select('#main > div.videos-list > article.loop-video > a')
+        pat = r'</i>(.*?)</span>'
+        for video in videos:
+            cover = video.select_one('div.post-thumbnail > div > img')
+            cover = cover.attrs['data-src']
+            data['cover'] = cover
+            data['title'] = video.attrs['title']
+            try:
+                views = video.select_one('span.views')
+                views = re.findall(pat, str(views))[0]
+            except:
+                views = 'Error'
+            data['views'] = views
+            try:
+                duration = video.select_one('span.duration')
+                duration = re.findall(pat, str(duration))[0]
+            except:
+                duration = 'Error'
+            data['duration'] = duration
+            url = video.attrs['href']
+            data['video_page_url'] = url
+
+            yield SplashRequest(
+                url=url,
                 callback=self.parse,
+                meta={'data': data},
                 args={'wait': self.wait_sec}
             )
 
     def parse(self, response):
         item = VideoItem()
-        soup = BeautifulSoup(response.body, 'lxml')
-        data = {}
-        videos = soup.select('#main > div.videos-list > article.loop-video')
+        data = response.request.meta['data']
+
+        # 爬取tags資訊
+        soup = BeautifulSoup(response.text, 'lxml')
+        tags = []
+        tags_select = soup.select('#video-about > div.tags > div.tags-list > a')
+        for tag in tags_select:
+            tag = tag.attrs['title']
+            tags.append(tag)
+
+        data['site'] = self.target_url
+        data['tags'] = tags
+
+        item.set_item(data)
