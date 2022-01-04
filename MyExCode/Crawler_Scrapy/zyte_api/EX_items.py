@@ -1,6 +1,8 @@
 from scrapinghub import ScrapinghubClient
 import json
 '''
+使用官方的模組
+
 API文檔
 https://docs.zyte.com/scrapy-cloud/items.html
 
