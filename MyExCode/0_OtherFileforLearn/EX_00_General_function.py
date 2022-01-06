@@ -122,7 +122,7 @@ def create_file(fileName='file', fileFormat='txt', content='', openMode='w'):
 
 
 def trans_url_unquote_encode(url, unicode='utf-8'):
-    '''轉碼'''
+    '''轉碼 URL encoding'''
     from urllib.parse import unquote
 
     url = unquote(url).encode(unicode)
