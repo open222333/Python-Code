@@ -125,7 +125,9 @@ def trans_url_unquote_encode(url, unicode='utf-8'):
     '''轉碼 URL encoding'''
     from urllib.parse import unquote
 
-    url = unquote(url).encode(unicode)
+    url = unquote(url)
+    # 轉成 encoding
+    # url = url.encode(unicode)
     return url
     # 演示：
     # >>> from urllib.parse import unquote
