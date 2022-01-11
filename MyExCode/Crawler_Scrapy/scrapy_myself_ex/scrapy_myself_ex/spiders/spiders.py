@@ -1,11 +1,178 @@
-import scrapy
-from bs4 import BeautifulSoup
-from scrapy_splash import SplashRequest
-from scrapy_myself_ex.items import VideoItem
-import re
-import time
-import requests
 import traceback
+import requests
+import scrapy
+import time
+import re
+
+from scrapy.exceptions import CloseSpider
+from scrapy_myself_ex.items import VideoItem, PttItem
+from scrapy_splash import SplashRequest
+from scrapy import Request
+
+from bs4 import BeautifulSoup
+
+# https://ithelp.ithome.com.tw/articles/10205893
+
+
+class LeetcodeSpider(scrapy.Spider):
+    '''爬取leetcode'''
+    name = 'leetcode'
+    start_urls = ['https://leetcode.com/problem-list/wpwgkgt/']
+    proxy = 'http://host_ip:port'
+
+    def start_requests(self):
+        for url in self.start_urls:
+            yield SplashRequest(
+                url,
+                callback=self.parse,
+                meta={
+                    'proxy': self.proxy  # 使用預設的proxy中間件 HttpProxyMiddleware
+                },
+                args={'wait': 5}
+            )
+
+    def parse(self, response):
+        soup = BeautifulSoup(response.body, 'lxml')
+        pass
+
+
+class ScrapySeleniumSpider(scrapy.Spider):
+    '''scrapy selenium middleware 的應用方式 要看 middlewares.py'''
+    name = 'scrapy_selenium'
+    # allowed_domains = ['http://quotes.toscrape.com/js/']
+    start_urls = ['http://quotes.toscrape.com/js/']
+
+    def start_requests(self):
+        for keyword in self.settings.get('KEYWORDS'):
+            # 導出搜尋的關鍵字
+            for page in range(1, self.settings.get('MAX_PAGES')):
+                # 導出可爬取的頁面
+                url = self.base_urls + keyword
+                yield Request(url=url, meta={'page': page}, callback=self.parse, dont_filter=True)
+
+    def parse(self, response):
+        pass
+
+
+class PttSpider(scrapy.Spider):
+    '''爬取ptt'''
+    count_page = 1
+    name = 'ptt'
+    allowed_domains = ['www.ptt.cc']
+    start_urls = ['http://www.ptt.cc/bbs/movie/index.html']
+
+    def parse(self, response):
+        items = PttItem()
+        for q in response.css('div.r-ent'):
+            items['push'] = q.css('div.nrec > span.hl::text').extract_first()
+            items['title'] = q.css('div.title > a::text').extract_first()
+            items['href'] = q.css('div.title > a::attr(href)').extract_first()
+            items['date'] = q.css('div.meta > div.date ::text').extract_first()
+            items['author'] = q.css(
+                'div.meta > div.author ::text').extract_first()
+            yield items
+        next_page_url = response.css(
+            'div.action-bar > div.btn-group > a.btn::attr(href)')[3].extract()
+        if (next_page_url) and (self.count_page < 10):
+            self.count_page = self.count_page + 1
+            new = response.urljoin(next_page_url)
+        else:
+            raise CloseSpider('close it')
+        yield scrapy.Request(new, callback=self.parse, dont_filter=True)
+
+
+class QuoteSpider(scrapy.Spider):
+    '''提供爬蟲練習的網站'''
+    name = 'quote'
+    # allowed_domains = ['http://quotes.toscrape.com/js/']
+    start_urls = ['http://quotes.toscrape.com/js/']
+
+    # 帶入 lua腳本 設定在args lua_source
+    script = '''
+    function main(splash)
+        -- ...
+        local element = splash:select('.element')
+        local bounds = element:bounds()
+        assert(element:mouse_click{x = bounds.width / 3, y = bounds.height / 3})
+        -- ...
+    end
+    '''
+
+    def start_requests(self):
+        num = 0
+        for url in self.start_urls:
+            # args = {'wait': 5, 'proxy': 'http://139.162.125.79:8888', 'splash_headers': self.header})
+            num += 1
+            data = {'num': num}
+            yield SplashRequest(url, meta=data, cookies={'t': '1'}, callback=self.parse, args={'wait': 5, 'lua_source': self.script})
+
+    def parse(self, response):
+        print(response.request.meta)  # 印出 上一個request的meta
+        soup = BeautifulSoup(response.text, 'lxml')
+        quotes = soup.select('div.quote span.text')
+        for q in quotes:
+            print(q)
+            print(q.text)
+
+        # fileName='quote_response.html'
+        # with open(fileName, 'wb') as f:
+        #     f.write(response.body)
+        #     f.close()
+
+
+class SplashPostSpider(scrapy.Spider):
+    # https://stackoverflow.com/questions/46925968/how-to-send-a-post-request-with-splashrequest-in-scrapy-splash
+    '''使用SplashRequest發送post請求
+    使用說明'''
+
+    name = "splash_post"
+    proxy = {
+        'http': 'http://proxy.example.com:1111',
+        'https': 'http://proxy.example.com:1111'
+    }  # 範例 無效的鏈結
+
+    lua_script = """
+    function main(splash, args)
+    assert(splash:go{
+    splash.args.url,
+    http_method=splash.args.http_method,
+    body=splash.args.body,
+    })
+    assert(splash:wait(0.5))
+    return {
+    html = splash:html(),
+    }
+    end
+    """
+
+    args = {
+        # lua腳本
+        'lua_source': lua_script,
+        'http_method': 'POST',
+        # 使用proxy
+        'proxy': proxy,
+        # 設置最長等待時間 預設60
+        'timeout': 3600,
+        # 超時後中止資源加載
+        'resource_timeout': 20
+    }
+    # has_proxy = {'wait': self.wait_sec, 'splash_headers': self.header}
+
+    def start_requests(self):
+        post_url = 'https://httpbin.org/post'
+        self.args['body'] = 'foo=bar'
+        yield SplashRequest(
+            post_url,
+            self.parse,
+            endpoint='execute',
+            magic_response=True,
+            meta={'handle_httpstatus_all': True},
+            args=self.args
+        )
+
+    def parse(self, response):
+        with open('test.txt', 'a') as f:
+            f.write(bytes(response.body).decode('utf-8'))
 
 
 class PornhubSpider(scrapy.Spider):

@@ -1,4 +1,4 @@
-from spiders.leetcode import LeetcodeSpider
+from spiders.spiders import LeetcodeSpider
 import scrapy
 '''不使用終端機輸入指令列執行scrapy
 程式內直接執行'''

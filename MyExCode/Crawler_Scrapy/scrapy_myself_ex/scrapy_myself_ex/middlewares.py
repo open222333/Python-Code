@@ -3,6 +3,7 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+from w3lib.http import basic_auth_header
 from scrapy import signals
 
 # useful for handling different item types with a single interface
@@ -107,3 +108,17 @@ class ScrapyMyselfExDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class CustomProxyMiddleware(object):
+    '''proxy
+    要確保在HttpProxyMiddleware之前
+    DOWNLOADER_MIDDLEWARES = { 
+        'myproject.middlewares.CustomProxyMiddleware': 350, 
+        'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 400, 
+    }
+    
+    '''
+    def process_request(self, request, spider):
+        request.meta['proxy'] = "http://192.168.1.1:8050"
+        request.headers['Proxy-Authorization'] = basic_auth_header('proxy_user', 'proxy_pass')

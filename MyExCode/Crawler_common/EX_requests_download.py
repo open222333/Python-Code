@@ -23,4 +23,4 @@ requests.packages.urllib3.disable_warnings()
 
 # 不使用open的下載
 urllib.request.urlretrieve(url, filename='test')
-# urllib.urlretrieve(url, filename="hosts") # python 2 的寫法Ｆ
+# urllib.urlretrieve(url, filename="hosts") # python 2 的寫法
