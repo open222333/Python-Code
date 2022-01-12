@@ -1,24 +1,227 @@
 import traceback
 import requests
 import scrapy
+import base64
+from base64 import urlsafe_b64encode
 import time
 import re
 
 from scrapy.exceptions import CloseSpider
-from scrapy_myself_ex.items import VideoItem, PttItem
 from scrapy_splash import SplashRequest
 from scrapy import Request
 
 from bs4 import BeautifulSoup
+from fake_useragent import FakeUserAgent
+
+from scrapy_myself_ex.items import VideoItem, PttItem
+from scrapy_myself_ex.function import get_SI_prefix_num
+
 
 # https://ithelp.ithome.com.tw/articles/10205893
+
+
+class SampleSpider(scrapy.Spider):
+    '''範本'''
+    name = 'Sample'
+    site_name = ''
+    video_type = ''
+    video_item = ''
+    video_filter = ''
+    target_url = ''
+    user_agent = FakeUserAgent().google
+
+    # 客製化設定 一般讀取settings 這只使用在此爬蟲
+    custom_settings = {
+        'TEST': 'value',
+    }
+
+    def __init__(self, pages=5, wait_sec=30, *tags):
+        self.pages = int(pages)
+        self.wait_sec = int(wait_sec)
+        self.tags = [tag for tag in tags]
+
+    def get_proxy(self):
+        # proxy = 'http://host_ip:port'
+        '''從設定取得 代理服務器的 地址,帳號,密碼'''
+        proxy = self.settings['PROXY_URL']
+        username = self.settings['PROXY_USERNAME']
+        password = self.settings['PROXY_PASSWORD']
+
+        # 驗證帳號密碼
+        auth = f'{username}:{password}'.encode(encoding='ISO-8859-1')
+        auth = b'Basic ' + urlsafe_b64encode(auth)
+
+        return {
+            'proxy': proxy,
+            'auth': auth
+        }
+
+    def start_requests(self):
+        start_urls = []
+        items = ['/']
+
+        start_urls.append(self.target_url)
+        if self.pages > 1:
+            for item in items:
+                for num in range(1, self.pages + 1):
+                    start_urls.append(self.target_url + f'{item}{num}')
+
+        # proxy 資訊
+        proxy_info = self.get_proxy()
+
+        for url in start_urls:
+            yield SplashRequest(
+                url=url,
+                callback=self.parse,
+                meta={
+                    # 'data': data,
+                    'proxy': proxy_info['proxy'],
+                },
+                headers={
+                    'User-Agent': self.user_agent,
+                    'Proxy-Authorization':  proxy_info['auth']
+                },
+                args={
+                    'wait': self.wait_sec,
+                    # 'splash_headers': {'User-Agent': self.user_agent}
+                }
+            )
+
+    def parse(self, response):
+        item = VideoItem()
+        soup = BeautifulSoup(response.body, 'lxml')
+        target = True
+
+        videos = soup.select('')
+        for video in videos:
+
+            # 排除標籤內有tags
+            tags_select = soup.select('')
+            for tag in tags_select:
+                if tag.text in self.tags:
+                    target = False
+                    break
+
+            data = {}
+            try:
+                cover = video.select_one('')
+                title = video.select_one('')
+                views = video.select_one('')
+                video_page_url = video.select_one('')
+            except:
+                traceback.print_exc()
+
+            if target:
+                data['spider_code'] = self.name
+                data['site_name'] = self.site_name
+                data['video_type'] = self.video_type
+                data['video_item'] = self.video_item
+                data['video_filter'] = self.video_filter
+                data['cover'] = cover
+                data['title'] = title
+                data['views'] = get_SI_prefix_num(str(views))
+                data['video_page_url'] = video_page_url
+
+                item.set_item(data)
+                yield item
+
+
+class SampleTwoParseSpider(scrapy.Spider):
+    '''需爬內頁'''
+    name = 'SampleTwoParse'
+    site_name = ''
+    video_type = ''
+    video_item = ''
+    video_filter = ''
+    target_url = ''
+    user_agent = FakeUserAgent().google
+
+    def __init__(self, pages=5, wait_sec=30, *tags):
+        self.pages = int(pages)
+        self.wait_sec = int(wait_sec)
+        self.tags = [tag for tag in tags]
+
+    def start_requests(self):
+        start_urls = []
+        items = ['/']
+
+        start_urls.append(self.target_url)
+        if self.pages > 1:
+            for item in items:
+                for num in range(1, self.pages + 1):
+                    start_urls.append(self.target_url + f'{item}{num}')
+
+        for url in start_urls:
+            yield SplashRequest(
+                url=url,
+                callback=self.first_parse,
+                args={
+                    'wait': self.wait_sec,
+                    'splash_headers': {'User-Agent': self.user_agent}
+                }
+            )
+
+    def first_parse(self, response):
+        soup = BeautifulSoup(response.body, 'lxml')
+
+        videos = soup.select('')
+        for video in videos:
+            data = {}
+            try:
+                cover = video.select_one('')
+                title = video.select_one('')
+                video_page_url = video.select_one('')
+            except:
+                traceback.print_exc()
+
+            data['cover'] = cover
+            data['title'] = title
+            data['video_page_url'] = video_page_url
+
+            yield SplashRequest(
+                url=data['video_page_url'],
+                callback=self.parse,
+                meta={'data': data},
+                args={
+                    'wait': self.wait_sec,
+                    'splash_headers': {'User-Agent': self.user_agent}
+                }
+            )
+
+    def parse(self, response):
+        item = VideoItem()
+        soup = BeautifulSoup(response.body, 'lxml')
+        data = response.request.meta['data']
+        target = True
+
+        try:
+            views = soup.select_one('')
+        except:
+            traceback.print_exc()
+
+        # 排除標籤內有tags
+        tags_select = soup.select('')
+        for tag in tags_select:
+            if tag.text in self.tags:
+                target = False
+                break
+
+        if target:
+            data['spider_code'] = self.name
+            data['site_name'] = self.site_name
+            data['video_type'] = self.video_type
+            data['video_item'] = self.video_item
+            data['video_filter'] = self.video_filter
+            data['views'] = get_SI_prefix_num(str(views))
+
+            item.set_item(data)
+            yield item
 
 
 class LeetcodeSpider(scrapy.Spider):
     '''爬取leetcode'''
     name = 'leetcode'
     start_urls = ['https://leetcode.com/problem-list/wpwgkgt/']
-    proxy = 'http://host_ip:port'
 
     def start_requests(self):
         for url in self.start_urls:

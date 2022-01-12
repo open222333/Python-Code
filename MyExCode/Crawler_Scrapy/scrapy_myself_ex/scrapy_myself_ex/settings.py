@@ -26,6 +26,9 @@ USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
 # 不遵守 robot協議
 ROBOTSTXT_OBEY = False
 
+
+# DOWNLOADER_CLIENTCONTEXTFACTORY = 'spider.contexts.CustomContextFactory'
+
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
@@ -113,7 +116,7 @@ HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
 # Splash 要使用
 DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
-# IP rotation in Scrapy
-ROTATING_PROXY_LIST = [
-    "http://139.162.125.79:8888",
-]
+# # IP rotation in Scrapy
+# ROTATING_PROXY_LIST = [
+#     "http://host_ip:port",
+# ]

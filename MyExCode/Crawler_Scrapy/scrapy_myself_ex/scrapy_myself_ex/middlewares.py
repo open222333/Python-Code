@@ -3,6 +3,10 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+from OpenSSL import SSL
+from scrapy.core.downloader.contextfactory import ScrapyClientContextFactory
+
+
 from w3lib.http import basic_auth_header
 from scrapy import signals
 
@@ -112,13 +116,32 @@ class ScrapyMyselfExDownloaderMiddleware:
 
 class CustomProxyMiddleware(object):
     '''proxy
+    使用 proxy
+
     要確保在HttpProxyMiddleware之前
     DOWNLOADER_MIDDLEWARES = { 
         'myproject.middlewares.CustomProxyMiddleware': 350, 
         'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 400, 
     }
-    
+
     '''
+
     def process_request(self, request, spider):
         request.meta['proxy'] = "http://192.168.1.1:8050"
         request.headers['Proxy-Authorization'] = basic_auth_header('proxy_user', 'proxy_pass')
+
+
+class CustomContextFactory(ScrapyClientContextFactory):
+    """
+    Custom context factory that allows SSL negotiation.
+    允許 SSL 協商的自定義上下文工廠
+
+    https://github.com/scrapy/scrapy/issues/1429
+
+    settings.py 添加以下
+    DOWNLOADER_CLIENTCONTEXTFACTORY = 'spider.contexts.CustomContextFactory'
+    """
+
+    def __init__(self):
+        # Use SSLv23_METHOD so we can use protocol negotiation
+        self.method = SSL.SSLv23_METHOD
