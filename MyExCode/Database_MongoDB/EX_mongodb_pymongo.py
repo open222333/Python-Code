@@ -6,6 +6,27 @@ host = '127.0.0.1:31117'  # mongodb預設port
 client = MongoClient(host)
 db = client['test_db']['test_collection']
 
+# 查詢運算子範例
+filed = 'colimn'
+data = 'test'
+
+op_dict = {
+    'eq': {filed: {'$eq': data}},  # 等於
+    'ne': {filed: {'$ne': data}},  # 不等於
+    'lt': {filed: {'$lt': data}},  # 小於
+    'le': {filed: {'$lte': data}},  # 小於等於
+    'gt': {filed: {'$gt': data}},  # 大於
+    'ge': {filed: {'$gte': data}},  # 大於等於
+    'bw': {filed: {'$regex': f'^{data}'}},  # 開頭是
+    'bn': {filed: {'$not': {'$regex': f'^{data}'}}},  # 開頭不是
+    'in': {filed: {'$elemMatch': {'$eq': data}}},  # 在其中
+    'ni': {filed: {'$not': {'$elemMatch': {'$eq': data}}}},  # 不在其中
+    'ew': {filed: {'$regex': f'${data}'}},  # 結尾是
+    'en': {filed: {'$not': {'$regex': f'${data}'}}},  # 結尾不是
+    'cn': {filed: {'$in': [data]}},  # 內容包含(需用array)
+    'nc': {filed: {'$nin': [data]}},  # 內容不包含(需用array)
+}
+
 # 新增 insert
 data = {
     "id": 0,

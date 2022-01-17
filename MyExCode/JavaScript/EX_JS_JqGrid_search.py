@@ -24,7 +24,7 @@ def get_filter_trans_jqGrid_to_pymongo(filters, *is_int: str, **multi_column: li
     is_int: 輸入欄位 欲指定型態int,
     multi_column: 多重標題 *為任何，範例：title=[viedos.ko.title, videos.zh-Hant.title]
 
-    回傳 msg {'status': bool, 'message': 錯誤訊息(status = False 才會回傳), 'result': 轉換結果}'''
+    回傳 msg {'status': bool, 'message': 錯誤訊息(status = False 才會回傳), 'result': 轉換結果, 'rules': 搜尋的條件資料，格式為[{'filed': 欄位, 'op': 運算子, 'data': 資料}, ......]}'''
     import json
     import traceback
 
@@ -55,6 +55,7 @@ def get_filter_trans_jqGrid_to_pymongo(filters, *is_int: str, **multi_column: li
 
     groupOp = filters['groupOp']
     rules = filters['rules']
+    msg_rules = []
 
     mongo_filter = {}
     msg = {}
@@ -128,6 +129,14 @@ def get_filter_trans_jqGrid_to_pymongo(filters, *is_int: str, **multi_column: li
                     msg['status'] = False
                     msg['message'] = f'op: {op} 沒有設定'
                     return msg
+            # 使用的規則
+            msg_rules.append(
+                {   
+                    'filed':filed,
+                    'op':op,
+                    'data':data
+                }
+            )
         except:
             msg['status'] = False
             msg['message'] = traceback.format_exc()
@@ -136,6 +145,7 @@ def get_filter_trans_jqGrid_to_pymongo(filters, *is_int: str, **multi_column: li
     mongo_filter[groupOp] = rule_stock
     msg['status'] = True
     msg['result'] = mongo_filter
+    msg['rules'] = msg_rules
     return msg
 
 
@@ -162,5 +172,6 @@ if filter['status']:
     datas = col.find(filter['result']).sort(request_args['sidx'], get_sord(request_args))
     for data in datas:
         print(data['videos'], datas.count())
+        break
 else:
     print(filter)
