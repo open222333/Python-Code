@@ -5,6 +5,7 @@ resetGitCache.sh
 test*.*
 test*.sh
 *token.json
+*.m3u8
 service-account.json
 
 # Byte-compiled / optimized / DLL files
