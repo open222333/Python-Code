@@ -1,3 +1,6 @@
+import typing
+
+
 def get_kwargs(**kwargs: list):
     '''**kwargs 應用'''
     '''
@@ -11,3 +14,8 @@ def get_kwargs(**kwargs: list):
                 print(f'value: {i}')
         else:
             print(f'value: {value}')
+
+
+def get_item(item: typing.Any = None):
+    '''引數強制狀態以及設定預設'''
+    print(item)
