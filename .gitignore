@@ -6,6 +6,7 @@ test*.*
 test*.sh
 *token.json
 *.m3u8
+*.icloud
 service-account.json
 
 # Byte-compiled / optimized / DLL files
