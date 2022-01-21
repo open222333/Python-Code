@@ -19,3 +19,20 @@ def get_kwargs(**kwargs: list):
 def get_item(item: typing.Any = None):
     '''引數強制狀態以及設定預設'''
     print(item)
+
+
+'''def 引數為func'''
+
+def funca():
+    print('a')
+
+
+def funcb():
+    print('b')
+
+
+def test(func):
+    func()
+
+
+test(funca)
