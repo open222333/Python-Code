@@ -1,7 +1,11 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String
+import time
 from config import SQLALCHEMY_DATABASE_URI, USER_WATCH_SQLALCHEMY_DATABASE_URI, SPEED_TEST_SQLALCHEMY_DATABASE_URI
+
+
+'''flask-sqlachemy 練習'''
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_BINDS = {
@@ -28,4 +32,6 @@ class Test(sqlalchemy.Model):
     test_data = Column(String(100))
 
 
-list_data = Test.query.get()
+data = Test.query.all()
+time.sleep(100)
+print(data)
