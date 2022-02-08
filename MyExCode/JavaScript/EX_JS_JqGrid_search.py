@@ -82,7 +82,7 @@ def get_filter_trans_jqGrid_to_pymongo(filters, *is_int: str, **multi_column: li
         data = rule['data']
 
         # 若有欄位指定型態int
-        if filed in is_int:
+        if filed in is_int and data != "":
             data = int(data)
 
         # 若有多重欄位
