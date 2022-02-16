@@ -73,9 +73,14 @@ def download_wget(url, file_name, output_dir=None):
     # wget.download(url)
 
 
-def download_file(url, chunk_size=10240):
-    '''下載大文件'''
+def download_file(url, chunk_size=10240, dir=None):
+    '''下載大文件 
+    dir: 目標資料夾'''
     local_filename = url.split('/')[-1]
+    if dir != None:
+        os.makedirs(dir)
+        local_filename = f"{dir}/{local_filename}"
+        
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
         with open(local_filename, 'wb') as f:

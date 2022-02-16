@@ -124,5 +124,9 @@ def get_m3u8_ts_list(m3u8_path):
     return result
 
 
-data = get_m3u8_ts_list('Python_Code/MyExCode/Media-Video/M3U8/test.m3u8')
-print(data)
+def is_m3u(file_name):
+    '''是否為m3u檔'''
+    target = ['.m3u', '.m3u8']
+    ex = os.path.splitext(file_name)[1]
+    return ex in target
+    
