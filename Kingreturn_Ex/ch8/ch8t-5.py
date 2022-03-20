@@ -1,0 +1,5 @@
+season = ('Spring', 'Summer', 'Fall', 'Winter')
+chinese = ('春季', '夏季', '秋季', '冬季')
+zipDate = zip(season, chinese)
+season_set = list(zipDate)
+print(season_set)

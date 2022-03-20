@@ -1,0 +1,40 @@
+<!doctype html> {% load static %}
+<html>
+
+<head>
+    <link href="{% static '/assets/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static '/assets/css/light-bootstrap-dashboard.css' %}" rel="stylesheet" />
+    {% comment %} <link rel="stylesheet" href="{% static 'styles.css' %}"> {% endcomment %}
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div class="formbg-inner padding-horizontal--48">
+        <div class="basetop">
+            {% block topbar %}
+            <ol>
+                <li class="basemenu"><a class="base" href="{% url 'Login:login' %}">登出系統</a></li>
+                <li class="basemenu"><a class="base" href="{% url 'Login:main' %}">主頁面</a></li>
+                <li class="basemenu"><a class="base" href="{% url 'Login:userPage' %}">使用者</a></li>
+                <li class="basemenu"><a class="base" href="{% url 'Login:testpage' %}">測試頁面</a>
+                </li>
+            </ol>
+            {% endblock %}
+        </div>
+
+</body>
+
+<body>
+    <div class="basetop">
+        <ol class="basesubmenu">
+            <li class="basesubmenu"><a class="base" href="">使用者資訊</a></li>
+            <li class="basesubmenu"><a class="base" href="">使用者權限</a></li>
+        </ol>
+    </div>
+</body>
+
+<body>
+    {% block content %}{% endblock %}
+</body>
+
+</html>

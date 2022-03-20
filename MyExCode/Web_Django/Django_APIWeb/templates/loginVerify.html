@@ -1,0 +1,38 @@
+<!doctype html> {% load static %}
+<html>
+
+<head>
+    <!-- <link rel="stylesheet" href="{% static 'styles.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'stylesLogin.css' %}">
+    <meta charset="utf-8">
+    <title>登入</title>
+</head>
+
+<body>
+    <div class="login-root">
+        <div class="box-root flex-flex flex-direction--column" style="min-height: 100vh;flex-grow: 1;">
+            <div class="box-root padding-top--24 flex-flex flex-direction--column" style="flex-grow: 1; z-index: 9;">
+                <div class="formbg-outer">
+                    <div class="formbg">
+                        <div class="formbg-inner padding-horizontal--48">
+                            <span class="padding-bottom--15">輸入驗證碼</span>
+                            <h2 class="loginmessage">{{ message }}</h2>
+                            <form id="stripe-login" ,method="POST">
+                                <div class="field padding-bottom--24">
+                                    <label for="id_account">驗證碼</label>
+                                    <input type="verifty" name="verifty" maxlength="10" required id="id_verifty">
+                                </div>
+                                <div class="field padding-bottom--24">
+                                    <input type="hidden" name="veriftyok">
+                                    <input type="submit" value="送出">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

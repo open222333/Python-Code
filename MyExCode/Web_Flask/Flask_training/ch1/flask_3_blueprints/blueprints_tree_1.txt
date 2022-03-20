@@ -1,0 +1,27 @@
+ecommerce/
+|
+├── auth/
+|   ├── templates/
+|   |   └── auth/
+|   |       ├── login.html
+|   |       ├── forgot_password.html
+|   |       └── signup.html
+|   ├── __init__.py
+|   └── auth.py
+|
+├── cart/
+|   ├── templates/
+|   |   └── cart/
+|   |       ├── checkout.html
+|   |       └── view.html
+|   ├── __init__.py
+|   └── cart.py
+|
+├── static/
+|   ├── logo.png
+|   ├── main.css
+|   └── generic.js
+|
+├── app.py
+├── config.py
+└── models.py

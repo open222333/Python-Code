@@ -1,0 +1,14 @@
+a.base-link {
+    color: green;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    font-family: fantasy;
+    border-radius: 5px;
+}
+
+div.loginformdiv1 {
+    text-align: center;
+    background-color: skyblue;
+    border-radius: 5px;
+}

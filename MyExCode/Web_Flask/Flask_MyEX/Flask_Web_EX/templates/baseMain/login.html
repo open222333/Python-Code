@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles.css') }}">
+    <meta charset="utf-8">
+    <title>登入</title>
+</head>
+
+<body>
+    <form class="loginform" ,method="POST">
+        <div class="loginformdiv1">
+            <div class="loginformdiv2">
+                {{ form.account.label }} {{ form.account(class_="form-control form-control-lg") }}
+            </div>
+            <div class="loginformdiv3">
+                {{ form.password.label }} {{ form.password(class_="form-control form-control-lg") }}
+            </div>
+            <div class="loginbtn1">
+                {{form.submit(class_="btn btn-primary btn-lg" )}}
+            </div>
+        </div>
+    </form>
+</body>
+
+</html>

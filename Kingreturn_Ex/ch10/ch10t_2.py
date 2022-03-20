@@ -1,8 +1,0 @@
-A = set([i for i in range(1, 100, 2)])
-B = set([j for j in range(0, 101, 5)])
-print("A:", A)
-print("B:", B)
-print('AB交集:', A & B)
-print('AB聯集:', A | B)
-print('A-B差集:', A - B)
-print('B-A差集:', B - A)
