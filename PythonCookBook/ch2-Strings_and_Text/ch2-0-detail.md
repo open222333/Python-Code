@@ -1,22 +1,5 @@
 # 字串與文字
 
-問題：
-
-```
-```
-
-解法：
-
-```
-```
-
-討論：
-
-```
-```
-
----
-
 ## 2.1 依據任意的多個定界符來切分字串
 
 問題：
@@ -261,16 +244,21 @@ strip() lstrip() rstrip()
 問題：
 
 ```
+清理奇怪的文字 例如: pythoй
 ```
 
 解法：
 
 ```
+str.upper() str.lower() 將文字轉換成標準模式
+str.replace() re.sub() 替換特定字元
+unicodedata.normalize() 正規化文字 如訣竅2.9
 ```
 
 討論：
 
 ```
+類似的訣竅可套用到位元組(byte)
 ```
 
 ## 2.13 對齊文字字串
@@ -278,16 +266,24 @@ strip() lstrip() rstrip()
 問題：
 
 ```
+格式化文字 套用某種對齊(alignment)
 ```
 
 解法：
 
 ```
+text = 'Hello World'
+print(text.ljust(20))
+print(text.rjust(20))
+print(text.center(20))
+
+使用format()函式 可用在字串也可用在其他值
 ```
 
 討論：
 
 ```
+舊的程式碼使用%來進行格式化 新的應優先使用format()
 ```
 
 ## 2.14 結合與串接字串
