@@ -1,5 +1,5 @@
 import time
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 '''
 datetime 文檔
 https://docs.python.org/zh-tw/3/library/datetime.html
@@ -23,6 +23,7 @@ print(f"now_utctime: {now_utctime}")
 datati = '2021-08-13 17:00:02'
 
 # Python time strptime() 函數根據指定的格式把一個時間字符串解析為時間元組。
+print("datetime.strptim(不帶格式):", datetime.strptime(datati, '%Y-%m-%d %H:%M:%S').timetuple())
 print("datetime.strptim:", datetime.strptime(datati, '%Y-%m-%d %H:%M:%S'))
 print("datetime.now().__format__:", datetime.now().__format__('%Y-%m-%d %H:%M:%S'))
 print("datetime.now().__format__:", datetime.now().__format__('%Y-%m-%d'))
@@ -37,3 +38,11 @@ print("datetime.utcfromtimestamp(time.mktime(now_time.timetuple())):",
 print("int(datetime.timestamp(now_time)):", int(datetime.timestamp(now_time)))
 print("datetime.timestamp(datetime.now()):", (datetime.timestamp(datetime.now())))
 print("now_time:", now_time)
+print("isoformat", datetime(2019, 5, 18, 15, 17, tzinfo=timezone(timedelta(hours=8))).isoformat())
+print(datetime(2019, 5, 18, 15, 17, tzinfo=timezone(timedelta(hours=8))).isoformat())
+print(datetime.now().astimezone(timezone(timedelta(hours=8))).isoformat(timespec='seconds'))
+
+a = datetime.now()
+b = timedelta(hours=8)
+c = a + b
+print(f'a(datetime.now()) + b(timedelta(hours=8)) = {c}')
