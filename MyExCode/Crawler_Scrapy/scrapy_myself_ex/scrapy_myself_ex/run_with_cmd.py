@@ -21,7 +21,7 @@ def run_spider_two(spider: scrapy.Spider):
     from scrapy.crawler import CrawlerProcess
     from scrapy.utils.project import get_project_settings
     import os
-    os.chdir('avnight/crawler/scrapy_crawler/scrapy_crawler')
+    os.chdir('scrapy/spiders')  # 到spider的資料夾位置
     process = CrawlerProcess(get_project_settings())
     process.crawl(spider)
     process.start()

@@ -21,7 +21,7 @@ from scrapy_myself_ex.function import get_SI_prefix_num
 
 
 class SampleSpider(scrapy.Spider):
-    '''範本'''
+    '''範本 內有proxy'''
     name = 'Sample'
     site_name = ''
     video_type = ''
@@ -40,10 +40,11 @@ class SampleSpider(scrapy.Spider):
         self.wait_sec = int(wait_sec)
         self.tags = [tag for tag in tags]
 
-    def get_proxy(self):
-        # proxy = 'http://host_ip:port'
+    def get_proxy_from_setting(self):
         '''從設定取得 代理服務器的 地址,帳號,密碼'''
-        proxy = self.settings['PROXY_URL']
+
+        # setting.py
+        proxy = self.settings['PROXY_URL']  # proxy = 'http://host_ip:port'
         username = self.settings['PROXY_USERNAME']
         password = self.settings['PROXY_PASSWORD']
 
@@ -55,6 +56,35 @@ class SampleSpider(scrapy.Spider):
             'proxy': proxy,
             'auth': auth
         }
+
+    def get_proxy(self, url, username, password):
+        # proxy = ''
+        
+        '''從設定取得 代理服務器的 地址,帳號,密碼
+        url = http://host_ip:port
+        '''
+        proxy = self.settings['PROXY_URL']
+        username = self.settings['PROXY_USERNAME']
+        password = self.settings['PROXY_PASSWORD']
+
+        # 驗證帳號密碼
+        auth = f'{username}:{password}'.encode(encoding='ISO-8859-1')
+        auth = b'Basic ' + urlsafe_b64encode(auth)
+
+        return {
+            'proxy': url,
+            'auth': auth
+        }
+
+    def get_last_page_num(page_url, selector):
+        '''根據 頁面網址,selector 取得最後一頁的頁碼'''
+        try:
+            content = requests.get(page_url).text
+            soup = BeautifulSoup(content, 'lxml')
+            last_page_url = soup.select_one(selector)
+            return last_page_url.text
+        except:
+            return traceback.print_exc()
 
     def start_requests(self):
         start_urls = []
@@ -317,10 +347,12 @@ class QuoteSpider(scrapy.Spider):
             print(q)
             print(q.text)
 
-        # fileName='quote_response.html'
-        # with open(fileName, 'wb') as f:
-        #     f.write(response.body)
-        #     f.close()
+        '''
+        fileName='quote_response.html'
+        with open(fileName, 'wb') as f:
+            f.write(response.body)
+            f.close()
+        '''
 
 
 class SplashPostSpider(scrapy.Spider):
@@ -537,7 +569,7 @@ class XvideosSpider(scrapy.Spider):
         data['duration'] = duration
         item.set_item(data)
         print(item)
-        # yield item
+        yield item
 
 
 class XxxyedSpider(scrapy.Spider):

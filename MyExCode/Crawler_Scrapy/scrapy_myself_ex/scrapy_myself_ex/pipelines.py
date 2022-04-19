@@ -56,6 +56,9 @@ class MongoPipeline(object):
         self.db.scrapy.insert(postItem)  # 插入紀錄
         return item  # 在終端輸出紀錄 可不寫
 
+
+class MongoPipeline_2(object):
+
     def __init__(self) -> None:
         from scrapy_myself_ex import settings
         host = settings.MONGODB_HOST
@@ -77,6 +80,7 @@ class MongoDBPipeline:
     # close_spider : 爬取完全部後被呼叫，關閉連接。
 
     def open_spider(self, spider):
+        '''當spider被打開時啟用'''
         # db_uri = spider.settings.get(
         #     'MONGODB_URI', 'mongodb://localhost:27017')
         # db_name = spider.settings.get('MONGODB_DB_NAME', 'ptt_scrapy')
@@ -96,6 +100,7 @@ class MongoDBPipeline:
         self.db.article.insert_one(item)
 
     def close_spider(self, spider):
+        '''當spider被關閉時啟用'''
         self.db_clients.close()
 
 
