@@ -137,6 +137,10 @@ class TempleOnePipeline:
                 tags=item['tags'],
                 second_video_url=item['second_video_url']
             ).save()
+        else:
+            # 若來源更新鏈結
+            data.update(**item)
+            data.save()
 
     # def insert_article(self, item):
     #     item = dict(item)
