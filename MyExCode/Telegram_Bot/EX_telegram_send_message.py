@@ -32,9 +32,3 @@ def telegram_bot_get_all_chat_id(bot_token, title=None):
                 del stock[chat_id]
 
     return stock
-
-# response = telegram_bot_get_all_chat_id(bot_token)
-# print(response)
-
-bot_token = '5020521993:AAH7drnyxRjbte5oFdlY93HXMzX5rIqAioQ'
-telegram_bot_send_message('\\', '-614834377', bot_token)

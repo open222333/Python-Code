@@ -1,9 +1,12 @@
 from bs4 import BeautifulSoup
+from pprint import pprint
 import os
+import re
 import sys
 import shutil
 import traceback
 import requests
+
 '''
 下載大文件
 https://stackoverflow.com/questions/16694907/download-large-file-in-python-with-requests
@@ -74,13 +77,13 @@ def download_wget(url, file_name, output_dir=None):
 
 
 def download_file(url, chunk_size=10240, dir=None):
-    '''下載大文件 
+    '''下載大文件
     dir: 目標資料夾'''
     local_filename = url.split('/')[-1]
     if dir != None:
         os.makedirs(dir)
         local_filename = f"{dir}/{local_filename}"
-        
+
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
         with open(local_filename, 'wb') as f:
@@ -239,9 +242,9 @@ def downloadVideo(url, file_name, output_dir=None, file_format="mp4", proxies=No
         https_proxy = "https://10.10.1.11:1080"
         ftp_proxy   = "ftp://10.10.1.10:3128"
 
-        proxyDict = { 
-                    "http"  : http_proxy, 
-                    "https" : https_proxy, 
+        proxyDict = {
+                    "http"  : http_proxy,
+                    "https" : https_proxy,
                     "ftp"   : ftp_proxy
                     }
     '''
@@ -361,7 +364,76 @@ def img_download(url):
         shutil.copyfileobj(r.raw, f)
 
 
-url = 'https://www.pexels.com/zh-tw/video/3196600/download/?search_query=%E6%B8%AC%E8%A9%A6&tracking_id=01t32lpgsyg4'
-# download_file_progress_bar(url)
-# download_resume_transfer(url, chunk_size=4096, file_extension='mp4')
-download_file_resume_transfer_and_bar(url, '/Users/4ge0/Desktop/test.mp4')
+def download_ts(ts_urls, dir_path=None, **headers):
+    '''下載ts檔'''
+    try:
+        for ts_url in ts_urls:
+            match = re.split(r'/', ts_url)
+            ts_name = match[len(match) - 1]
+            if dir_path != None:
+                if not os.path.exists(dir_path):
+                    os.makedirs(dir_path)
+                ts_file = f'{dir_path}/{ts_name}'
+            else:
+                ts_file = ts_name
+            ts_content = requests.get(url=ts_url, headers=headers, stream=True)
+            with open(ts_file, 'ab+') as f:
+                for chunk in ts_content.iter_content(chunk_size=1024):
+                    f.write(chunk)
+    except:
+        traceback.print_exc()
+
+
+def merge_ts(ts_dir, ts_name):
+    '''合併ts'''
+    try:
+        all_ts = os.listdir(ts_dir)
+        all_ts.sort()
+        pprint(all_ts)
+        for ts in all_ts:
+            _, extension = os.path.splitext(f'{ts_dir}/{ts}')  # 路徑 以及副檔名
+            if extension == '.ts':
+                with open(f'{ts_dir}/{ts_name}.ts', 'ab+') as f:
+                    f.write(open(f'{ts_dir}/{ts}', 'rb').read())
+    except:
+        traceback.print_exc()
+
+
+def download_and_merge_ts(ts_urls, dir_path, ts_merge_name=None, **headers):
+    '''下載並合併ts檔'''
+    try:
+        for ts_url in ts_urls:
+            match = re.split(r'/', ts_url)
+            ts_name = match[len(match) - 1]
+            print(f'{ts_name} 下載中...')
+
+            if not os.path.exists(dir_path):
+                os.makedirs(dir_path)
+            if ts_merge_name == None:
+                ts_merge_name = os.path.dirname(dir_path)
+
+            ts_file = f'{dir_path}/{ts_merge_name}.ts'
+
+            ts_content = requests.get(url=ts_url, headers=headers, stream=True)
+            with open(ts_file, 'ab') as f:
+                for chunk in ts_content.iter_content(chunk_size=1024):
+                    f.write(chunk)
+            print(f'{ts_name} 完成')
+    except:
+        print(f'{ts_name} 異常')
+        traceback.print_exc()
+
+
+def covert_to_to_mp4(ts_path):
+    '''轉換ts檔 成 mp4'''
+    mp4_file = os.path.basename(ts_path)
+    path, _ = os.path.splitext(ts_path)
+    command = f'ffmpeg -i {ts_path} {path}.mp4'
+    os.system(command)
+
+
+def get_file_name_from_url(url):
+    '''從網址取得檔名'''
+    match = re.split(r'/', url)
+    file_name = match[len(match) - 1]
+    return file_name

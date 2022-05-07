@@ -1,10 +1,9 @@
 import requests
 
 
-class Crawler(object):
+class Login():
     def __init__(self, **kwargs) -> None:
         self.login_page = ''
-        pass
 
     def login(self):
         headers = {
