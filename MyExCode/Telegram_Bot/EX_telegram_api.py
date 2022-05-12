@@ -4,7 +4,7 @@ import requests
 def telegram_bot_send_message(message, chat_id, bot_token):
     '''發送訊息'''
     api_url = f'https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={chat_id}&text={message}'
-    response = requests.get(api_url)
+    requests.get(api_url)
 
 
 def telegram_bot_get_all_chat_id(bot_token, title=None):
