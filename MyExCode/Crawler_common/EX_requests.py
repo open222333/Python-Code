@@ -4,26 +4,6 @@ import json
 from fake_useragent import FakeUserAgent
 from base64 import urlsafe_b64encode
 import traceback
-
-
-def get_ip(url='https://ipinfo.io/', proxies=None):
-    '''
-    proxies = {
-        'http': 'http://user:password@proxyip:port',
-        'https': 'http://user:password@proxyip:port',
-        'ftp': 'http://user:password@proxyip:port'
-    }
-    '''
-    try:
-
-        response = requests.get(url, proxies=proxies)
-        ip_info = json.loads(response.text)
-        return ip_info['ip']
-    except:
-        traceback.print_exc()
-
-
-
 '''# 20210831
 # verify=False 忽略憑證錯誤
 user_agent = FakeUserAgent().google  # chrome
@@ -55,3 +35,19 @@ response = requests.get(
     verify=False  # 忽略憑證錯誤
 )
 '''
+
+
+def get_ip(url='https://ipinfo.io/', proxies=None):
+    '''
+    proxies = {
+        'http': 'http://user:password@proxyip:port',
+        'https': 'http://user:password@proxyip:port',
+        'ftp': 'http://user:password@proxyip:port'
+    }
+    '''
+    try:
+        response = requests.get(url, proxies=proxies)
+        ip_info = json.loads(response.text)
+        return ip_info['ip']
+    except:
+        traceback.print_exc()
