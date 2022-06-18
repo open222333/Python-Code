@@ -37,8 +37,26 @@ response = requests.get(
 '''
 
 
+class RequestRandomProxy():
+    '''設置多個proxy 隨機跳轉'''
+    
+    
+    def __init__(self) -> None:
+        self.proxies = {}
+        
+    def add_proxy(self, host_ip, port, username=None, password=None):
+        if username != None and password != None:
+            self.proxies[len()]
+    
+    def _get_proxy_info(self, proxy):
+        response = requests.get('https://ipinfo.io/', proxy)
+        ip_info = json.loads(response.text)
+        return ip_info
+
+
 def get_ip(url='https://ipinfo.io/', proxies=None):
     '''
+    取得ip - 測試proxy 是否正常
     proxies = {
         'http': 'http://user:password@proxyip:port',
         'https': 'http://user:password@proxyip:port',
@@ -51,3 +69,6 @@ def get_ip(url='https://ipinfo.io/', proxies=None):
         return ip_info['ip']
     except:
         traceback.print_exc()
+
+
+print(get_ip())

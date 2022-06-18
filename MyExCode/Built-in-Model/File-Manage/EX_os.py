@@ -7,6 +7,17 @@ def get_environ():
     return os.environ
 
 
+def get_home():
+    '''回傳home資料夾'''
+    return os.path.expanduser('~')
+
+
+def get_home_2():
+    '''回傳home資料夾'''
+    from pathlib import Path
+    return str(Path.home())
+
+
 def get_filename(path):
     # 顯示檔案名
     return os.path.basename(path)
