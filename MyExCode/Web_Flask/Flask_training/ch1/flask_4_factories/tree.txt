@@ -1,0 +1,6 @@
+/flask
+├── /app
+│   ├── __init__.py
+│   └── config
+│       └── config.py
+└── main.py

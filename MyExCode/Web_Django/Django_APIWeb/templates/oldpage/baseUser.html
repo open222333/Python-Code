@@ -1,0 +1,22 @@
+{% extends "template.html" %} {% load static %}
+<!doctype html>
+<html>
+{% block content %}
+
+<head>
+    <link href="{% static '/assets/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static '/assets/css/light-bootstrap-dashboard.css' %}" rel="stylesheet" />
+    {% comment %} <link rel="stylesheet" href="{% static 'styles.css' %}"> {% endcomment %}
+    <meta charset="utf-8">
+    <title>登入後基礎頁面</title>
+</head>
+
+<body>
+    <div class="">
+        <h1>User Page</h1>
+    </div>
+</body>
+
+{% endblock %}
+
+</html>

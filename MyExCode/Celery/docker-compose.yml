@@ -1,0 +1,77 @@
+version: '3'
+services:
+    worker_0:
+        container_name: worker_0
+        build: .
+        env_file: worker.env
+        hostname: worker_0
+        volumes:
+            - .:/usr/src/app
+        command: celery worker -A ${CELERY_PROJECT} -l info -E -P gevent --purge --autoscale=3,1
+        depends_on:
+            - redis
+            - mongo
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "1g"
+    worker_1:
+        container_name: worker_1
+        build: .
+        env_file: worker.env
+        hostname: worker_1
+        volumes:
+            - .:/usr/src/app
+        command: celery worker -A ${CELERY_PROJECT} -l info -E -P gevent --purge --autoscale=3,1
+        depends_on:
+            - redis
+            - mongo
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "1g"
+    worker_2:
+        container_name: worker_2
+        build: .
+        env_file: worker.env
+        hostname: worker_2
+        volumes:
+            - .:/usr/src/app
+        command: celery worker -A ${CELERY_PROJECT} -l info -E -P gevent --purge --autoscale=3,1
+        depends_on:
+            - redis
+            - mongo
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "1g"
+    beat:
+        container_name: beat
+        build: .
+        env_file: worker.env
+        hostname: beat
+        volumes:
+            - .:/usr/src/app
+        command: celery beat -A ${CELERY_PROJECT} -l info --pidfile=
+        depends_on:
+            - redis
+            - mongo
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "1g"
+    mongo:
+        container_name: mongo
+        hostname: mongo-container
+        image: mongo:4
+        ports:
+            - 31117:27017
+        volumes:
+            - ./docker/data/mongo:/data/db
+    redis:
+        container_name: redis
+        hostname: redis-container
+        image: redis:3
+        # 對內給beat發任務 使用 不用開出去
+        # ports:
+        #     - 31119:6379

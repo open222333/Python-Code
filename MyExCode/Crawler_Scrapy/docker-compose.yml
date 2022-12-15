@@ -1,0 +1,10 @@
+version: '3'
+services:
+  scrapy:
+    container_name: scrapy
+    image: scrapinghub/splash
+    ports:
+      - 8050:8050
+    # volumes:
+    #     - ../dh_apparadise_spiders/spiders:/usr/src/app
+    command: ping 127.0.0.1

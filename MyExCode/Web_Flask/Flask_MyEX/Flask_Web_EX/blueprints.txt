@@ -1,0 +1,14 @@
+APIWeb/
+    static/
+        styles.css
+    templates/
+        baseMain/
+            login.html
+            baseMenu.html
+            basePage.html
+        userDetail/
+    view/
+        login.py
+    app.py
+    config.py
+    models.py
