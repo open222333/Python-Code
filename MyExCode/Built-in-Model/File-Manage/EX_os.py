@@ -156,3 +156,20 @@ def cat_files_sample(infiles, outfile, buffer=1024):
                         tgt.write(data)
                     else:
                         break
+
+def split_file(path: str, chunk_size: int = 500000000, filename: str = None):
+    """使用split 分割檔案
+
+    Args:
+        path (str): 檔案路徑
+        chunk_size (int): 分割大小 byte. Defaults to 500000000.
+        filename (str, optional): 檔名. Defaults to None.
+    """
+    if not filename:
+        filename = os.path.basename(path)
+    file_dir = os.path.dirname(path)
+
+    command = f'split -b {chunk_size} {path} {file_dir}/{filename}_'
+
+    print(command)
+    os.system(command)
