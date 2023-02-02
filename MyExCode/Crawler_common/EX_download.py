@@ -437,3 +437,86 @@ def get_file_name_from_url(url):
     match = re.split(r'/', url)
     file_name = match[len(match) - 1]
     return file_name
+
+
+# 20230203
+def download_file(url: str, file_path: str, print_bar=False, chunk_size=1024000):
+    """斷點續傳下載檔案
+
+    Args:
+        url (str): 網址
+        file_path (str): 檔案位置
+        print_bar (bool, optional): 顯示進度條. Defaults to False.
+        chunk_size (int, optional): 下載chunk大小. Defaults to 1024000.
+
+    Returns:
+        bool: 是否下載成功
+    """
+    # 解析已下載的大小
+    if os.path.exists(file_path):
+        # 如果存在 斷點續傳
+        try:
+            file_size = os.path.getsize(file_path)
+            open_file_mode = 'ab'
+            r_first = requests.get(url)
+            remote_file_size = int(r_first.headers.get('content-length'))
+            if remote_file_size < file_size:
+                # 檔案大小異常 重載
+                os.remove(file_path)
+                open_file_mode = 'wb'
+                file_size = 0
+            elif remote_file_size == file_size:
+                # 已是完成下載的檔案
+                return True
+            bpct = True  # 斷點續傳
+        except:
+            os.remove(file_path)
+            return False
+    else:
+        # 如果不存在 非斷點續傳
+        open_file_mode = 'wb'
+        file_size = 0
+        bpct = False  # 非斷點續傳
+
+    if bpct:
+        headers = {'Range': f'bytes={file_size}-'}
+        r = requests.get(url, stream=True, timeout=15, headers=headers)
+        total = r.headers.get('content-length')
+        if r.status_code != 206:
+            print(f"不支援斷點下載 刪除後重載:{file_path} code:{r.status_code}")
+            os.remove(os.path.dirname(file_path))
+            r.raise_for_status()
+            return False
+
+        if r.status_code == 404:
+            print(f'code 404 url:{url}')
+    else:
+        r = requests.get(url, stream=True, timeout=15)
+        total = r.headers.get('content-length')
+        print(f'非斷點續傳 code:{r.status_code}')
+
+        if r.status_code == 404:
+            print(f'code 404 url:{url}')
+
+    bar = ProgressBar()
+    bar.title = os.path.basename(file_path)
+
+    if not os.path.exists(os.path.dirname(file_path)):
+        os.makedirs(os.path.dirname(file_path))
+        open_file_mode = 'wb'
+
+    with open(file_path, open_file_mode) as f:
+        count = 0
+        if print_bar:
+            for chunk in r.iter_content(chunk_size=chunk_size):
+                if count == 0:
+                    done = len(chunk) + file_size
+                else:
+                    done = len(chunk)
+                bar(int(total) + file_size, done, in_loop=True)
+                f.write(chunk)
+                count += 1
+        else:
+            for chunk in r.iter_content(chunk_size=chunk_size):
+                f.write(chunk)
+    return True
