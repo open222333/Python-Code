@@ -17,19 +17,30 @@ https://www.itread01.com/content/1546369412.html
 
 
 class ProgressBar():
-    '''自己設計的進度條'''
+    '''進度條'''
 
     def __init__(self, title='Progress', symbol='=', bar_size=50) -> None:
-        '''進度表屬性'''
+        """
+
+        Args:
+            title (str, optional): 名稱. Defaults to 'Progress'.
+            symbol (str, optional): 進度條圖案. Defaults to '='.
+            bar_size (int, optional): 進度條長度. Defaults to 50.
+        """
         self.title = title
         self.symbol = symbol
         self.bar_size = bar_size
         self.done = 0  # 迴圈內 使用
 
     def __call__(self, total: int, done=1, decimal=1, in_loop=False):
-        '''
-        in_loop: 建立的實體是否在迴圈內使用
-        '''
+        """進度條
+
+        Args:
+            total (int): 總數
+            done (int, optional): 已完成. Defaults to 1.
+            decimal (int, optional): 每次完成. Defaults to 1.
+            in_loop (bool, optional): 是否在迴圈內. Defaults to False.
+        """
         if in_loop:
             self.done += done
             if self.done >= total:
@@ -48,13 +59,14 @@ class ProgressBar():
                     break
             self.__done()
 
-    def __print_progress_bar(self, done, total, decimal):
-        '''
-        繪製 進度表
-        done:完成數
-        total:總任務數
-        decimal: 百分比顯示到後面幾位
-        '''
+    def __print_progress_bar(self, done:int, total:int, decimal:int):
+        """繪製 進度表
+
+        Args:
+            done (int): 完成數
+            total (int): 總任務數
+            decimal (int): 百分比顯示到後面幾位
+        """
         # 計算百分比
         precent = float(round(100 * done / total, decimal))
         done_symbol = int(precent / 100 * self.bar_size)
