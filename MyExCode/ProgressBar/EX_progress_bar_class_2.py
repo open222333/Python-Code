@@ -2,19 +2,32 @@ import sys
 
 
 class ProgressBar():
-    '''自己設計的進度條'''
+    '''進度條'''
 
     def __init__(self, title='Progress', symbol='=', bar_size=50) -> None:
+        """
+
+        Args:
+            title (str, optional): 標題. Defaults to 'Progress'.
+            symbol (str, optional): 進度條符號. Defaults to '='.
+            bar_size (int, optional): 進度條大小(滿值有多少符號). Defaults to 50.
+        """
         '''進度表屬性'''
         self.title = title
         self.symbol = symbol
         self.bar_size = bar_size
-        self.done = 0  # 迴圈內 使用
+        # 迴圈內 使用
+        self.done = 0
 
     def __call__(self, total: int, done=1, decimal=1, in_loop=False):
-        '''
-        in_loop: 建立的實體是否在迴圈內使用
-        '''
+        """呼叫進度表
+
+        Args:
+            total (int): 總數
+            done (int, optional): 已完成. Defaults to 1.
+            decimal (int, optional): 顯示小數位. Defaults to 1.
+            in_loop (bool, optional): 建立的實體是否在迴圈內使用. Defaults to False.
+        """
         if in_loop:
             self.done += done
             if self.done >= total:
@@ -33,13 +46,14 @@ class ProgressBar():
                     break
             self.__done()
 
-    def __print_progress_bar(self, done, total, decimal):
-        '''
-        繪製 進度表
-        done:完成數
-        total:總任務數
-        decimal: 百分比顯示到後面幾位
-        '''
+    def __print_progress_bar(self, done: int, total: int, decimal:int):
+        """繪製 進度表
+
+        Args:
+            done (int): 已完成數
+            total (int): 總任務數
+            decimal (int): 百分比顯示到後面幾位
+        """
         # 計算百分比
         precent = float(round(100 * done / total, decimal))
         done_symbol = int(precent / 100 * self.bar_size)
@@ -52,18 +66,3 @@ class ProgressBar():
 
     def __done(self):
         print()
-
-
-test_url = 'https://www.pexels.com/zh-tw/video/3196600/download/?search_query=%E6%B8%AC%E8%A9%A6&tracking_id=01t32lpgsyg4'
-
-bar = ProgressBar()
-max_num = 100000
-step = 1024
-decimal = 2
-
-# mode a 預設
-bar(max_num, step, decimal=decimal)
-
-# mode b
-for i in range(0, max_num, step):
-    bar(max_num, step, decimal=decimal, in_loop=True)
