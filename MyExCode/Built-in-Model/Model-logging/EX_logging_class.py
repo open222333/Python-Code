@@ -28,15 +28,29 @@ import os
 class Log():
 
     def __init__(self, log_name: str) -> None:
+        self.log_name = log_name
         self.logger = logging.getLogger(log_name)
         self.logger.setLevel(logging.WARNING)
 
-        self.log_path = 'logs'
-        self.log_file = os.path.join(self.log_path, f'{log_name}-all.log')
-        self.formatter = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-
         # 當前日期
         self.now_time = datetime.now().__format__('%Y-%m-%d')
+
+        self.log_path = 'logs'
+        if not os.path.exists(self.log_path):
+            os.makedirs(self.log_path)
+
+        self.log_file = os.path.join(self.log_path, f'{log_name}-all.log')
+        self.formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    def set_log_path(self, log_path: str):
+        """設置log檔存放位置
+
+        Args:
+            log_path (str): 路徑 預設為 logs
+        """
+        self.log_path = log_path
+        if not os.path.exists(self.log_path):
+            os.makedirs(self.log_path)
 
     def set_log_file_name(self, name: str):
         """設置log檔名稱 預設為 {log_name}-all.log
@@ -56,6 +70,7 @@ class Log():
         Returns:
             TimedRotatingFileHandler: _description_
         """
+        self.log_file = os.path.join(self.log_path, f'{self.log_name}-{self.now_time}.log')
         handler = TimedRotatingFileHandler(self.log_file, when='D', backupCount=days)
         handler.setFormatter(self.formatter)
         self.logger.addHandler(handler)
@@ -79,7 +94,7 @@ class Log():
         """設置log steam
 
         Returns:
-            logging.StreamHandler: _description_Ｆ
+            logging.StreamHandler: _description_
         """
         handler = logging.StreamHandler()
         handler.setFormatter(self.formatter)
