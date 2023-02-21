@@ -4,6 +4,27 @@ import logging
 import os
 
 
+'''
+; ******log設定******
+; 關閉log功能 輸入選項 (true, True, 1) 預設 不關閉
+; LOG_DISABLE=1
+
+; logs路徑 預設 logs
+; LOG_PATH=
+
+; 關閉紀錄log檔案 輸入選項 (true, True, 1)  預設 不關閉
+; LOG_FILE_DISABLE=1
+
+; 設定紀錄log等級 DEBUG,INFO,WARNING,ERROR,CRITICAL 預設WARNING
+; LOG_LEVEL=
+
+; 指定log大小(輸入數字) 單位byte, 與 LOG_DAYS 只能輸入一項 若都輸入 LOG_SIZE優先
+; LOG_SIZE=
+
+; 指定保留log天數(輸入數字) 預設7
+; LOG_DAYS=
+'''
+
 class Log():
 
     def __init__(self, log_name: str) -> None:
@@ -105,3 +126,16 @@ class Log():
 
     def critical(self, message: str, exc_info: bool = False):
         self.logger.critical(message, exc_info=exc_info)
+
+
+### 用法範例 ###
+LOG_LEVEL = os.environ.get('LOG_LEVEL', None)
+LOG_DAYS=os.environ.get('LOG_DAYS', None)
+date = datetime.now().__format__("%Y%m%d")
+
+logger = Log(__name__)
+logger.set_log_file_name(f'{__name__}-{date}.log')
+logger.set_date_handler()
+logger.set_msg_handler()
+if not LOG_LEVEL:
+    logger.set_level(LOG_LEVEL)
