@@ -1,5 +1,6 @@
 import os
 import shutil
+from typing import Union
 
 
 def get_environ():
@@ -157,6 +158,7 @@ def cat_files_sample(infiles, outfile, buffer=1024):
                     else:
                         break
 
+
 def split_file(path: str, chunk_size: int = 500000000, filename: str = None):
     """使用split 分割檔案
 
@@ -173,3 +175,49 @@ def split_file(path: str, chunk_size: int = 500000000, filename: str = None):
 
     print(command)
     os.system(command)
+
+
+def get_all_files(path: str, extensions: Union[int, float, None] = None, add_abspath: bool = False, exclude_dir: bool = True) -> list[str]:
+    """取得所有檔案
+
+    Args:
+        path (str): 檔案資料夾
+        extensions (Union[int, float, None], optional): 指定副檔名,若無指定則全部列出. Defaults to None.
+        add_abspath (bool, optional): 列出 絕對路徑. Defaults to False.
+        exclude_dir (bool, optional): 排除資料夾. Defaults to True.
+
+    Returns:
+        list[str]: 回傳串列
+    """
+    target_file_path = []
+    path = os.path.abspath(path)
+
+    for file in os.listdir(path):
+
+        is_dir = False
+
+        if exclude_dir:
+            is_dir = os.path.isdir(file)
+
+        if not is_dir:
+            if add_abspath:
+                target_path = f'{path}/{file}'
+            else:
+                target_path = f'{file}'
+
+            _, file_extension = os.path.splitext(file)
+            if extensions:
+                allow_extension = [f'.{e}' for e in extensions]
+                if file_extension in allow_extension:
+                    target_file_path.append(target_path)
+            else:
+                target_file_path.append(target_path)
+
+        # 遞迴
+        if os.path.isdir(f'{path}/{file}'):
+            files = get_all_files(f'{path}/{file}', extensions)
+            for file in files:
+                target_file_path.append(file)
+
+    target_file_path.sort()
+    return target_file_path

@@ -6,6 +6,29 @@ import socket
 import os
 
 
+"""沒有使用 Log Class 的設定範例
+
+; ******log設定******
+; 關閉log功能 輸入選項 (true, True, 1) 預設 不關閉
+; LOG_DISABLE=1
+
+; logs路徑 預設 logs
+; LOG_PATH=
+
+; 關閉紀錄log檔案 輸入選項 (true, True, 1)  預設 不關閉
+; LOG_FILE_DISABLE=1
+
+; 設定紀錄log等級 DEBUG,INFO,WARNING,ERROR,CRITICAL 預設WARNING
+; LOG_LEVEL=
+
+; 指定log大小(輸入數字) 單位byte, 與 LOG_DAYS 只能輸入一項 若都輸入 LOG_SIZE優先
+; LOG_SIZE=
+
+; 指定保留log天數(輸入數字) 預設7
+; LOG_DAYS=
+"""
+
+
 try:
     HOSTNAME = socket.gethostname()
 
