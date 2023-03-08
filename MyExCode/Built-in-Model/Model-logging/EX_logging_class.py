@@ -114,7 +114,7 @@ class Log():
         Args:
             formatter (str): log格式.
         """
-        self.formatter = formatter
+        self.formatter = logging.Formatter(formatter)
 
     def set_level(self, level: str = 'WARNING'):
         """設置log等級
