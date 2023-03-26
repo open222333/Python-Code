@@ -2,7 +2,7 @@
 
 ## 目錄
 
-- [ch2-Strings_and_Text(字串與文字)](#ch2-strings_and_text字串與文字)
+- [ch2-Strings\_and\_Text(字串與文字)](#ch2-strings_and_text字串與文字)
 	- [目錄](#目錄)
 - [內容](#內容)
 	- [2.1 依據任意的多個定界符來切分字串](#21-依據任意的多個定界符來切分字串)
@@ -759,21 +759,84 @@ print(format(x, '^10.2f'))
 問題：
 
 ```
+將許多小字串結合在一起成為一個大字串
 ```
 
 解法：
 
 ```
+使用join()
 ```
 
 討論：
 
 ```
+使用+運算子來連接大量字串是很沒效率的，因為必須進行多次記憶體複製以及垃圾回收。
+
+# 若字串都很小 以下可能提供較好的效能
+f.write(chunk1 + chunk2)
+
+# 若字串都很大 以下可能提供較好的效能 因避免 建立大型暫存結果並複製大區塊記憶體
+f.write(chunk1)
+f.write(chunk2)
 ```
 
 範例：
 
 ```Python
+# 使用join()
+parts = ['Is', 'Chicago', 'Not', 'Chicago?']
+print(' '.join(parts))
+print(','.join(parts))
+print(''.join(parts))
+
+# 結合少數字串可用+
+a = 'Is Chicago'
+b = 'Not Chicago?'
+print(a + ' ' + b)
+
+# 使用format()
+print('{} {}'.format(a, b))
+
+# 結合字串字面值 直接並列在一起
+c = 'Hello' 'World'
+print(c)
+
+# 使用一個產生器運算式(generator expression)同時把資料轉為字串並串接起來。
+data = ['ACME', 50, 91.1]
+print(','.join(str(d) for d in data))
+
+# 若在撰寫的程式碼需要大量小型字串建置輸出
+# 產生器函式不需知道細節，只需產出(yield)各個部分
+
+def sample():
+    yield 'Is'
+    yield 'Chicago'
+    yield 'Not'
+    yield 'Chicago?'
+
+
+def combine(source, maxsize):
+    parts = []
+    size = 0
+    for part in source:
+        parts.append(part)
+        size += len(part)
+        if size > maxsize:
+            yield ''.join(parts)
+            parts = []
+            size = 0
+    yield ''.join(parts)
+
+
+with open('test.txt', 'w') as f:
+    for part in combine(sample(), 32768):
+        f.write(part)
+
+# 沒有效率的寫法
+s = ''
+for p in parts:
+	s += p
 ```
 
 ## 2.15 在字串中插換變數
