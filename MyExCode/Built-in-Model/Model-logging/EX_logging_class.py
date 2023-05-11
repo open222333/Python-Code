@@ -33,19 +33,22 @@ import os
 
 class Log():
 
-    def __init__(self, log_name: str) -> None:
-        self.log_name = log_name
-        self.logger = logging.getLogger(log_name)
-        self.logger.setLevel(logging.WARNING)
-
-        # 當前日期
-        self.now_time = datetime.now().__format__('%Y-%m-%d')
+    def __init__(self, log_name: str = None) -> None:
+        """
+        Args:
+            log_name (str, optional): logger名稱. Defaults to 主機名稱.
+        """
+        if log_name:
+            self.log_name = log_name
+        else:
+            self.log_name = socket.gethostname()
 
         self.log_path = 'logs'
-        if not os.path.exists(self.log_path):
-            os.makedirs(self.log_path)
+        self.logfile_name = None
 
-        self.log_file = os.path.join(self.log_path, f'{log_name}-all.log')
+        self.logger = logging.getLogger(self.log_name)
+        self.logger.setLevel(logging.WARNING)
+
         self.formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
     def set_log_path(self, log_path: str):
@@ -55,43 +58,80 @@ class Log():
             log_path (str): 路徑 預設為 logs
         """
         self.log_path = log_path
-        if not os.path.exists(self.log_path):
-            os.makedirs(self.log_path)
 
     def set_log_file_name(self, name: str):
-        """設置log檔名稱 預設為 {log_name}-all.log
+        """設置log檔名稱 預設為 主機名稱.log
 
         Args:
-            name (str): _description_
+            name (str): 名稱
         """
-        self.log_file = os.path.join(self.log_path, name)
+        self.logfile_name = name
 
-    def set_date_handler(self, days: int = 7) -> TimedRotatingFileHandler:
+    def set_date_handler(self, amount: int = 3, when: str = 'D') -> TimedRotatingFileHandler:
         """設置每日log檔
 
         Args:
-            log_file (_type_): log檔名
-            days (int, optional): 保留天數. Defaults to 7.
+            `amount` (int, optional): 保留檔案數量. Defaults to 3.\n
+            `when` (str, optional): S - Seconds, M - Minutes, H - Hours, D - Days., Defaults to 'D'.
 
         Returns:
             TimedRotatingFileHandler: _description_
         """
-        self.log_file = os.path.join(self.log_path, f'{self.log_name}-{self.now_time}.log')
-        handler = TimedRotatingFileHandler(self.log_file, when='D', backupCount=days)
+        if not os.path.exists(self.log_path):
+            os.makedirs(self.log_path)
+
+        def my_namer(default_name: str):
+            """替換 TimedRotatingFileHandler namer
+
+            [TimedRotatingFileHandler Changing File Name?](https://stackoverflow.com/questions/338450/timedrotatingfilehandler-changing-file-name)\n
+
+            Args:
+                default_name (str): _description_
+
+            Returns:
+                _type_: _description_
+            """
+            base_filename, ext, date = default_name.split(".")
+            return f"{base_filename}.{date}.{ext}"
+
+        # 當前
+        if when == 'S':
+            date_format = '%Y-%m-%d_%H-%M-%S'
+        elif when == 'M':
+            date_format = '%Y-%m-%d_%H-%M'
+        elif when == 'H':
+            date_format = '%Y-%m-%d_%H'
+        elif when == 'D' or when == 'MIDNIGHT':
+            date_format = '%Y-%m-%d'
+
+        if not self.logfile_name:
+            self.logfile_name = self.log_name
+
+        self.now_time = datetime.now().__format__(date_format)
+        self.log_file = os.path.join(self.log_path, f'{self.logfile_name}')
+        handler = TimedRotatingFileHandler(self.log_file, when=when, backupCount=amount)
+        handler.namer = my_namer
         handler.setFormatter(self.formatter)
         self.logger.addHandler(handler)
 
-    def set_file_handler(self, size: int = 1 * 1024 * 1024, file_amount: int = 5) -> RotatingFileHandler:
+    def set_file_handler(self, size: int = 1 * 1024 * 1024, file_amount: int = 1) -> RotatingFileHandler:
         """設置log檔案大小限制
 
         Args:
             log_file (_type_): log檔名
             size (int, optional): 檔案大小. Defaults to 1*1024*1024 (1M).
-            file_amount (int, optional): 檔案數量. Defaults to 5.
+            file_amount (int, optional): 檔案數量. Defaults to 1.
 
         Returns:
             RotatingFileHandler: _description_
         """
+        if not os.path.exists(self.log_path):
+            os.makedirs(self.log_path)
+
+        if not self.logfile_name:
+            self.logfile_name = self.log_name
+
+        self.log_file = os.path.join(self.log_path, f'{self.logfile_name}')
         handler = RotatingFileHandler(self.log_file, maxBytes=size, backupCount=file_amount)
         handler.setFormatter(self.formatter)
         self.logger.addHandler(handler)
@@ -132,6 +172,11 @@ class Log():
             self.logger.setLevel(logging.ERROR)
         elif level == 'CRITICAL':
             self.logger.setLevel(logging.CRITICAL)
+
+    def disable_log(self):
+        """關閉log
+        """
+        logging.disable()
 
     def debug(self, message: str, exc_info: bool = False):
         self.logger.debug(message, exc_info=exc_info)
