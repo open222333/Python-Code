@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Union
 
 
 def spend_time(start: datetime, end: datetime) -> str:
@@ -10,13 +11,20 @@ def spend_time(start: datetime, end: datetime) -> str:
     return f"{days}天 {hours}時 {minutes}分 {seconds}秒"
 
 
-def get_time_str(total_secends: int) -> str:
-    '''依照秒數 回傳時間'''
+def get_time_str(total_seconds: Union[int, float]) -> str:
+    """依照秒數 回傳中文時間
+
+    Args:
+        total_seconds (int): 總秒數
+
+    Returns:
+        str: 回傳時間
+    """
     msg = ''
-    seconds = total_secends % 60
-    minutes = (total_secends // 60) % 60
-    hours = ((total_secends // 60) // 60) % 24
-    days = ((total_secends // 60) // 60) // 24
+    seconds = int(round(total_seconds % 60, 0))
+    minutes = int((total_seconds // 60) % 60)
+    hours = int(((total_seconds // 60) // 60) % 24)
+    days = int(((total_seconds // 60) // 60) // 24)
     if days != 0:
         msg += f"{days}天"
     if hours != 0:
@@ -37,3 +45,18 @@ def compute_time(sec):
     end_time = datetime.now().__format__(date_format)
     print(datetime.strptime(end_time, date_format) -
           datetime.strptime(now_time, date_format))
+
+
+def get_time_point(self, total_seconds: Union[int, float]) -> str:
+    """依照秒數 回傳 00:00:00格式
+
+    Args:
+        total_secends (int): 總秒數
+
+    Returns:
+        str: 回傳時間
+    """
+    hours = total_seconds // 3600
+    minutes = (total_seconds % 3600) // 60
+    seconds = total_seconds % 60
+    return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
